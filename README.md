@@ -1,4 +1,4 @@
-<b>Zatím plugin není HOTOVÝ!
+<b>Zatím plugin není HOTOVÝ!</b>
 
 WordPress plugin pro propojení Google Drivu a zobrazení obsahu. Možnost přes shordcody zobrazit obsah.
 
