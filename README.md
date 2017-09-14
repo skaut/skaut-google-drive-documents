@@ -1,3 +1,5 @@
+Zatím plugin není HOTOVÝ!
+
 WordPress plugin pro propojení Google Drivu a zobrazení obsahu. Možnost přes shordcody zobrazit obsah.
 
 Kdo si chcete plugin stáhnout je na
