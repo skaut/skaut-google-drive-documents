@@ -13,7 +13,7 @@ WordPress plugin pro propojení Google Drivu a zobrazení obsahu. Možnost přes
 == Description ==
 
 <h2> Minimální požadavky</h2>
-- WordPress 4.8 a vyšší
+- WordPress 5.0 a vyšší
 - PHP 7.0 a vyšší
 
 
