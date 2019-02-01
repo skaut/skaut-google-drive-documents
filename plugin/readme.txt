@@ -35,4 +35,4 @@ WordPress plugin pro propojení Google Drivu a zobrazení obsahu. Možnost přes
 == Changelog ==
 = 1.0 =
 * 
-* vyžadován WordPress 4.8 a vyšší
+* vyžadován WordPress 5.0 a vyšší
