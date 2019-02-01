@@ -1,5 +1,5 @@
-<b>Plugin zatím není HOTOVÝ!</b>
-
+#<b>Plugin zatím není HOTOVÝ!</b>
+## Google Drive Documents
 WordPress plugin pro propojení Google Drivu a zobrazení obsahu. Možnost přes shordcody zobrazit obsah.
 
 Kdo si chcete plugin stáhnout je na ...
