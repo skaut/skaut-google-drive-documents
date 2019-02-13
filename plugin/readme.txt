@@ -1,8 +1,8 @@
 === Google Drive Documents ===
 Contributors: skaut, kalich5
 Tags: skaut, multisite, plugin, shortcode, google drvie, documents
-Requires at least: 4.8
-Tested up to: 4.9
+Requires at least: 5.0
+Tested up to: 5.0
 Requires PHP: 7.0
 Stable tag: 1.0
 License: GPLv3 or later
@@ -13,7 +13,7 @@ WordPress plugin pro propojení Google Drivu a zobrazení obsahu. Možnost přes
 == Description ==
 
 <h2> Minimální požadavky</h2>
-- WordPress 4.8 a vyšší
+- WordPress 5.0 a vyšší
 - PHP 7.0 a vyšší
 
 
@@ -35,4 +35,4 @@ WordPress plugin pro propojení Google Drivu a zobrazení obsahu. Možnost přes
 == Changelog ==
 = 1.0 =
 * 
-* vyžadován WordPress 4.8 a vyšší
+* vyžadován WordPress 5.0 a vyšší
