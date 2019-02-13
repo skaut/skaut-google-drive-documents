@@ -18,3 +18,8 @@ wp-content/plugins/hello.php
 
 .DS_Store
 
+/node_modules
+/vendor
+
+composer.lock
+package-lock.json
