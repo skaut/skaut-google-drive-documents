@@ -1,10 +1,8 @@
 <?php
 
-/**
- * Fired when the plugin is uninstalled.
- */
-
-// If uninstall not called from WordPress, then exit.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-	exit;
+	die('None of your business');
 }
+
+delete_option( 'sgdg_client_id' );
+delete_option( 'sgdg_client_secret' );

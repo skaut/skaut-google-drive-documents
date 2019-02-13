@@ -1,5 +1,7 @@
 <?php
 
+namespace Sgdd\Admin\Options\OptionTypes;
+
 require_once __DIR__ . '/class-setting-field.php';
 
 class StringField extends SettingField {
@@ -23,7 +25,7 @@ class StringField extends SettingField {
     parent::add_field();
   }
 
-  public function print() {
+  public function display() {
     if ( $this->readOnly ) {
       echo "<input type='text' name='" . esc_attr( $this->id ) . "' value='" . esc_attr( get_option( $this->id, $this->default_value ) ) . "' readonly class='regular-text'>";
     } else {

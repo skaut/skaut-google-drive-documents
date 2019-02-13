@@ -1,6 +1,9 @@
 <?php
 
+namespace Sgdd\Admin\Options\OptionTypes;
+
 abstract class SettingField {
+
   protected $id;
   protected $title;
   protected $page;
@@ -19,10 +22,10 @@ abstract class SettingField {
 
   abstract public function sanitize( $value );
 
-  abstract public function print();
+  abstract public function display();
 
   public function add_field() {
     $this->register();
-    add_settings_field( $this->id, $this->title, [ $this, 'print' ], $this->page, $this->section );
+    add_settings_field( $this->id, $this->title, [ $this, 'display' ], $this->page, $this->section );
   }
 };
