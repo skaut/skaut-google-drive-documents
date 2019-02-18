@@ -2,7 +2,7 @@
 Contributors: skaut, kalich5
 Tags: skaut, multisite, plugin, shortcode, google drvie, documents
 Requires at least: 5.0
-Tested up to: 5.0
+Tested up to: 5.1
 Requires PHP: 7.0
 Stable tag: 1.0
 License: GPLv3 or later
