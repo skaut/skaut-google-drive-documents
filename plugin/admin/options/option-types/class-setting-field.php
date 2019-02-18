@@ -1,5 +1,4 @@
 <?php
-
 namespace Sgdd\Admin\Options\OptionTypes;
 
 abstract class SettingField {
@@ -8,14 +7,14 @@ abstract class SettingField {
   protected $title;
   protected $page;
   protected $section;
-  protected $default_value;
+  protected $defaultValue;
 
-  public function __construct( $id, $title, $page, $section, $default_value ) {
+  public function __construct( $id, $title, $page, $section, $defaultValue ) {
     $this->id            = 'sgdd_' . $id;
     $this->title         = $title;
     $this->page          = 'sgdd_' . $page;
     $this->section       = 'sgdd_' . $section;
-    $this->default_value = $default_value;
+    $this->defaultValue  = $defaultValue;
   }
 
   abstract public function register();
@@ -24,8 +23,12 @@ abstract class SettingField {
 
   abstract public function display();
 
-  public function add_field() {
+  public function addField() {
     $this->register();
     add_settings_field( $this->id, $this->title, [ $this, 'display' ], $this->page, $this->section );
   }
+
+  public function get( $defaultValue = null ) {
+		return get_option( $this->id, ( isset( $defaultValue ) ? $defaultValue : $this->defaultValue ) );
+	}
 };
