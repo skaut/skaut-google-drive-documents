@@ -28,7 +28,7 @@ gulp.task( 'composer-copy-apiclient-services', function() {
 			], {base: 'vendor/'})
 			.pipe( replace( /^<\?php/, '<?php\nnamespace Sgdd\\Vendor;' ) )
 			.pipe( replace( /\nuse /g, '\nuse Sgdd\\Vendor\\' ) )
-			.pipe( gulp.dest( 'plugin/bundled/vendor/' ) );
+			.pipe( gulp.dest( 'plugin/includes/vendor/' ) );
 	});
 
 gulp.task( 'composer-copy-apiclient', function() {
@@ -69,7 +69,7 @@ gulp.task( 'composer-copy-apiclient', function() {
 				.pipe( replace( /\nuse /g, '\nuse Sgdd\\Vendor\\' ) )
 				.pipe( replace( 'public function call($name, $arguments, $expectedClass = null)\n  {', 'public function call($name, $arguments, $expectedClass = null)\n  {\n    $expectedClass = \'\\\\Sgdd\\\\Vendor\\\\\' . $expectedClass;' ) )
 		)
-			.pipe( gulp.dest( 'plugin/bundled/vendor/' ) );
+			.pipe( gulp.dest( 'plugin/includes/vendor/' ) );
 	});
 
 gulp.task( 'composer-copy-other', function() {
@@ -128,7 +128,7 @@ gulp.task( 'composer-copy-other', function() {
 			.pipe( replace( /\nnamespace /g, '\nnamespace Sgdd\\Vendor\\' ) )
 			.pipe( replace( /\nuse /g, '\nuse Sgdd\\Vendor\\' ) )
 			.pipe( replace( ' \\GuzzleHttp', ' \\Sgdd\\Vendor\\GuzzleHttp' ) )
-			.pipe( gulp.dest( 'plugin/bundled/vendor/' ) );
+			.pipe( gulp.dest( 'plugin/includes/vendor/' ) );
 	});
 
 gulp.task( 'composer-copy-licenses', function() {
@@ -144,7 +144,7 @@ gulp.task( 'composer-copy-licenses', function() {
 				'vendor/psr/http-message/LICENSE',
 				'vendor/psr/log/LICENSE'
 			], {base: 'vendor/'})
-			.pipe( gulp.dest( 'plugin/bundled/vendor/' ) );
+			.pipe( gulp.dest( 'plugin/includes/vendor/' ) );
 	});
 
 gulp.task( 'composer-copy', gulp.parallel( 'composer-copy-apiclient-services', 'composer-copy-apiclient', 'composer-copy-other', 'composer-copy-licenses' ) );

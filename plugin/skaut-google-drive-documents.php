@@ -1,9 +1,8 @@
 <?php
-
 namespace Sgdd;
 
 /**
- * Plugin Name: Google Drive Documents v2
+ * Plugin Name: Google Drive Documents
  * Plugin URI:  https://github.com/skaut/skaut-google-drive-documents
  * Description: A WordPress plugin to display and edit documents using Google Drive as file storage
  * Version:     0.1
@@ -11,8 +10,7 @@ namespace Sgdd;
  * Author URI:  hhttps://github.com/xkosorin
  * License:     GPLv3
  * License URI: https://raw.githubusercontent.com/skaut/skaut-google-drive-documents/master/plugin/license.txt
- * Text Domain: sgdd
- * Domain Path: /languages
+ * Text Domain: skaut-google-drive-documents
  * 
  * 
  * Google Drive Documents is free software: you can redistribute it and/or modify
@@ -36,9 +34,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once __DIR__ . '/admin/admin-page.php';
 require_once __DIR__ . '/admin/options/class-admin-options.php';
 
+require_once __DIR__ . '/admin/google-api.php';
+require_once __DIR__ . '/includes/includes.php';
+
 function init() {
 	register_activation_hook( __FILE__, '\\Sgdd\\activate' );
-	add_action( 'admin_notices', '\\Sgdd\\activation_info' );
+	add_action( 'admin_notices', '\\Sgdd\\activationInfo' );
 	add_action( 'plugins_loaded', [ '\\Sgdd\\Admin\\Options\\Options', 'init' ] );
 	\Sgdd\Admin\AdminPage\register();
 }
@@ -46,24 +47,24 @@ function init() {
 function activate() {
   if ( ! isset( $GLOBALS['wp_version'] ) || version_compare( $GLOBALS['wp_version'], '5.0', '<' ) ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
-		wp_die( esc_html__( 'Google Drive gallery requires at least WordPress 5.0', 'sgdd' ) );
+		wp_die( __( 'Google Drive gallery requires at least WordPress 5.0', 'skaut-google-drive-documents' ) );
 	}
 	if ( version_compare( phpversion(), '7.0', '<' ) ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
-		wp_die( esc_html__( 'Google Drive gallery requires at least PHP 7.0', 'sgdd' ) );
+		wp_die( __( 'Google Drive gallery requires at least PHP 7.0', 'skaut-google-drive-documents' ) );
 	}
 	set_transient( 'sgdd_activation_info', true, 60 );
 }
 
-function activation_info() {
-  if ( get_transient( 'sgdd_activation_info' ) ) {
+function activationInfo() {
+  if ( get_transient( 'sgddActivationInfo' ) ) {
     $help_link = 'https://napoveda.skaut.cz/dobryweb/' . substr( get_locale(), 0, 2 ) . '-skaut-google-drive-documents';
 
     echo '<div class="notice notice-info is-dismissible"><p>';
 		// translators: 1: Start of a link to the settings 2: End of the link to the settings 3: Start of a help link 4: End of the help link
-		printf( esc_html__( 'Google Drive Documents needs to be %1$sconfigured%2$s before it can be used. See the %3$sdocumentation%4$s for more information.', 'sgdd' ), '<a href="' . esc_url( admin_url( 'admin.php?page=sgdd_settings' ) ) . '">', '</a>', '<a href="' . esc_url( $help_link ) . '" target="_blank">', '</a>' );
+		printf( esc_html__( 'Google Drive Documents needs to be %1$sconfigured%2$s before it can be used. See the %3$sdocumentation%4$s for more information.', 'skaut-google-drive-documents' ), '<a href="' . esc_url( admin_url( 'admin.php?page=sgdd_settings' ) ) . '">', '</a>', '<a href="' . esc_url( $help_link ) . '" target="_blank">', '</a>' );
 		echo '</p></div>';
-		delete_transient( 'sgdd_activation_info' );
+		delete_transient( 'sgddActivationInfo' );
   }
 }
 
