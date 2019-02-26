@@ -1,6 +1,10 @@
 <?php
 namespace Sgdd\Admin\SettingsPages\OAuthGrant;
 
+if ( ! is_admin() ) {
+	return;
+}
+
 function register() {
   add_action( 'admin_init', '\\Sgdd\\Admin\\SettingsPages\\OAuthGrant\\addSettings' );
 }
