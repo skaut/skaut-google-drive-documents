@@ -16,6 +16,7 @@ function getGoogleClient() {
   );
   $client->setAccessType( "offline" );
   $client->setIncludeGrantedScopes( true );
+  $client->setApprovalPrompt( 'force' );
   $client->addScope( \Sgdd\Vendor\Google_Service_Drive::DRIVE );
   
   return $client;
@@ -32,11 +33,11 @@ function getDriveClient() {
   $client->setAccessToken( $accessToken );
 
   if ( $client->isAccessTokenExpired() ) {
-    $client->fetchAccessTokenWithRefreshToken( $client->getRefreshToken() );
-    $newAccessToken = $client->getAccessToken();
-    $updatedAccessToken = array_merge( $accessToken, $newAccessToken );
-    update_option( 'sgdd_accessToken', $updatedAccessToken );
-  }
+		$client->fetchAccessTokenWithRefreshToken( $client->getRefreshToken() );
+		$newAccessToken = $client->getAccessToken();
+		$mergedAccessToken = array_merge( $accessToken, $newAccessToken );
+		update_option( 'sgdd_accessToken', $mergedAccessToken );
+	}
 
   return new \Sgdd\Vendor\Google_Service_Drive( $client );
 }

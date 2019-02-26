@@ -1,14 +1,14 @@
 <?php
 namespace Sgdd\Admin\AdminPage;
 
-if ( !is_admin() ) {
-  return;
-}
-
 require_once __DIR__ . '/admin-page-display.php';
 require_once __DIR__ . '/settings-pages/oauth-grant.php';
 require_once __DIR__ . '/settings-pages/oauth-revoke.php';
 require_once __DIR__ . '/settings-pages/path-selection.php';
+
+if ( ! is_admin() ) {
+	return;
+}
 
 function register() {
   add_action( 'admin_menu', '\\Sgdd\\Admin\\AdminPage\\addMenu');

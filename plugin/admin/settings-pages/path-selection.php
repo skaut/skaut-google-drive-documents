@@ -1,6 +1,10 @@
 <?php
 namespace Sgdd\Admin\SettingsPages\PathSelection;
 
+if ( ! is_admin() ) {
+	return;
+}
+
 function register() {
   add_action( 'admin_init', '\\Sgdd\\Admin\\SettingsPages\\PathSelection\\addSettings' );
 }
@@ -17,7 +21,7 @@ function display() {
   $root = 'root';
 	do {
 		$params   = [
-			'q'                     => '"' . $root . '" in parents and mimeType = "application/vnd.google-apps.folder"',
+			'q'                     => '"' . $root . '" in parents and mimeType = "application/vnd.google-apps.folder" and trashed = false',
 			'supportsTeamDrives'    => true,
 			'includeTeamDriveItems' => true,
 			'pageToken'             => $page_token,
