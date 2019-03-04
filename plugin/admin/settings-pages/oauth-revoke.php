@@ -12,9 +12,9 @@ function register() {
 function addSettings() {
   add_settings_section( 'sgdd_auth', __( 'Step 1: Authorization', 'skaut-google-drive-documents' ), '\\Sgdd\\Admin\\SettingsPages\\OAuthRevoke\\display', 'sgdd_settings' );
 
-  \Sgdd\Admin\Options\Options::$authorizedDomain->addField( true );
-  \Sgdd\Admin\Options\Options::$authorizedOrigin->addField( true );
-  \Sgdd\Admin\Options\Options::$redirectUri->addField( true );
+  \Sgdd\Admin\Options\Options::$authorizedDomain->addField( true, true );
+  \Sgdd\Admin\Options\Options::$authorizedOrigin->addField( true, true );
+  \Sgdd\Admin\Options\Options::$redirectUri->addField( true, true );
   \Sgdd\Admin\Options\Options::$clientId ->addField( true );
   \Sgdd\Admin\Options\Options::$clientSecret->addField( true );
 }
