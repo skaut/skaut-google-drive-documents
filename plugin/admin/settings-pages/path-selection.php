@@ -18,7 +18,7 @@ function display() {
   
   $ret        = [];
   $page_token = null;
-  $root = '1xZXf7tkXDc2nnTkoh16Ff5DpisUI2IqG';
+  $root = 'root';
 	do {
 		$params   = [
 			'q'                     => '"' . $root . '" in parents and mimeType = "application/vnd.google-apps.folder" and trashed = false',
