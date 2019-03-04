@@ -18,7 +18,7 @@ function display() {
   
   $ret        = [];
   $page_token = null;
-  $root = 'root';
+  $root = '1xZXf7tkXDc2nnTkoh16Ff5DpisUI2IqG';
 	do {
 		$params   = [
 			'q'                     => '"' . $root . '" in parents and mimeType = "application/vnd.google-apps.folder" and trashed = false',
@@ -42,7 +42,7 @@ function display() {
 	} while ( null !== $page_token );
 
   foreach ( $ret as $res ) {
-    var_dump ($res);
+    echo $res['name'];
     echo '<br>';
   }
 
