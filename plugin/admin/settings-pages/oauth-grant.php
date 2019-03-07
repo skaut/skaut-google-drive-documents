@@ -15,7 +15,7 @@ function addSettings() {
   \Sgdd\Admin\Options\Options::$authorizedDomain->addField( true, true );
   \Sgdd\Admin\Options\Options::$authorizedOrigin->addField( true, true );
   \Sgdd\Admin\Options\Options::$redirectUri->addField( true, true );
-  \Sgdd\Admin\Options\Options::$clientId ->addField();
+  \Sgdd\Admin\Options\Options::$clientId->addField();
   \Sgdd\Admin\Options\Options::$clientSecret->addField();
 }
 
