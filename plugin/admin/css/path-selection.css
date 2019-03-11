@@ -1,0 +1,13 @@
+#loadingCircle {
+  background: rgba(255, 255, 255, .7) url("../loading-icon.gif");
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+#rootPath {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}

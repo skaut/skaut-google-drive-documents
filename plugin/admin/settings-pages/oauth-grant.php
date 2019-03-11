@@ -20,7 +20,6 @@ function addSettings() {
 }
 
 function display() {
-  //$help_link = 'https://napoveda.skaut.cz/dobryweb/' . substr( get_locale(), 0, 2 ) . '-skaut-google-drive-documents';
   $help_link = 'https://github.com/skaut/skaut-google-drive-documents/wiki/N%C3%A1vod-na-nastavenie';
   $console = 'https://console.cloud.google.com/apis/dashboard';
   
