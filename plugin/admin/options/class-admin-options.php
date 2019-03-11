@@ -14,11 +14,11 @@ class Options {
   
 	public static function init() {
 		$url                    = wp_parse_url( get_site_url() );
-		self::$authorizedDomain = new \Sgdd\Admin\Options\OptionTypes\StringField( 'authorizedDomain', __( 'Authorized Domain', 'skaut-google-drive-documents' ), 'settings', 'auth', $_SERVER['HTTP_HOST'] );
-		self::$authorizedOrigin = new \Sgdd\Admin\Options\OptionTypes\StringField( 'authorizedOrigin', __( 'Authorized Origin', 'skaut-google-drive-documents' ), 'settings', 'auth', $url['scheme'] . '://' . $url['host'] );
-		self::$redirectUri 		  = new \Sgdd\Admin\Options\OptionTypes\StringField( 'redirectUri', __( 'Redirect Uri', 'skaut-google-drive-documents' ), 'settings', 'auth', esc_url_raw( admin_url( 'admin.php?page=sgdd_settings&action=oauth_redirect' ) ) );
+		self::$authorizedDomain = new \Sgdd\Admin\Options\OptionTypes\StringField( 'authorizedDomain', __( 'Authorised domain', 'skaut-google-drive-documents' ), 'settings', 'auth', $_SERVER['HTTP_HOST'] );
+		self::$authorizedOrigin = new \Sgdd\Admin\Options\OptionTypes\StringField( 'authorizedOrigin', __( 'Authorised JavaScript origin', 'skaut-google-drive-documents' ), 'settings', 'auth', $url['scheme'] . '://' . $url['host'] );
+		self::$redirectUri 		  = new \Sgdd\Admin\Options\OptionTypes\StringField( 'redirectUri', __( 'Authorised redirect URI', 'skaut-google-drive-documents' ), 'settings', 'auth', esc_url_raw( admin_url( 'admin.php?page=sgdd_settings&action=oauth_redirect' ) ) );
 		self::$clientId				  = new \Sgdd\Admin\Options\OptionTypes\StringField( 'clientId', __( 'Client ID', 'skaut-google-drive-documents' ), 'settings', 'auth', '' );
-		self::$clientSecret 		= new \Sgdd\Admin\Options\OptionTypes\StringField( 'clientSecret', __( 'Client Secret', 'skaut-google-drive-documents' ), 'settings', 'auth', '' );
+		self::$clientSecret 		= new \Sgdd\Admin\Options\OptionTypes\StringField( 'clientSecret', __( 'Client secret', 'skaut-google-drive-documents' ), 'settings', 'auth', '' );
 	
 		self::$rootPath 				= new \Sgdd\Admin\Options\OptionTypes\PathField( 'rootPath', '', 'settings', 'pathSelection', 'root' );
 	}
