@@ -29,6 +29,6 @@ abstract class SettingField {
   }
 
   public function get( $defaultValue = null ) {
-		return get_option( $this->id, ( isset( $defaultValue ) ? $defaultValue : $this->defaultValue ) );
-	}
+    return get_option( $this->id, ( isset( $defaultValue ) ? $defaultValue : $this->defaultValue ) );
+  }
 };

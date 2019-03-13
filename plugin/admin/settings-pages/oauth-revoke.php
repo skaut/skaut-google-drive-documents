@@ -2,7 +2,7 @@
 namespace Sgdd\Admin\SettingsPages\OAuthRevoke;
 
 if ( ! is_admin() ) {
-	return;
+  return;
 }
 
 function register() {
@@ -21,5 +21,5 @@ function addSettings() {
 
 function display() {
   settings_errors();
-	echo '<a class="button button-primary" href="' . esc_url_raw( wp_nonce_url( admin_url( 'admin.php?page=sgdd_settings&action=oauth_revoke' ) ), 'oAuthRevoke' ) . '">' . __( 'Revoke Permission', 'skaut-google-drive-documents' ) . '</a>';
+  echo '<a class="button button-primary" href="' . esc_url_raw( wp_nonce_url( admin_url( 'admin.php?page=sgdd_settings&action=oauth_revoke' ) ), 'oAuthRevoke' ) . '">' . __( 'Revoke Permission', 'skaut-google-drive-documents' ) . '</a>';
 }

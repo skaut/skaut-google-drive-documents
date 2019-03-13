@@ -7,7 +7,7 @@ require_once __DIR__ . '/settings-pages/oauth-revoke.php';
 require_once __DIR__ . '/settings-pages/path-selection.php';
 
 if ( ! is_admin() ) {
-	return;
+  return;
 }
 
 function register() {
@@ -43,7 +43,7 @@ function actionHandler() {
     if ( isset( $_GET['action'] ) ) {
       if ( $_GET['action'] === 'oauth_grant' ) {
         wp_verify_nonce( $_GET['_wpnonce'], 'oAuthGrant' );
-				\Sgdd\Admin\GoogleAPILib\oAuthGrant();
+        \Sgdd\Admin\GoogleAPILib\oAuthGrant();
       } else if ( $_GET['action'] === 'oauth_redirect' ) {
         \Sgdd\Admin\GoogleAPILib\oAuthRedirect();
       } else if ( $_GET['action'] === 'oauth_revoke') {
