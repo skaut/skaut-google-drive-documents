@@ -20,6 +20,6 @@ class Options {
 		self::$clientId				  = new \Sgdd\Admin\Options\OptionTypes\StringField( 'clientId', __( 'Client ID', 'skaut-google-drive-documents' ), 'settings', 'auth', '' );
 		self::$clientSecret 		= new \Sgdd\Admin\Options\OptionTypes\StringField( 'clientSecret', __( 'Client secret', 'skaut-google-drive-documents' ), 'settings', 'auth', '' );
 	
-		self::$rootPath 				= new \Sgdd\Admin\Options\OptionTypes\PathField( 'rootPath', '', 'settings', 'pathSelection', 'root' );
+		self::$rootPath 				= new \Sgdd\Admin\Options\OptionTypes\PathField( 'rootPath', '', 'settings', 'pathSelection', [ ] );
 	}
 }

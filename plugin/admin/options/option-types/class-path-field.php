@@ -21,7 +21,6 @@ class PathField extends SettingField {
   }
 
   public function display() {
-    //echo( '<input id="' . esc_attr( $this->id ) . '" type="hidden" name="' . esc_attr( $this->id ) . '" value="' . esc_attr( wp_json_encode( $this->get(), JSON_UNESCAPED_UNICODE ) ) . '">' );
-    echo "<input type='text' name='" . esc_attr( $this->id ) . "' value='" . esc_attr( wp_json_encode( $this->get(), JSON_UNESCAPED_UNICODE ) ) . "' readonly class='regular-text'>";
+    echo "<input id='" . esc_attr( $this->id ) . "' type='hidden' name='" . esc_attr( $this->id ) . "' value='" . esc_attr( wp_json_encode( $this->get(), JSON_UNESCAPED_UNICODE ) ) . "'>";
   }
 }
