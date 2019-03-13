@@ -27,6 +27,6 @@ function display() {
   add_settings_error( 'general', 'help', sprintf( esc_html__( 'To get access details please follow this %1$slink%2$s', 'skaut-google-drive-documents' ), '<a href="' . esc_url( $console ) . '" target="_blank">', '</a>' ), 'notice-info' );
 
   settings_errors();
-  echo '<p>' . __( 'Create a Google app and provide the following details:', 'sgdd' ) . '</p>' ;
+  echo '<p>' . __( 'Create a Google app and provide the following details:', 'skaut-google-drive-documents' ) . '</p>' ;
 	echo '<a class="button button-primary" href="' . esc_url_raw( wp_nonce_url( admin_url( 'admin.php?page=sgdd_settings&action=oauth_grant' ) ), 'oAuthGrant' ) . '">' . __( 'Grant Permission', 'skaut-google-drive-documents' ) . '</a>';
 }

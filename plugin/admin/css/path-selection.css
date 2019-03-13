@@ -1,13 +1,16 @@
 #loadingCircle {
   background: rgba(255, 255, 255, .7) url("../loading-icon.gif");
   background-repeat: no-repeat;
+  background-position-x: center;
   width: 100%;
   height: 100%;
   position: absolute;
 }
 
-#rootPath {
-  position: relative;
-  width: 150px;
-  height: 150px;
+#tableBody {
+  display: none;
+}
+
+.tablePath a {
+  cursor: pointer;
 }

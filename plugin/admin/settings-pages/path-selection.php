@@ -25,10 +25,10 @@ function registerScript( $hook ) {
 			'sgdd_path_selection_ajax',
 			'sgddRootPathLocalize',
 			[
-				'ajax_url'        => admin_url( 'admin-ajax.php' ),
-				'nonce'           => wp_create_nonce( 'sgddPathSelection' ),
-				'path'            => \Sgdd\Admin\Options\Options::$rootPath->get(),
-				'team_drive_list' => esc_html__( 'Team drive list', 'skaut-google-drive-documents' ),
+				'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
+				'nonce'         => wp_create_nonce( 'sgddPathSelection' ),
+				'path'          => \Sgdd\Admin\Options\Options::$rootPath->get(),
+				'teamDriveList' => esc_html__( 'Team drive list', 'skaut-google-drive-documents' ),
 			]
 		);
 	}
@@ -58,120 +58,124 @@ function drivePathSelection() {
 	$service = \Sgdd\Admin\GoogleAPILib\getDriveClient();
 	$path = isset( $_GET['path'] ) ? $_GET['path'] : [];
 
-	if ( empty( $path ) ) {
-		$path = "Empty!";
+	$result = [
+		'pathNames' => [],
+		'content'  => [],
+	];
+
+	if ( ! empty ( $path ) ) {
+		$result['pathNames'] = getPathName( $path, $service );
+		$result['content']   = getDriveContent( $service, end( $path ) );
+	} else {
+		$result['pathNames'] = [ 'Team Drive List' ];
+		$result['content']   = getTeamDrives( $service );
 	}
 
-	wp_send_json( $path );
+	wp_send_json( $result );
+}
+
+function getPathName( $path, $service ) {
+	$result = [];
+
+	if ( count ( $path ) > 0 ) {
+		if ( $path[0] === 'root' ) {
+			$result[] = __( 'My Drive', 'skaut-google-drive-documents' );
+		} else {
+			$response = $service->teamdrives->get( $path[0], [ 'fields' => 'name' ] );
+			$result[] = $response->getName();
+		}
+	}
+
+	foreach(array_slice( $path, 1 ) as $pathElement) {
+		$response = $service->files->get( $pathElement, [ 'supportsTeamDrives' => true, 'fields' => 'name' ] );
+		$result[] = $response->getName();
+	}
+
+	return $result;
+}
+
+function getDriveContent( $service, $root ) {
+	$result = [];
+	$pageToken = null;
+
+	do {
+		$response = $service->files->listFiles(array(
+				'q' 										=> "'" . $root . "' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false",
+				'supportsTeamDrives'    => true,
+			  'includeTeamDriveItems' => true,
+				'pageToken' 						=> $pageToken,
+				'pageSize'  						=> 1000,
+				'fields'    						=> 'nextPageToken, files(id, name)',
+		));
+
+		if ( $response instanceof \Sgdg\Vendor\Google_Service_Exception ) {
+			throw $response;
+		}
+
+		foreach ($response->files as $file) {
+				$result[] = [
+					'pathName' => $file->getName(),
+					'pathId'   => $file->getId(),
+				];
+		}
+
+		$pageToken = $response->pageToken;
+	} while ($pageToken != null);
+
+	return $result;
+}
+
+function getTeamDrives( $service ) {
+	$result = [
+		[
+			'pathName' => __( 'My Drive', 'skaut-google-drive-documents' ),
+			'pathId'   => 'root',
+		],
+	];
+	$pageToken = null;
+
+	do {
+		$response = $service->teamdrives->listTeamdrives(array(
+				'pageToken' => $pageToken,
+				'pageSize'  => 100,
+				'fields'    => 'nextPageToken, teamDrives(id, name)',
+		));
+
+		if ( $response instanceof \Sgdg\Vendor\Google_Service_Exception ) {
+			throw $response;
+		}
+
+		foreach ($response->getTeamDrives() as $drive) {
+				$result[] = [
+					'pathName' => $drive->getName(),
+					'pathId'   => $drive->getId(),
+				];
+		}
+
+		$pageToken = $response->pageToken;
+	} while ($pageToken != null);
+
+	return $result;
 }
 
 function display() {  
 ?>	
 	<div id="rootPath">
 		<div id="loadingCircle"></div>
-		<table border='1'>
-			<tr>
-					<th>PathName</th>
-					<th>PathId</th>
-			</tr>
+		<table id="widefat fixed">
+			<thead>
+				<tr>
+					<th class="tablePath"></th>
+				</tr>
+			</thead>
+			<tbody class="tableBody"></tbody>
+			<tfoot>
+				<tr>
+					<th class="tablePath"></th>
+				</tr>
+			</tfoot>
 		</table>
 	</div>
 <?php
-	//\Sgdd\Admin\Options\Options::$rootPath->display();
-  //$service = \Sgdd\Admin\GoogleAPILib\getDriveClient();
-	
-	
-	//Get Path Name From ID
-	//$path = \Sgdd\Admin\Options\Options::$rootPath->get();
-	/*$response = $service->teamdrives->get( $path[0], [ 'fields' => 'name' ] );
-	$name = $response->getName();
-  //Get Path Name From ID
-
-	echo $name;*/
-
-	/*$path = [ '0AG1axM1kLzqjUk9PVA', '1w78zgtEG8dQNJ5mBnJc2hJA9PuW2KiA2', '1m5epvIURE_nVz6hV28ZsyhVGURrvqSju' ];
-
-  $ret        = [];
-  $page_token = null;
-	$root = end( $path );
-	do {
-		$params   = [
-			//'q'                     => '"' . $root . '" in parents and mimeType = "application/vnd.google-apps.folder" and trashed = false',
-			'q'                     => '"' . $root . '" in parents and trashed = false',
-			'supportsTeamDrives'    => true,
-			'includeTeamDriveItems' => true,
-			'pageToken'             => $page_token,
-			'pageSize'              => 1000,
-			'fields'                => 'nextPageToken, files(id, name)',
-		];
-		$response = $service->files->listFiles( $params );
-		if ( $response instanceof \Sgdd\Vendor\Google_Service_Exception ) {
-			throw $response;
-		}
-		foreach ( $response->getFiles() as $file ) {
-			$ret[] = [
-				'name' => $file->getName(),
-				'id'   => $file->getId(),
-			];
-		}
-		$page_token = $response->getNextPageToken();
-	} while ( null !== $page_token );*/
-
-	/*$ret        = [
-		[
-			'name' => esc_html__( 'My Drive', 'skaut-google-drive-gallery' ),
-			'id'   => 'root',
-		],
-	];
-	$page_token = null;
-	do {
-		$params   = [
-			'pageToken' => $page_token,
-			'pageSize'  => 100,
-			'fields'    => 'nextPageToken, teamDrives(id, name)',
-		];
-		$response = $service->teamdrives->listTeamdrives( $params );
-
-		if ( $response instanceof \Sgdd\Vendor\Google_Service_Exception ) {
-			throw $response;
-		}
-		foreach ( $response->getTeamdrives() as $teamdrive ) {
-			$ret[] = [
-				'name' => $teamdrive->getName(),
-				'id'   => $teamdrive->getId(),
-			];
-		}
-		$page_token = $response->getNextPageToken();
-	} while ( null !== $page_token );*/
-
-	/*$ret = [];
-	if ( count( $path ) > 0 ) {
-		if ( 'root' === $path[0] ) {
-			$ret[] = esc_html__( 'My Drive', 'skaut-google-drive-gallery' );
-		} else {
-			$response = $service->teamdrives->get( $path[0], [ 'fields' => 'name' ] );
-			$ret[]    = $response->getName();
-		}
-	}
-	foreach ( array_slice( $path, 1 ) as $path_element ) {
-		$response = $service->files->get(
-			$path_element,
-			[
-				'supportsTeamDrives' => true,
-				'fields'             => 'name',
-			]
-		);
-		$ret[]    = $response->getName();
-	}*/
-
-	//var_dump($ret);
-
-  /*foreach ( $ret as $res ) {
-    echo $res['name'] . ' [id: '. $res['id'] . ']';
-    echo '<br>';
-	}*/
-
-	/*var_dump( \Sgdd\Admin\Options\Options::$rootPath->get()[0] );*/
-
-  //echo count($ret);
+	\Sgdd\Admin\Options\Options::$rootPath->display();
 }
