@@ -2,7 +2,7 @@
 namespace Sgdd\Admin\SettingsPages\OAuthGrant;
 
 if ( ! is_admin() ) {
-	return;
+  return;
 }
 
 function register() {
@@ -28,5 +28,5 @@ function display() {
 
   settings_errors();
   echo '<p>' . __( 'Create a Google app and provide the following details:', 'skaut-google-drive-documents' ) . '</p>' ;
-	echo '<a class="button button-primary" href="' . esc_url_raw( wp_nonce_url( admin_url( 'admin.php?page=sgdd_settings&action=oauth_grant' ) ), 'oAuthGrant' ) . '">' . __( 'Grant Permission', 'skaut-google-drive-documents' ) . '</a>';
+  echo '<a class="button button-primary" href="' . esc_url_raw( wp_nonce_url( admin_url( 'admin.php?page=sgdd_settings&action=oauth_grant' ) ), 'oAuthGrant' ) . '">' . __( 'Grant Permission', 'skaut-google-drive-documents' ) . '</a>';
 }
