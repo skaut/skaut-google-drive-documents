@@ -1,25 +1,25 @@
 <?php
-namespace Sgdd\Admin\SettingsPages\PathSelection;
+namespace Sgdd\Admin\SettingsPages\Basic\PathSelection;
 
 if ( ! is_admin() ) {
   return;
 }
 
 function register() {
-  add_action( 'admin_init', '\\Sgdd\\Admin\\SettingsPages\\PathSelection\\addSettings' );
-  add_action( 'admin_enqueue_scripts', '\\Sgdd\\Admin\\SettingsPages\\PathSelection\\registerScript' );
-  add_action( 'wp_ajax_listDrive', '\\Sgdd\\Admin\\SettingsPages\\PathSelection\\ajaxHandler' );
+  add_action( 'admin_init', '\\Sgdd\\Admin\\SettingsPages\\Basic\\PathSelection\\addSettings' );
+  add_action( 'admin_enqueue_scripts', '\\Sgdd\\Admin\\SettingsPages\\Basic\\PathSelection\\registerScript' );
+  add_action( 'wp_ajax_listDrive', '\\Sgdd\\Admin\\SettingsPages\\Basic\\PathSelection\\ajaxHandler' );
 }
 
 function addSettings() {
-  add_settings_section( 'sgdd_path_select', __( 'Step 2: Root Path Selection', 'skaut-google-drive-documents' ), '\\Sgdd\\Admin\\SettingsPages\\PathSelection\\display', 'sgdd_settings' );
+  add_settings_section( 'sgdd_path_select', __( 'Step 2: Root Path Selection', 'skaut-google-drive-documents' ), '\\Sgdd\\Admin\\SettingsPages\\Basic\\PathSelection\\display', 'sgdd_basic' );
 
   \Sgdd\Admin\Options\Options::$rootPath->register();
 }
 
 function registerScript( $hook ) {
   \Sgdd\enqueue_style( 'sgdd_path_selection_css', '/admin/css/path-selection.css' );
-  if ( $hook === 'toplevel_page_sgdd_settings' ) {
+  if ( $hook === 'toplevel_page_sgdd_basic' ) {
     \Sgdd\enqueue_script( 'sgdd_path_selection_ajax', '/admin/js/path-selection.js', [ 'jquery' ] );
     wp_localize_script(
       'sgdd_path_selection_ajax',
@@ -160,6 +160,7 @@ function getTeamDrives( $service ) {
 
 function display() {  
 ?>
+
   <div id="rootPath">
     <div id="loadingCircle"></div>
     <table id="widefat fixed">
@@ -176,6 +177,7 @@ function display() {
       </tfoot>
     </table>
   </div>
+
 <?php
   \Sgdd\Admin\Options\Options::$rootPath->display();
 }

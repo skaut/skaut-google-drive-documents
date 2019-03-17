@@ -14,7 +14,7 @@ jQuery( document ).ready( function( $ ) {
         $( '#loadingCircle' ).fadeIn();
         $( '#submit' ).attr( 'disabled', 'disabled' );
       },
-      success: function( response ) {	
+      success: function( response ) {
         var html = '';
 
         /* Loading animation */
