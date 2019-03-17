@@ -1,26 +1,24 @@
 <?php
 namespace Sgdd\Admin\AdminPage;
 
-require_once __DIR__ . '/admin-page-display.php';
-require_once __DIR__ . '/settings-pages/oauth-grant.php';
-require_once __DIR__ . '/settings-pages/oauth-revoke.php';
-require_once __DIR__ . '/settings-pages/path-selection.php';
+require_once __DIR__ . '/settings-pages/basic.php';
+require_once __DIR__ . '/settings-pages/advanced.php';
+
+require_once __DIR__ . '/settings-pages/basic/oauth-grant.php';
+require_once __DIR__ . '/settings-pages/basic/oauth-revoke.php';
+require_once __DIR__ . '/settings-pages/basic/path-selection.php';
 
 if ( ! is_admin() ) {
   return;
 }
 
 function register() {
-  add_action( 'admin_menu', '\\Sgdd\\Admin\\AdminPage\\addMenu');
+  add_action( 'admin_menu', '\\Sgdd\\Admin\\AdminPage\\addMenu' );
   add_action( 'admin_init', '\\Sgdd\\Admin\\AdminPage\\actionHandler' );
   add_action( 'admin_enqueue_scripts', '\\Sgdd\\Admin\\AdminPage\\registerStyle' );
-  
-  if ( !get_option('sgdd_accessToken') ) {
-    \Sgdd\Admin\SettingsPages\OAuthGrant\register();
-  } else {
-    \Sgdd\Admin\SettingsPages\OAuthRevoke\register();
-    \Sgdd\Admin\SettingsPages\PathSelection\register();
-  }
+
+  \Sgdd\Admin\SettingsPages\Basic\register();
+  \Sgdd\Admin\SettingsPages\Advanced\register();
 }
 
 function registerStyle() {
@@ -32,14 +30,14 @@ function addMenu() {
     __('Google Drive Documents Settings', 'skaut-google-drive-documents'),
     __('Google Drive Documents', 'skaut-google-drive-documents'),
     'manage_options',
-    'sgdd_settings',
-    '\\Sgdd\\Admin\\AdminPageDisplay\\display',
+    'sgdd_basic',
+    '\\Sgdd\\Admin\\SettingsPages\\Basic\\display',
     plugins_url('/skaut-google-drive-documents/admin/icon.png')
   );
 }
 
 function actionHandler() {
-  if ( isset( $_GET['page'] ) && $_GET['page'] === 'sgdd_settings' ) {
+  if ( isset( $_GET['page'] ) && $_GET['page'] === 'sgdd_basic' ) {
     if ( isset( $_GET['action'] ) ) {
       if ( $_GET['action'] === 'oauth_grant' ) {
         wp_verify_nonce( $_GET['_wpnonce'], 'oAuthGrant' );

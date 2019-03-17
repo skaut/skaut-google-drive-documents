@@ -1,16 +1,16 @@
 <?php
-namespace Sgdd\Admin\SettingsPages\OAuthGrant;
+namespace Sgdd\Admin\SettingsPages\Basic\OAuthGrant;
 
 if ( ! is_admin() ) {
   return;
 }
 
 function register() {
-  add_action( 'admin_init', '\\Sgdd\\Admin\\SettingsPages\\OAuthGrant\\addSettings' );
+  add_action( 'admin_init', '\\Sgdd\\Admin\\SettingsPages\\Basic\\OAuthGrant\\addSettings' );
 }
 
 function addSettings() {
-  add_settings_section( 'sgdd_auth', __( 'Step 1: Authorization', 'skaut-google-drive-documents' ), '\\Sgdd\\Admin\\SettingsPages\\OAuthGrant\\display', 'sgdd_settings' );
+  add_settings_section( 'sgdd_auth', __( 'Step 1: Authorization', 'skaut-google-drive-documents' ), '\\Sgdd\\Admin\\SettingsPages\\Basic\\OAuthGrant\\display', 'sgdd_basic' );
 
   \Sgdd\Admin\Options\Options::$authorizedDomain->addField( true, true );
   \Sgdd\Admin\Options\Options::$authorizedOrigin->addField( true, true );
@@ -28,5 +28,5 @@ function display() {
 
   settings_errors();
   echo '<p>' . __( 'Create a Google app and provide the following details:', 'skaut-google-drive-documents' ) . '</p>' ;
-  echo '<a class="button button-primary" href="' . esc_url_raw( wp_nonce_url( admin_url( 'admin.php?page=sgdd_settings&action=oauth_grant' ) ), 'oAuthGrant' ) . '">' . __( 'Grant Permission', 'skaut-google-drive-documents' ) . '</a>';
+  echo '<a class="button button-primary" href="' . esc_url_raw( wp_nonce_url( admin_url( 'admin.php?page=sgdd_basic&action=oauth_grant' ) ), 'oAuthGrant' ) . '">' . __( 'Grant Permission', 'skaut-google-drive-documents' ) . '</a>';
 }

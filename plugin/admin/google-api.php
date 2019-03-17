@@ -11,7 +11,7 @@ function getGoogleClient() {
     [
       'client_id'     => \Sgdd\Admin\Options\Options::$clientId->get(),
       'client_secret' => \Sgdd\Admin\Options\Options::$clientSecret->get(),
-      'redirect_uris' => [ esc_url_raw( admin_url( 'admin.php?page=sgdd_settings&action=oauth_redirect' ) ) ]
+      'redirect_uris' => [ esc_url_raw( admin_url( 'admin.php?page=sgdd_basic&action=oauth_redirect' ) ) ]
     ]
   );
   $client->setAccessType( "offline" );
@@ -86,7 +86,7 @@ function oAuthRedirect() {
   }
   
   set_transient( 'settings_errors', get_settings_errors(), 30 );
-  header( 'Location: ' . esc_url_raw( admin_url( 'admin.php?page=sgdd_settings&settings-updated=true' ) ) );
+  header( 'Location: ' . esc_url_raw( admin_url( 'admin.php?page=sgdd_basic&settings-updated=true' ) ) );
 }
 
 function oAuthRevoke() {
@@ -99,6 +99,6 @@ function oAuthRevoke() {
 
   add_settings_error( 'general', 'oauthUpdated', __( 'Permission revoked.', 'skaut-google-drive-documents' ), 'updated' );
   set_transient( 'settings_errors', get_settings_errors(), 30 );
-  header( 'Location: ' . esc_url_raw( admin_url( 'admin.php?page=sgdd_settings&settings-updated=true' ) ) );
+  header( 'Location: ' . esc_url_raw( admin_url( 'admin.php?page=sgdd_basic&settings-updated=true' ) ) );
 }
 
