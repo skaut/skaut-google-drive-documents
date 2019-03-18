@@ -21,5 +21,7 @@ wp-content/plugins/hello.php
 /node_modules
 /vendor
 
+.vscode
+
 composer.lock
 package-lock.json
