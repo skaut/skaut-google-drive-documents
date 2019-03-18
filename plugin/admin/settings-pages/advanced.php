@@ -6,10 +6,10 @@ if ( ! is_admin() ) {
 }
 
 function register() {
-	add_action( 'admin_menu', '\\Sgdd\\Admin\\SettingsPages\\Advanced\\add' );
+	add_action( 'admin_menu', '\\Sgdd\\Admin\\SettingsPages\\Advanced\\add_menu' );
 }
 
-function add() {
+function add_menu() {
   add_submenu_page( 'sgdd_basic', __( 'Advanced options', 'skaut-google-drive-documents' ), esc_html__( 'Advanced options', 'skaut-google-drive-documents' ), 'manage_options', 'sgdd_advanced', '\\Sgdd\\Admin\\SettingsPages\\Advanced\\display' );
 }
 
