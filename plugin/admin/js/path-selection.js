@@ -41,7 +41,7 @@ jQuery( document ).ready( function( $ ) {
 
         /* Up directory dots */
         html = '';
-        if ( path.length > 0 ) {
+        if ( path.length > 0 ) {
           html += '<tr><td class="row-title"><label>..</label></tr>';
           $( '.tableBody' ).html( html );
         }
@@ -68,15 +68,16 @@ jQuery( document ).ready( function( $ ) {
           $( '#submit' ).removeAttr( 'disabled' );
         });
 
-        $( '#sgdd_rootPath' ).val( JSON.stringify( path ) );
+        $( '#sgdd_root_path' ).val( JSON.stringify( path ) );
       },
-      error: function() {
+      error: function(response) {
         alert("Error");
+        console.log(response);
       }
     });
   }
 
-  function pathClick( path, element) {
+  function pathClick( path, element ) {
     var elementIndex = path.indexOf( $( element ).data( 'id' ) );
     var newPath = path.slice( 0, elementIndex + 1 );
 

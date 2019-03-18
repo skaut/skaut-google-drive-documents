@@ -1,104 +1,135 @@
 <?php
+/**
+ * Google API connections.
+ *
+ * Handles connecting and managing connection to Google API.
+ *
+ * @package SGDD
+ * @since 1.0.0
+ */
+
 namespace Sgdd\Admin\GoogleAPILib;
 
 if ( ! is_admin() ) {
-  return;
+	return;
 }
 
-function getGoogleClient() {
-  $client = new \Sgdd\Vendor\Google_Client();
-  $client->setAuthConfig(
-    [
-      'client_id'     => \Sgdd\Admin\Options\Options::$clientId->get(),
-      'client_secret' => \Sgdd\Admin\Options\Options::$clientSecret->get(),
-      'redirect_uris' => [ esc_url_raw( admin_url( 'admin.php?page=sgdd_basic&action=oauth_redirect' ) ) ]
-    ]
-  );
-  $client->setAccessType( "offline" );
-  $client->setIncludeGrantedScopes( true );
-  $client->setApprovalPrompt( 'force' );
-  $client->addScope( \Sgdd\Vendor\Google_Service_Drive::DRIVE );
-  
-  return $client;
+/**
+ * Sets up Google Client object.
+ *
+ * @return object Google Client object.
+ */
+function get_google_client() {
+	$client = new \Sgdd\Vendor\Google_Client();
+	$client->setAuthConfig(
+		[
+			'client_id'     => \Sgdd\Admin\Options\Options::$client_id->get(),
+			'client_secret' => \Sgdd\Admin\Options\Options::$client_secret->get(),
+			'redirect_uris' => [ esc_url_raw( admin_url( 'admin.php?page=sgdd_basic&action=oauth_redirect' ) ) ],
+		]
+	);
+	$client->setAccessType( 'offline' );
+	$client->setIncludeGrantedScopes( true );
+	$client->setApprovalPrompt( 'force' );
+	$client->addScope( \Sgdd\Vendor\Google_Service_Drive::DRIVE );
+
+	return $client;
 }
 
-function getDriveClient() {
-  $client = \Sgdd\Admin\GoogleAPILib\getGoogleClient();
-  $accessToken = get_option( 'sgdd_accessToken' );
+/**
+ * Sets up Google Drive Client object.
+ *
+ * @throws \Exception If access token is not defined.
+ * @return object Google Drive Client object.
+ */
+function get_drive_client() {
+	$client       = \Sgdd\Admin\GoogleAPILib\get_google_client();
+	$access_token = get_option( 'sgdd_access_token' );
 
-  if ( ! $accessToken ) {
-    throw new \Exception( __( 'Not authorized!', 'skaut-google-drive-documents' ) );
-  }
+	if ( ! $access_token ) {
+		throw new \Exception( __( 'Not authorized!', 'skaut-google-drive-documents' ) );
+	}
 
-  $client->setAccessToken( $accessToken );
+	$client->setAccessToken( $access_token );
 
-  if ( $client->isAccessTokenExpired() ) {
-    $client->fetchAccessTokenWithRefreshToken( $client->getRefreshToken() );
-    $newAccessToken = $client->getAccessToken();
-    $mergedAccessToken = array_merge( $accessToken, $newAccessToken );
-    update_option( 'sgdd_accessToken', $mergedAccessToken );
-  }
+	if ( $client->isAccessTokenExpired() ) {
+		$client->fetchAccessTokenWithRefreshToken( $client->getRefreshToken() );
+		$new_access_token    = $client->getAccessToken();
+		$merged_access_token = array_merge( $access_token, $new_access_token );
+		update_option( 'sgdd_access_token', $merged_access_token );
+	}
 
-  return new \Sgdd\Vendor\Google_Service_Drive( $client );
+	return new \Sgdd\Vendor\Google_Service_Drive( $client );
 }
 
-function oAuthGrant() {
-  $client = getGoogleClient();
-  $authUrl = $client->createAuthUrl();
+/**
+ * Handles oAuth grant proccess.
+ */
+function oauth_grant() {
+	$client   = get_google_client();
+	$auth_url = $client->createAuthUrl();
 
-  header( 'Location: ' . esc_url_raw( $authUrl ) );
+	header( 'Location: ' . esc_url_raw( $auth_url ) );
 }
 
-function oAuthRedirect() {
-  if ( ! isset( $_GET['code'] ) ) {
-    add_settings_error( 'general', 'oauthFailed', esc_html__( 'Google API hasn\'t returned an authentication code. Please try again.', 'skaut-google-drive-documents' ), 'error' );
-  }
+/**
+ * Handles redirect from Google API.
+ */
+function oauth_redirect() {
+	// phpcs:ignore
+	if ( ! isset( $_GET['code'] ) ) {
+		add_settings_error( 'general', 'oauth_failed', esc_html__( 'Google API hasn\'t returned an authentication code. Please try again.', 'skaut-google-drive-documents' ), 'error' );
+	}
 
-  if ( count( get_settings_errors() ) === 0 && ! get_option( 'sgdd_accessToken' ) ) {    
-    $client = getGoogleClient();
-    $client->authenticate( $_GET['code'] );
-    $accessToken = $client->getAccessToken();
-    
-    add_option( 'sgdd_accessToken', $accessToken );
-    
-    //TODO
-    //var_dump($accessToken);
-    /*$client = \Sgdg\Frontend\GoogleAPILib\get_raw_client();
-    // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
-    $client->authenticate( $_GET['code'] );
-    $access_token = $client->getAccessToken();
-    $drive_client = new \Sgdg\Vendor\Google_Service_Drive( $client );
-    try {
-      \Sgdg\Admin\AdminPages\Basic\RootSelection\list_teamdrives( $drive_client );
-      update_option( 'sgdg_access_token', $access_token );
-    } catch ( \Sgdg\Vendor\Google_Service_Exception $e ) {
-      if ( 'accessNotConfigured' === $e->getErrors()[0]['reason'] ) {
-        // translators: %s: Link to the Google developers console
-        add_settings_error( 'general', 'oauth_failed', sprintf( esc_html__( 'Google Drive API is not enabled. Please enable it at %s and try again after a while.', 'skaut-google-drive-gallery' ), '<a href="https://console.developers.google.com/apis/library/drive.googleapis.com" target="_blank">https://console.developers.google.com/apis/library/drive.googleapis.com</a>' ), 'error' );
-      } else {
-        add_settings_error( 'general', 'oauth_failed', esc_html__( 'An unknown error has been encountered:', 'skaut-google-drive-gallery' ) . ' ' . $e->getErrors()[0]['message'], 'error' );
-      }
-    }*/
-  }
-  
-  if ( count( get_settings_errors() ) === 0 ) { 
-    add_settings_error( 'general', 'oauthUpdated', __( 'Permission granted.', 'skaut-google-drive-documents' ), 'updated' );
-  }
-  
-  set_transient( 'settings_errors', get_settings_errors(), 30 );
-  header( 'Location: ' . esc_url_raw( admin_url( 'admin.php?page=sgdd_basic&settings-updated=true' ) ) );
+	if ( count( get_settings_errors() ) === 0 && ! get_option( 'sgdd_access_token' ) ) {
+		$client = get_google_client();
+		// phpcs:ignore
+		$client->authenticate( $_GET['code'] );
+		$access_token = $client->getAccessToken();
+
+		add_option( 'sgdd_access_token', $access_token );
+
+		/*
+		TODO.
+		$client = \Sgdg\Frontend\GoogleAPILib\get_raw_client();
+		// phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
+		$client->authenticate( $_GET['code'] );
+		$access_token = $client->getAccessToken();
+		$drive_client = new \Sgdg\Vendor\Google_Service_Drive( $client );
+		try {
+		\Sgdg\Admin\AdminPages\Basic\RootSelection\list_teamdrives( $drive_client );
+		update_option( 'sgdg_access_token', $access_token );
+		} catch ( \Sgdg\Vendor\Google_Service_Exception $e ) {
+		if ( 'accessNotConfigured' === $e->getErrors()[0]['reason'] ) {
+			// translators: %s: Link to the Google developers console
+			add_settings_error( 'general', 'oauth_failed', sprintf( esc_html__( 'Google Drive API is not enabled. Please enable it at %s and try again after a while.', 'skaut-google-drive-gallery' ), '<a href="https://console.developers.google.com/apis/library/drive.googleapis.com" target="_blank">https://console.developers.google.com/apis/library/drive.googleapis.com</a>' ), 'error' );
+		} else {
+			add_settings_error( 'general', 'oauth_failed', esc_html__( 'An unknown error has been encountered:', 'skaut-google-drive-gallery' ) . ' ' . $e->getErrors()[0]['message'], 'error' );
+		}
+		}
+		*/
+	}
+
+	if ( count( get_settings_errors() ) === 0 ) {
+		add_settings_error( 'general', 'oauth_updated', __( 'Permission granted.', 'skaut-google-drive-documents' ), 'updated' );
+	}
+
+	set_transient( 'settings_errors', get_settings_errors(), 30 );
+	header( 'Location: ' . esc_url_raw( admin_url( 'admin.php?page=sgdd_basic&settings-updated=true' ) ) );
 }
 
-function oAuthRevoke() {
-  $client = getGoogleClient();
-  $client->revokeToken();
+/**
+ * Handles oAuth revoke proccess.
+ */
+function oauth_revoke() {
+	$client = get_google_client();
+	$client->revokeToken();
 
-  if ( get_option( 'sgdd_accessToken' ) ) {
-    delete_option( 'sgdd_accessToken' );
-  }
+	if ( get_option( 'sgdd_access_token' ) ) {
+		delete_option( 'sgdd_access_token' );
+	}
 
-  add_settings_error( 'general', 'oauthUpdated', __( 'Permission revoked.', 'skaut-google-drive-documents' ), 'updated' );
-  set_transient( 'settings_errors', get_settings_errors(), 30 );
-  header( 'Location: ' . esc_url_raw( admin_url( 'admin.php?page=sgdd_basic&settings-updated=true' ) ) );
+	add_settings_error( 'general', 'oauth_updated', __( 'Permission revoked.', 'skaut-google-drive-documents' ), 'updated' );
+	set_transient( 'settings_errors', get_settings_errors(), 30 );
+	header( 'Location: ' . esc_url_raw( admin_url( 'admin.php?page=sgdd_basic&settings-updated=true' ) ) );
 }
-
