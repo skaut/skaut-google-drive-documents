@@ -87,7 +87,12 @@ function get_path_name( $path, $service ) {
 	}
 
 	foreach ( array_slice( $path, 1 ) as $path_element ) {
-		$response = $service->files->get( $path_element, [ 'supportsTeamDrives' => true, 'fields' => 'name' ] );
+		$get_options = [
+			'supportsTeamDrives' => true,
+			'fields'             => 'name',
+		];
+
+		$response = $service->files->get( $path_element, $get_options );
 		$result[] = $response->getName();
 	}
 
@@ -121,6 +126,7 @@ function get_drive_content( $service, $root ) {
 				];
 		}
 
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		$page_token = $response->pageToken;
 	} while ( null !== $page_token );
 
@@ -156,6 +162,7 @@ function get_team_drives( $service ) {
 				];
 		}
 
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		$page_token = $response->pageToken;
 	} while ( null !== $page_token );
 

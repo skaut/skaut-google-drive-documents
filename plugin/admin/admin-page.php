@@ -57,8 +57,10 @@ function add_menu() {
  * Handles redirects from Google
  */
 function action_handler() {
+	// phpcs:ignore WordPress.Security.NonceVerification
 	if ( isset( $_GET['page'] ) && 'sgdd_basic' === sanitize_key( $_GET['page'] ) ) {
 		if ( isset( $_GET['action'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification
 			if ( 'oauth_grant' === $_GET['action'] ) {
 				if ( isset( $_GET['_wpnonce'] ) ) {
 					wp_verify_nonce( sanitize_key( $_GET['_wpnonce'] ), 'oauth_grant' );

@@ -14,7 +14,15 @@ class StringField extends SettingField {
 	}
 
 	public function register() {
-		register_setting( $this->page, $this->id, [ 'type' => 'string', 'sanitize_callback' => [ $this, 'sanitize' ], 'default' => $this->default_value ] );
+		register_setting(
+			$this->page,
+			$this->id,
+			[
+				'type'              => 'string',
+				'sanitize_callback' => [ $this, 'sanitize' ],
+				'default'           => $this->default_value,
+			]
+		);
 	}
 
 	public function sanitize( $value ) {
