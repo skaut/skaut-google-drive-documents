@@ -20,7 +20,7 @@ namespace Sgdd\Vendor\Google\Auth;
 use Sgdd\Vendor\Google\Auth\HttpHandler\HttpHandlerFactory;
 use Sgdd\Vendor\GuzzleHttp\Psr7;
 use Sgdd\Vendor\GuzzleHttp\Psr7\Request;
-use InvalidArgumentException;
+use Sgdd\Vendor\InvalidArgumentException;
 use Sgdd\Vendor\Psr\Http\Message\RequestInterface;
 use Sgdd\Vendor\Psr\Http\Message\ResponseInterface;
 use Sgdd\Vendor\Psr\Http\Message\UriInterface;
