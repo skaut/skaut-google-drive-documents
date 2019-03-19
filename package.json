@@ -19,6 +19,7 @@
     "url": "git+https://github.com/skaut/skaut-google-drive-documents.git"
   },
   "devDependencies": {
+    "eslint-plugin-compat": "^3.0.1",
     "gulp": "^4.0.0",
     "gulp-composer": "^0.4.5",
     "gulp-eslint": "^5.0.0",
