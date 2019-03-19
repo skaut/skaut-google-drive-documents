@@ -2,13 +2,13 @@
 
 jQuery( document ).ready( function( $ ) {
   function showDir( path ) {
-    $.ajax({ 
+    $.ajax({
       url: sgddRootPathLocalize.ajaxUrl,
-      type: "GET",
+      type: 'GET',
       data: {
         action: 'listDrive',
         path: path,
-        _ajax_nonce: sgddRootPathLocalize.nonce
+        _ajax_nonce: sgddRootPathLocalize.nonce // eslint-disable-line camelcase
       },
       beforeSend: function() {
         $( '#loadingCircle' ).fadeIn();
@@ -16,19 +16,20 @@ jQuery( document ).ready( function( $ ) {
       },
       success: function( response ) {
         var html = '';
+        var i;
 
         /* Loading animation */
         $( '#loadingCircle' ).fadeOut();
         $( '#tableBody' ).fadeIn();
 
         /* debug log */
-        console.log(response);
+        console.log( response );
 
         /* Print path */
-        if ( path.length > 0 ) {
+        if ( 0 < path.length ) {
           html += '<a data-id="">' + sgddRootPathLocalize.teamDriveList + '</a> > ';
-          for (var i = 0; i < response.pathNames.length; i++) {
-            if (i > 0) {
+          for ( i = 0; i < response.pathNames.length; i++ ) {
+            if ( 0 < i ) {
               html += ' > ';
             }
             html += '<a data-id="' + path[i] + '">' + response.pathNames[i] + '</a>';
@@ -41,17 +42,17 @@ jQuery( document ).ready( function( $ ) {
 
         /* Up directory dots */
         html = '';
-        if ( path.length > 0 ) {
+        if ( 0 < path.length ) {
           html += '<tr><td class="row-title"><label>..</label></tr>';
           $( '.tableBody' ).html( html );
         }
 
         /* List dir content */
-        for (var i = 0; i < response.content.length; i++) {
+        for ( i = 0; i < response.content.length; i++ ) {
           html += '<tr class="';
 
-          if (i % 2 == 0) {
-            html += 'alternate'
+          if ( 0 == i % 2 ) {
+            html += 'alternate';
           }
 
           html += '"><td class="row-title"><label data-id="' + response.content[i].pathId + '">' + response.content[i].pathName + '</label>';
@@ -70,9 +71,9 @@ jQuery( document ).ready( function( $ ) {
 
         $( '#sgdd_root_path' ).val( JSON.stringify( path ) );
       },
-      error: function(response) {
-        alert("Error");
-        console.log(response);
+      error: function( response ) {
+        alert( 'Error' );
+        console.log( response );
       }
     });
   }
