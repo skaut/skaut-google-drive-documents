@@ -144,7 +144,7 @@ class Google_Model implements \ArrayAccess
    */
   public function toSimpleObject()
   {
-    $object = new stdClass();
+    $object = new \stdClass();
 
     // Process all other data.
     foreach ($this->modelData as $key => $val) {
@@ -155,8 +155,8 @@ class Google_Model implements \ArrayAccess
     }
 
     // Process all public properties.
-    $reflect = new ReflectionObject($this);
-    $props = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
+    $reflect = new \ReflectionObject($this);
+    $props = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
     foreach ($props as $member) {
       $name = $member->getName();
       $result = $this->getSimpleValue($this->$name);

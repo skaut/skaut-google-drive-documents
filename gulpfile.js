@@ -24,7 +24,8 @@ gulp.task( 'composer-copy-apiclient-services', function() {
 				'vendor/google/apiclient-services/src/Google/Service/Drive/FileList.php',
 				'vendor/google/apiclient-services/src/Google/Service/Drive/Resource/*',
 				'vendor/google/apiclient-services/src/Google/Service/Drive/TeamDrive.php',
-				'vendor/google/apiclient-services/src/Google/Service/Drive/TeamDriveList.php'
+				'vendor/google/apiclient-services/src/Google/Service/Drive/TeamDriveList.php',
+				'vendor/google/apiclient-services/src/Google/Service/Drive/Permission.php'
 			], {base: 'vendor/'})
 			.pipe( replace( /^<\?php/, '<?php\nnamespace Sgdd\\Vendor;' ) )
 			.pipe( replace( /\nuse /g, '\nuse Sgdd\\Vendor\\' ) )
