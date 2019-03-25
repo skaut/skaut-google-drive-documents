@@ -53,8 +53,8 @@ function init() {
 	register_activation_hook( __FILE__, '\\Sgdd\\activate' );
 	add_action( 'admin_notices', '\\Sgdd\\activation_info' );
 	add_action( 'plugins_loaded', [ '\\Sgdd\\Admin\\Options\\Options', 'init' ] );
-  \Sgdd\Admin\AdminPage\register();
-  \Sgdd\Admin\Block\register();
+	\Sgdd\Admin\AdminPage\register();
+	\Sgdd\Admin\Block\register();
 }
 
 /**

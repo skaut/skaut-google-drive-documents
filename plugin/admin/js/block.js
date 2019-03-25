@@ -1,29 +1,29 @@
 'use strict';
 
-wp.blocks.registerBlockType( 'sakut-google-drive-documents/block', {
+var el = wp.element.createElement,
+    registerBlockType = wp.blocks.registerBlockType,
+    blockStyle = { backgroundColor: '#900', color: '#fff', padding: '20px' };
+
+registerBlockType( 'sakut-google-drive-documents/block', {
   title: 'SGDD Block',
   description: 'SGDD Test Block',
   icon: 'welcome-add-page',
   category: 'common',
+  keywords: [ 'docs', 'documents', 'drive' ],
 
   attributes: {
     content: {
-      type: 'array',
+      type: 'string',
       source: 'children',
       selector: 'p',
     }
   },
 
-  edit: function( props ) {
-    return wp.element.createElement( wp.blocks.RichText, { 
-      tagName: 'p',
-      className: props.className,
-      value: props.attributes.content,
-      onChange: function( newContent ) {
-        props.setAttributes( { content: newContent } );
-      }
-    } );
+  edit: function() {
+    return el( 'p', { style: blockStyle }, 'Hello editor.' );
   },
 
-  save: function( props ) {}
+  save: function() {
+      null;
+  },
 });
