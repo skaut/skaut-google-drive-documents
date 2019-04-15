@@ -17,6 +17,8 @@ require_once __DIR__ . '/settings-pages/basic/oauth-grant.php';
 require_once __DIR__ . '/settings-pages/basic/oauth-revoke.php';
 require_once __DIR__ . '/settings-pages/basic/path-selection.php';
 
+require_once __DIR__ . '/editor.php';
+
 if ( ! is_admin() ) {
 	return;
 }
@@ -31,6 +33,7 @@ function register() {
 
 	\Sgdd\Admin\SettingsPages\Basic\register();
 	\Sgdd\Admin\SettingsPages\Advanced\register();
+	\Sgdd\Admin\Editor\register();
 }
 
 /**

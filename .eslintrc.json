@@ -1,0 +1,10 @@
+{
+	"env": {
+		"browser": true
+	},
+	"plugins": ["compat"],
+	"extends": "wordpress",
+	"rules": {
+		"compat/compat": "error"
+	}
+}

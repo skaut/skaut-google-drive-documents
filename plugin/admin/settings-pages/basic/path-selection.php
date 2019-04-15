@@ -173,14 +173,15 @@ function display() {
 	?>
 
 	<div id="rootPath">
-		<div id="loadingCircle"></div>
-		<table id="widefat fixed">
+		<table class="widefat">
 			<thead>
 				<tr>
 					<th class="tablePath"></th>
 				</tr>
 			</thead>
-			<tbody class="tableBody"></tbody>
+			<tbody class="tableBody">
+				<tr id="loadingCircle"></tr>
+			</tbody>
 			<tfoot>
 				<tr>
 					<th class="tablePath"></th>
