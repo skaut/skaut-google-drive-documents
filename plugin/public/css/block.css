@@ -1,0 +1,11 @@
+.folder {
+  background-color: blue;
+}
+
+.folder label {
+  color: #ffffff;
+}
+
+.file {
+  background-color: yellowgreen;
+}

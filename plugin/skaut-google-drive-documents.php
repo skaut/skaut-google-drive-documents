@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once __DIR__ . '/admin/admin-page.php';
-require_once __DIR__ . '/admin/block.php';
+require_once __DIR__ . '/public/block.php';
 require_once __DIR__ . '/admin/options/class-options.php';
 
 require_once __DIR__ . '/admin/google-api.php';
@@ -54,7 +54,7 @@ function init() {
 	add_action( 'admin_notices', '\\Sgdd\\activation_info' );
 	add_action( 'plugins_loaded', [ '\\Sgdd\\Admin\\Options\\Options', 'init' ] );
 	\Sgdd\Admin\AdminPage\register();
-	\Sgdd\Admin\Block\register();
+	\Sgdd\Pub\Block\register();
 }
 
 /**
