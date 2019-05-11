@@ -107,11 +107,12 @@ function get_drive_content( $service, $root ) {
 		$response = $service->files->listFiles(
 			array(
 				'q'                     => "'" . $root . "' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false",
-				'supportsTeamDrives'    => true,
-				'includeTeamDriveItems' => true,
+				'supportsTeamDrives'    => true, //will be gone
+				'includeTeamDriveItems' => true, //will be gone
 				'pageToken'             => $page_token,
 				'pageSize'              => 1000,
 				'fields'                => 'nextPageToken, files(id, name)',
+				//'supportsAllDrives' => true,  //will be added
 			)
 		);
 
@@ -143,6 +144,8 @@ function get_team_drives( $service ) {
 	$page_token = null;
 
 	do {
+
+		//Will be gone
 		$response = $service->teamdrives->listTeamdrives(
 			array(
 				'pageToken' => $page_token,
@@ -151,10 +154,22 @@ function get_team_drives( $service ) {
 			)
 		);
 
+		// Will be added
+		/* $response = $service->drive->listDrives(
+			[
+				'pageToken' => $page_token,
+				'pageSize'  => 10,
+			]
+		); */
+
 		if ( $response instanceof \Sgdg\Vendor\Google_Service_Exception ) {
 			throw $response;
 		}
 
+		// Will be added
+		/* foreach ( $response->get() as $drive ) { */
+
+		// Will be gone
 		foreach ( $response->getTeamDrives() as $drive ) {
 				$result[] = [
 					'pathName' => $drive->getName(),
@@ -180,7 +195,9 @@ function display() {
 				</tr>
 			</thead>
 			<tbody class="tableBody">
-				<tr id="loadingCircle"></tr>
+				<tr>	
+					<th id="loadingCircle"></th>
+				</tr>
 			</tbody>
 			<tfoot>
 				<tr>

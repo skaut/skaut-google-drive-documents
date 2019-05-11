@@ -17,6 +17,7 @@
 
 namespace Sgdd\Vendor\Google\Auth;
 
+use Sgdd\Vendor\Google\Auth\HttpHandler\HttpClientCache;
 use Sgdd\Vendor\Google\Auth\HttpHandler\HttpHandlerFactory;
 use Sgdd\Vendor\GuzzleHttp\Psr7;
 use Sgdd\Vendor\GuzzleHttp\Psr7\Request;
@@ -495,7 +496,7 @@ class OAuth2 implements FetchAuthTokenInterface
     public function fetchAuthToken(callable $httpHandler = null)
     {
         if (is_null($httpHandler)) {
-            $httpHandler = HttpHandlerFactory::build();
+            $httpHandler = HttpHandlerFactory::build(HttpClientCache::getHttpClient());
         }
 
         $response = $httpHandler($this->generateCredentialsRequest());
@@ -1266,6 +1267,20 @@ class OAuth2 implements FetchAuthTokenInterface
         }
 
         return null;
+    }
+
+    /**
+     * Get the client ID.
+     *
+     * Alias of {@see Google\Auth\OAuth2::getClientId()}.
+     *
+     * @param callable $httpHandler
+     * @return string
+     * @access private
+     */
+    public function getClientName(callable $httpHandler = null)
+    {
+        return $this->getClientId();
     }
 
     /**

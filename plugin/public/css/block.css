@@ -1,11 +1,18 @@
 .folder {
-  background-color: blue;
+  background-color: rgb(197, 218, 224);
+  font-weight: 500;
 }
 
 .folder label {
-  color: #ffffff;
+  color: #333333;
 }
 
 .file {
-  background-color: yellowgreen;
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.selected {
+  background-color: #c2ffa9;
+  font-weight: 600;
 }

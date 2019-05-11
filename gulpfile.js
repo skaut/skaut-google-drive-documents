@@ -19,6 +19,8 @@ gulp.task( 'composer-do-update', function( done ) {
 gulp.task( 'composer-copy-apiclient-services', function() {
 		return gulp.src([
 				'vendor/google/apiclient-services/src/Google/Service/Drive.php',
+				'vendor/google/apiclient-services/src/Google/Service/Drive/Drive.php',
+				'vendor/google/apiclient-services/src/Google/Service/Drive/DriveList.php',
 				'vendor/google/apiclient-services/src/Google/Service/Drive/DriveFileImageMediaMetadata.php',
 				'vendor/google/apiclient-services/src/Google/Service/Drive/DriveFile.php',
 				'vendor/google/apiclient-services/src/Google/Service/Drive/FileList.php',

@@ -2,6 +2,12 @@
 
 jQuery( document ).ready( function( $ ) {
   function showDir( path ) {
+
+    /* If path is not initialized */
+    if ( ! ( path instanceof Array ) ) {
+      path = [];
+    }
+
     $.ajax({
       url: sgddRootPathLocalize.ajaxUrl,
       type: 'GET',
@@ -23,7 +29,7 @@ jQuery( document ).ready( function( $ ) {
         $( '#tableBody' ).fadeIn();
 
         /* debug log */
-        console.log( response );
+        //console.log( response );
 
         /* Print path */
         if ( 0 < path.length ) {
@@ -72,8 +78,8 @@ jQuery( document ).ready( function( $ ) {
         $( '#sgdd_root_path' ).val( JSON.stringify( path ) );
       },
       error: function( response ) {
-        alert( 'Error' );
-        console.log( response );
+        var html = '<div class="notice notice-error"><p>' + response.error + '</p></div>';
+        $( '#rootPath' ).replaceWith( html );
       }
     });
   }

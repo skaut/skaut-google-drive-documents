@@ -18,15 +18,11 @@ SgddFileSelection.prototype.ajax = function() {
 		type: 'GET',
 		data: {
 			action: 'selectFile',
-			path: this.getAttribute( 'path' ),
+			namesPath: this.getAttribute( 'namesPath' ),
+			idsPath: this.getAttribute( 'idsPath'),
 			_ajax_nonce: sgddBlockJsLocalize.nonce // eslint-disable-line camelcase
 		},
-		beforeSend: function() {
-
-			//TODO
-			/*$( '#loadingCircle' ).fadeIn();
-			$( '#submit' ).attr( 'disabled', 'disabled' );*/
-		},
+		beforeSend: function() {},
 		success: function( response ) {
 			if ( response.error ) {
 				that.setState({error: response.error});
@@ -43,49 +39,59 @@ SgddFileSelection.prototype.ajax = function() {
 SgddFileSelection.prototype.render = function() {
 	var that = this;
 	var children = [];
-	var path = [ el( 'a', {onClick: function( e ) {
+	var namesPath = [ el( 'a', {onClick: function( e ) {
 		that.pathClick( that, e );
 	}}, sgddBlockJsLocalize.root ) ];
-	var i, id;
+	var i;
 
 	if ( this.state.error ) {
-		return el( 'div', { class: 'notice notice-error' }, el( 'p', {}, this.state.error ) );
+		return el( 'div', { className: 'notice notice-error' }, el( 'p', {}, this.state.error ) );
 	}
 
 	if ( this.state.list ) {
-		if ( 0 < this.getAttribute( 'path' ).length ) {
-			children.push( el( 'tr', {}, el( 'td', {}, el( 'label', { onClick: function( e ) {
-				that.upClick( that );
-			}}, '..' ) ) ) );
-		}
-
 		for ( i = 0; i < this.state.list.length; i++ ) {
+			const id = this.state.list[i].fileId;
+
 			if ( this.state.list[i].folder ) {
-				children.push( el( 'tr', { class: 'folder' }, el( 'td', {}, el( 'label', { onClick: function( e ) {
-					that.folderClick( that, e );
+				children.unshift( el( 'tr', { className: 'folder', key: id }, el( 'td', {}, el( 'label', { onClick: function( e ) {
+					that.folderClick( that, e, id );
+					
 				}}, this.state.list[i].fileName ) ) ) );
 			} else {
-				id = this.state.list[i].fileId;
-
-				children.push( el( 'tr', { class: 'file' }, el( 'td', {}, el( 'label', { onClick: function( e ) {
-					that.fileClick( that, id );
-				}}, this.state.list[i].fileName ) ) ) );
+				if ( id === this.getAttribute('fileId') ) {
+					children.push( el( 'tr', { className: 'selected', key: id }, el( 'td', {}, el( 'label', { onClick: function() {
+						that.fileClick( that, id );
+					}}, this.state.list[i].fileName ) ) ) );
+				} else {
+					children.push( el( 'tr', { className: 'file', key: id }, el( 'td', {}, el( 'label', { onClick: function() {
+						that.fileClick( that, id );
+					}}, this.state.list[i].fileName ) ) ) );
+				}
 			}
 		}
 
-		for ( i = 0; i < this.getAttribute( 'path' ).length; i++ ) {
-			path.push( ' > ' );
-			path.push( el( 'a', { 'data-id': this.getAttribute( 'path' )[i], onClick: function( e ) {
-				that.path( that, e );
-			}}, this.getAttribute( 'path' )[i]) );
+		for ( i = 0; i < this.getAttribute( 'namesPath' ).length; i++ ) {
+			namesPath.push( ' > ' );
+			namesPath.push( el( 'a', { 'data-id': this.getAttribute( 'namesPath' )[i], key: i, onClick: function( e ) {
+				that.pathClick( that, e );
+			}}, this.getAttribute( 'namesPath' )[i]) );
+		}
+
+		if ( 0 < this.getAttribute( 'namesPath' ).length ) {
+			children.unshift( el( 'tr', { key: -1 }, el( 'td', {}, el( 'label', { onClick: function( e ) {
+				that.upClick( that );
+			}}, '..' ) ) ) );
 		}
 	}
 
 	return el( wp.element.Fragment, {}, [
-		el( 'table', { class: 'widefat' }, [
+		el( wp.editor.InspectorControls, {},
+			el( SgddInspector, {block: this})
+		),
+		el( 'table', { className: 'widefat fixed' }, [
 			el( 'thead', {},
 				el( 'tr', {},
-					el( 'th', {}, path )
+					el( 'th', {}, namesPath )
 				)
 			),
 
@@ -93,7 +99,7 @@ SgddFileSelection.prototype.render = function() {
 
 			el( 'tfoot', {},
 				el( 'tr', {},
-					el( 'th', {}, path )
+					el( 'th', {}, namesPath )
 				)
 			)
 		])
@@ -111,23 +117,44 @@ SgddFileSelection.prototype.setAttribute = function( name, value ) {
 };
 
 SgddFileSelection.prototype.upClick = function( that ) {
-	var path;
+	var namesPath;
+	var idsPath;
 
-	path = that.getAttribute( 'path' ).slice( 0, that.getAttribute( 'path' ).length - 1 );
-	that.setAttribute( 'path', path );
+	namesPath = that.getAttribute( 'namesPath' ).slice( 0, that.getAttribute( 'namesPath' ).length - 1 );
+	idsPath = that.getAttribute( 'idsPath' ).slice( 0, that.getAttribute( 'idsPath' ).length - 1 );
+
+	that.setAttribute( 'namesPath', namesPath );
+	that.setAttribute( 'idsPath', idsPath );
 	that.setState({ error: undefined, list: undefined }, that.ajax );
 };
 
-SgddFileSelection.prototype.folderClick = function( that, e ) {
-	var newFolder = $( e.currentTarget ).html();
-	var path;
+SgddFileSelection.prototype.pathClick = function( that, e ) {
+	var namesPath = that.getAttribute( 'namesPath' );
+	var idsPath = that.getAttribute( 'idsPath' );
 
-	path = that.getAttribute( 'path' ).concat( newFolder );
-	that.setAttribute( 'path', path );
+	namesPath = namesPath.slice( 0, namesPath.indexOf( $( e.currentTarget ).data( 'id' ) ) + 1 );
+	idsPath = idsPath.slice( 0, idsPath.indexOf( $( e.currentTarget ).data( 'id' ) ) + 1 );
+
+	that.setAttribute( 'namesPath', namesPath );
+	that.setAttribute( 'idsPath', idsPath );
+	that.setState({error: undefined, list: undefined}, that.ajax );
+};
+
+SgddFileSelection.prototype.folderClick = function( that, e, id ) {
+	let newFolder = $( e.currentTarget ).html();
+	var namesPath;
+	var idsPath = that.getAttribute( 'idsPath' );
+
+	namesPath = that.getAttribute( 'namesPath' ).concat( newFolder );
+	idsPath.push( id );
+	
+	that.setAttribute( 'namesPath', namesPath );
+	that.setAttribute( 'idsPath', idsPath );
 	that.setState({ error: undefined, list: undefined }, that.ajax );
 };
 
 SgddFileSelection.prototype.fileClick = function( that, fileId ) {
 	that.setAttribute( 'fileId', fileId );
+	that.setAttribute( 'permissions', false );
 	that.setState({ error: undefined, list: undefined }, that.ajax );
 };

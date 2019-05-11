@@ -44,52 +44,15 @@ function file_selection() {
 	}
 
 	$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
-	$path    = isset( $_GET['path'] ) ? $_GET['path'] : [];
+	$path    = isset( $_GET['idsPath'] ) ? $_GET['idsPath'] : [];
 
 	if ( 0 < count( $path ) ) {
-		$folder_id = get_folder_id( $service, $path );
-		$result    = get_folder_content( $service, $folder_id );
+		$result = get_folder_content( $service, end( $path ) );
 	} else {
 		$result = get_folder_content( $service );
 	}
 
 	wp_send_json( $result );
-}
-
-function get_folder_id( $service, array $path, $root = null ) {
-	if ( ! isset( $root ) ) {
-		$root = end( \Sgdd\Admin\Options\Options::$root_path->get() );
-	}
-
-	$page_token = null;
-
-	do {
-		$response = $service->files->listFiles(
-			array(
-				'q'                     => "'" . $root . "' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false",
-				'supportsTeamDrives'    => true,
-				'includeTeamDriveItems' => true,
-				'pageToken'             => $page_token,
-				'pageSize'              => 1000,
-				'fields'                => 'nextPageToken, files(id, name, mimeType)',
-			)
-		);
-
-		if ( $response instanceof \Sgdg\Vendor\Google_Service_Exception ) {
-			throw $response;
-		}
-
-		foreach ( $response->files as $file ) {
-			if ( $file->getName() === $path[0] ) {
-				array_shift( $path );
-				if ( 0 < count( $path ) ) {
-					get_folder_id( $service, $path, $file->getId() );
-				}
-				return $file->getId();
-			}
-		}
-	} while ( null !== $page_token );
-	throw new \Exception( esc_html__( 'No such directory found - it may have been deleted or renamed. ', 'skaut-google-drive-documents' ) );
 }
 
 function get_folder_content( $service, $folder = null ) {
@@ -116,7 +79,7 @@ function get_folder_content( $service, $folder = null ) {
 			throw $response;
 		}
 
-		foreach ( $response->files as $file ) {
+		foreach ( $response->getFiles() as $file ) {
 				$result[] = [
 					'fileName' => $file->getName(),
 					'fileId'   => $file->getId(),
