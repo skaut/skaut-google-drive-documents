@@ -31,7 +31,8 @@ function get_google_client() {
 	$client->setAccessType( 'offline' );
 	$client->setIncludeGrantedScopes( true );
 	$client->setApprovalPrompt( 'force' );
-	$client->addScope( \Sgdd\Vendor\Google_Service_Drive::DRIVE );
+	$client->setApplicationName( 'Skaut Google Drive Documents' );
+	$client->setScopes( \Sgdd\Vendor\Google_Service_Drive::DRIVE );
 
 	return $client;
 }
@@ -93,11 +94,11 @@ function oauth_redirect() {
 		// phpcs:ignore WordPress.Security.NonceVerification
 		$client->authenticate( $_GET['code'] );
 		$access_token = $client->getAccessToken();
-		$drive_client = new \Sgdg\Vendor\Google_Service_Drive( $client );
+		$drive_client = new \Sgdd\Vendor\Google_Service_Drive( $client );
 		try {
-			\Sgdg\Admin\AdminPages\Basic\RootSelection\list_teamdrives( $drive_client );
+			\Sgdd\Admin\SettingsPages\Basic\PathSelection\get_team_drives( $drive_client );
 			update_option( 'sgdd_access_token', $access_token );
-		} catch ( \Sgdg\Vendor\Google_Service_Exception $e ) {
+		} catch ( \Sgdd\Vendor\Google_Service_Exception $e ) {
 			if ( 'accessNotConfigured' === $e->getErrors()[0]['reason'] ) {
 				// translators: %s: Link to the Google developers console
 				add_settings_error( 'general', 'oauth_failed', sprintf( esc_html__( 'Google Drive API is not enabled. Please enable it at %s and try again after a while.', 'skaut-google-drive-documents' ), '<a href="https://console.developers.google.com/apis/library/drive.googleapis.com" target="_blank">https://console.developers.google.com/apis/library/drive.googleapis.com</a>' ), 'error' );

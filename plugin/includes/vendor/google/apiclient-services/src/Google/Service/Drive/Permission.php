@@ -27,6 +27,8 @@ class Google_Service_Drive_Permission extends Google_Collection
   public $expirationTime;
   public $id;
   public $kind;
+  protected $permissionDetailsType = 'Google_Service_Drive_PermissionPermissionDetails';
+  protected $permissionDetailsDataType = 'array';
   public $photoLink;
   public $role;
   protected $teamDrivePermissionDetailsType = 'Google_Service_Drive_PermissionTeamDrivePermissionDetails';
@@ -96,6 +98,20 @@ class Google_Service_Drive_Permission extends Google_Collection
   public function getKind()
   {
     return $this->kind;
+  }
+  /**
+   * @param Google_Service_Drive_PermissionPermissionDetails
+   */
+  public function setPermissionDetails($permissionDetails)
+  {
+    $this->permissionDetails = $permissionDetails;
+  }
+  /**
+   * @return Google_Service_Drive_PermissionPermissionDetails
+   */
+  public function getPermissionDetails()
+  {
+    return $this->permissionDetails;
   }
   public function setPhotoLink($photoLink)
   {

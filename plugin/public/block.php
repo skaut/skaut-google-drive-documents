@@ -13,7 +13,8 @@ function register() {
 
 function add_block() {
 	\Sgdd\enqueue_script( 'sgdd_block_js', '/public/js/block.js', [ 'wp-blocks', 'wp-components', 'wp-editor', 'wp-element', 'wp-i18n', 'sgdd_file_selection_js' ] );
-	\Sgdd\enqueue_script( 'sgdd_file_selection_js', '/public/js/file-selection.js', [ 'wp-components', 'wp-element' ] );
+	\Sgdd\enqueue_script( 'sgdd_file_selection_js', '/public/js/file-selection.js', [ 'wp-components', 'wp-element', 'sgdd_inspector_js' ] );
+	\Sgdd\enqueue_script( 'sgdd_inspector_js', '/public/js/inspector.js', [ 'wp-element' ] );
 	wp_enqueue_script( 'thickbox' );
 	wp_enqueue_style( 'thickbox' );
 
@@ -49,22 +50,26 @@ function display( $attr ) {
 }
 
 function print_file( $file_id ) {
-	$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
+	try {
+		$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
 
-	$domain_permission = new \Sgdd\Vendor\Google_Service_Drive_Permission(
-		[
-			'role' => 'reader',
-			'type' => 'anyone',
-		]
-	);
+		$domain_permission = new \Sgdd\Vendor\Google_Service_Drive_Permission(
+			[
+				'role' => 'reader',
+				'type' => 'anyone',
+			]
+		);
 
-	$request     = $service->permissions->create( $file_id, $domain_permission, [ 'supportsTeamDrives' => true ] );
-	$get_options = [
-		'supportsTeamDrives' => true,
-		'fields'             => '*',
-	];
+		$request     = $service->permissions->create( $file_id, $domain_permission, [ 'supportsTeamDrives' => true ] );
+		$get_options = [
+			'supportsTeamDrives' => true,
+			'fields'             => '*',
+		];
 
-	$response = $service->files->get( $file_id, $get_options );
+		$response = $service->files->get( $file_id, $get_options );
 
-	return $response;
+		return $response;
+	} catch ( \Exception $e ) {
+		return 'Chyba!! ' . $e->getMessage();
+	}
 }

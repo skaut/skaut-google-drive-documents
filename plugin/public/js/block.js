@@ -11,7 +11,11 @@ registerBlockType( 'sakut-google-drive-documents/block', {
   keywords: [ 'docs', 'documents', 'drive' ],
 
   attributes: {
-    path: {
+    namesPath: {
+      type: 'array',
+      default: []
+    },
+    idsPath: {
       type: 'array',
       default: []
     },
