@@ -8,7 +8,9 @@ var SgddInspector = function( attributes ) {
 SgddInspector.prototype = Object.create( wp.element.Component.prototype );
 SgddInspector.prototype.render = function() {
 	return el( wp.components.PanelBody, {title: 'Embed size', className: 'sgdd-block-settings'}, [
-		el( 'h3', {}, 'Width' ),
-		el( 'h3', {}, 'Height' )
+		el( SgddIntegerSetting, {block: this.block, name: 'embedWidth'} ),
+		el( SgddIntegerSetting, {block: this.block, name: 'embedHeight'} ),
+		el( SgddSelectSetting, {block: this.block, name: 'units'} ),
+		el( SgddBoolSetting, {block: this.block, name: 'folder'} )
 	]);
 };
