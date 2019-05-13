@@ -1,21 +1,30 @@
 'use strict';
 var el = wp.element.createElement;
 
-var SgdgIntegerSettingsComponent = function( attributes ) {
-	SgdgSettingsComponent.call( this, attributes );
+var SgddSelectSetting = function( attributes ) {
+	SgddSettingsBase.call( this, attributes );
 };
-SgdgIntegerSettingsComponent.prototype = Object.create( SgdgSettingsComponent.prototype );
-SgdgIntegerSettingsComponent.prototype.renderInput = function() {
+SgddSelectSetting.prototype = Object.create( SgddSettingsBase.prototype );
+SgddSelectSetting.prototype.renderInput = function() {
 	var that = this;
 	var value = this.block.getAttribute( this.name );
-	return el( 'input', {className: 'sgdg-block-settings-integer components-range-control__number', disabled: undefined === value, onChange: function( e ) {
+	return el( 'div', {className: 'sgdd-block-units'}, [
+		el( 'label', {className: 'sgdd-block-settings-radio', for: this.name + '_px'}, [
+			el( 'input', {checked: 'pixels' === this.state.value, disabled: undefined === value, id: this.name + '_px', name: this.name, onChange: function( e ) {
 			that.change( e );
-		}, placeholder: sgdgBlockLocalize[this.name].default, type: 'number', value: this.state.value});
+		}, type: 'radio', value: 'pixels'}),
+			sgddBlockJsLocalize['pixels']
+		]),
+		el( 'label', {className: 'sgdd-block-settings-radio', for: this.name + '_per'}, [
+			el( 'input', {checked: 'percentage' === this.state.value, disabled: undefined === value, id: this.name + '_per', name: this.name, onChange: function( e ) {
+			that.change( e );
+		}, type: 'radio', value: 'percentage'}),
+			sgddBlockJsLocalize['percentage']
+		])
+	]);
 };
-SgdgIntegerSettingsComponent.prototype.getValue = function( element ) {
-	var value = parseInt( element.value );
-	if ( isNaN( value ) ) {
-		return undefined;
-	}
-	return value;
+
+SgddSelectSetting.prototype.change = function( e ) {
+	this.setState({value: e.target.value});
+	this.block.setAttribute( this.name, e.target.value );
 };
