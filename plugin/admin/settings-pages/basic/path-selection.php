@@ -25,10 +25,10 @@ function register_script( $hook ) {
 			'sgdd_path_selection_ajax',
 			'sgddRootPathLocalize',
 			[
-				'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
-				'nonce'         => wp_create_nonce( 'sgdd_path_selection' ),
-				'path'          => \Sgdd\Admin\Options\Options::$root_path->get(),
-				'teamDriveList' => esc_html__( 'Team drive list', 'skaut-google-drive-documents' ),
+				'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
+				'nonce'     => wp_create_nonce( 'sgdd_path_selection' ),
+				'path'      => \Sgdd\Admin\Options\Options::$root_path->get(),
+				'driveList' => esc_html__( 'Shared drive list', 'skaut-google-drive-documents' ),
 			]
 		);
 	}
@@ -67,8 +67,8 @@ function drive_path_selection() {
 		$result['pathNames'] = get_path_name( $path, $service );
 		$result['content']   = get_drive_content( $service, end( $path ) );
 	} else {
-		$result['pathNames'] = [ 'Team Drive List' ];
-		$result['content']   = get_team_drives( $service );
+		$result['pathNames'] = [ 'Shared Drive List' ];
+		$result['content']   = get_drives( $service );
 	}
 
 	wp_send_json( $result );
@@ -81,15 +81,15 @@ function get_path_name( $path, $service ) {
 		if ( 'root' === $path[0] ) {
 			$result[] = __( 'My Drive', 'skaut-google-drive-documents' );
 		} else {
-			$response = $service->teamdrives->get( $path[0], [ 'fields' => 'name' ] );
+			$response = $service->drives->get( $path[0], [ 'fields' => 'name' ] );
 			$result[] = $response->getName();
 		}
 	}
 
 	foreach ( array_slice( $path, 1 ) as $path_element ) {
 		$get_options = [
-			'supportsTeamDrives' => true,
-			'fields'             => 'name',
+			'supportsAllDrives' => true,
+			'fields'            => 'name',
 		];
 
 		$response = $service->files->get( $path_element, $get_options );
@@ -104,15 +104,15 @@ function get_drive_content( $service, $root ) {
 	$page_token = null;
 
 	do {
+
 		$response = $service->files->listFiles(
 			array(
-				'q'                     => "'" . $root . "' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false",
-				'supportsTeamDrives'    => true, //will be gone
-				'includeTeamDriveItems' => true, //will be gone
-				'pageToken'             => $page_token,
-				'pageSize'              => 1000,
-				'fields'                => 'nextPageToken, files(id, name)',
-				//'supportsAllDrives' => true,  //will be added
+				'q'                         => "'" . $root . "' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false",
+				'supportsAllDrives'         => true,
+				'includeItemsFromAllDrives' => true,
+				'pageToken'                 => $page_token,
+				'pageSize'                  => 1000,
+				'fields'                    => 'nextPageToken, files(id, name)',
 			)
 		);
 
@@ -134,7 +134,7 @@ function get_drive_content( $service, $root ) {
 	return $result;
 }
 
-function get_team_drives( $service ) {
+function get_drives( $service ) {
 	$result     = [
 		[
 			'pathName' => __( 'My Drive', 'skaut-google-drive-documents' ),
@@ -144,33 +144,21 @@ function get_team_drives( $service ) {
 	$page_token = null;
 
 	do {
-
-		//Will be gone
-		$response = $service->teamdrives->listTeamdrives(
+		$response = $service->drives->listDrives(
 			array(
 				'pageToken' => $page_token,
 				'pageSize'  => 100,
-				'fields'    => 'nextPageToken, teamDrives(id, name)',
+				'fields'    => 'nextPageToken, drives(id, name)',
 			)
 		);
 
-		// Will be added
-		/* $response = $service->drive->listDrives(
-			[
-				'pageToken' => $page_token,
-				'pageSize'  => 10,
-			]
-		); */
+		
 
 		if ( $response instanceof \Sgdg\Vendor\Google_Service_Exception ) {
 			throw $response;
 		}
 
-		// Will be added
-		/* foreach ( $response->get() as $drive ) { */
-
-		// Will be gone
-		foreach ( $response->getTeamDrives() as $drive ) {
+		foreach ( $response->getDrives() as $drive ) {
 				$result[] = [
 					'pathName' => $drive->getName(),
 					'pathId'   => $drive->getId(),
@@ -195,9 +183,7 @@ function display() {
 				</tr>
 			</thead>
 			<tbody class="tableBody">
-				<tr>	
-					<th id="loadingCircle"></th>
-				</tr>
+				<tr class="loadingCircle"></tr>
 			</tbody>
 			<tfoot>
 				<tr>

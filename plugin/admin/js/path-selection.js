@@ -17,23 +17,20 @@ jQuery( document ).ready( function( $ ) {
         _ajax_nonce: sgddRootPathLocalize.nonce // eslint-disable-line camelcase
       },
       beforeSend: function() {
-        $( '#loadingCircle' ).fadeIn();
-        $( '#submit' ).attr( 'disabled', 'disabled' );
+        $( '#rootPath tbody tr' ).not( '.loadingCircle' ).fadeOut();
+        $( '.loadingCircle' ).fadeIn( 'slow' );
+      },
+      complete: function() {
+        $( '.loadingCircle' ).fadeOut();
+        $( '#rootPath tbody tr' ).not( '.loadingCircle' ).fadeIn( 'slow' );
       },
       success: function( response ) {
         var html = '';
         var i;
 
-        /* Loading animation */
-        $( '#loadingCircle' ).fadeOut();
-        $( '#tableBody' ).fadeIn();
-
-        /* debug log */
-        //console.log( response );
-
         /* Print path */
         if ( 0 < path.length ) {
-          html += '<a data-id="">' + sgddRootPathLocalize.teamDriveList + '</a> > ';
+          html += '<a data-id="">' + sgddRootPathLocalize.driveList + '</a> > ';
           for ( i = 0; i < response.pathNames.length; i++ ) {
             if ( 0 < i ) {
               html += ' > ';
@@ -41,13 +38,13 @@ jQuery( document ).ready( function( $ ) {
             html += '<a data-id="' + path[i] + '">' + response.pathNames[i] + '</a>';
           }
         } else {
-          html += '<a data-id="">' + sgddRootPathLocalize.teamDriveList + '</a>';
+          html += '<a data-id="">' + sgddRootPathLocalize.driveList + '</a>';
           $( '#submit' ).attr( 'disabled', 'disabled' );
         }
         $( '.tablePath' ).html( html );
 
         /* Up directory dots */
-        html = '';
+        html = '<tr class="loadingCircle"></tr>';
         if ( 0 < path.length ) {
           html += '<tr><td class="row-title"><label>..</label></tr>';
           $( '.tableBody' ).html( html );
