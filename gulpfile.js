@@ -25,8 +25,6 @@ gulp.task( 'composer-copy-apiclient-services', function() {
 				'vendor/google/apiclient-services/src/Google/Service/Drive/DriveFile.php',
 				'vendor/google/apiclient-services/src/Google/Service/Drive/FileList.php',
 				'vendor/google/apiclient-services/src/Google/Service/Drive/Resource/*',
-				'vendor/google/apiclient-services/src/Google/Service/Drive/TeamDrive.php',
-				'vendor/google/apiclient-services/src/Google/Service/Drive/TeamDriveList.php',
 				'vendor/google/apiclient-services/src/Google/Service/Drive/Permission.php'
 			], {base: 'vendor/'})
 			.pipe( replace( /^<\?php/, '<?php\nnamespace Sgdd\\Vendor;' ) )
@@ -63,6 +61,9 @@ gulp.task( 'composer-copy-apiclient', function() {
 				], {base: 'vendor/'})
 				.pipe( replace( /^<\?php/, '<?php\nnamespace Sgdd\\Vendor;' ) )
 				.pipe( replace( / ArrayAccess/g, ' \\ArrayAccess' ) )
+				.pipe( replace( 'stdClass', '\\stdClass' ) )
+				.pipe( replace( 'ReflectionObject', '\\ReflectionObject' ) )
+				.pipe( replace( 'ReflectionProperty', '\\ReflectionProperty' ) )
 				.pipe( replace( 'class_exists($this->$keyType)', 'class_exists(\'\\\\Sgdd\\\\Vendor\\\\\' . $this->$keyType)' ) )
 				.pipe( replace( 'return $this->$keyType;', 'return \'\\\\Sgdd\\\\Vendor\\\\\' . $this->$keyType;' ) ),
 			gulp.src([

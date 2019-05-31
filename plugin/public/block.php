@@ -87,7 +87,7 @@ function print_file( $file_id ) {
 
 		$request     = $service->permissions->create( $file_id, $domain_permission, [ 'supportsTeamDrives' => true ] );
 		$get_options = [
-			'supportsTeamDrives' => true,
+			'supportsAllDrives'         => true,
 			'fields'             => '*',
 		];
 

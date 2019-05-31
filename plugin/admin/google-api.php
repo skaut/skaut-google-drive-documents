@@ -96,7 +96,7 @@ function oauth_redirect() {
 		$access_token = $client->getAccessToken();
 		$drive_client = new \Sgdd\Vendor\Google_Service_Drive( $client );
 		try {
-			\Sgdd\Admin\SettingsPages\Basic\PathSelection\get_team_drives( $drive_client );
+			\Sgdd\Admin\SettingsPages\Basic\PathSelection\get_drives( $drive_client );
 			update_option( 'sgdd_access_token', $access_token );
 		} catch ( \Sgdd\Vendor\Google_Service_Exception $e ) {
 			if ( 'accessNotConfigured' === $e->getErrors()[0]['reason'] ) {

@@ -66,12 +66,12 @@ function get_folder_content( $service, $folder = null ) {
 	do {
 		$response = $service->files->listFiles(
 			array(
-				'q'                     => "'" . $folder . "' in parents",
-				'supportsTeamDrives'    => true,
-				'includeTeamDriveItems' => true,
-				'pageToken'             => $page_token,
-				'pageSize'              => 1000,
-				'fields'                => 'nextPageToken, files(id, name, mimeType)',
+				'q'                         => "'" . $folder . "' in parents",
+				'supportsAllDrives'         => true,
+				'includeItemsFromAllDrives' => true,
+				'pageToken'                 => $page_token,
+				'pageSize'                  => 1000,
+				'fields'                    => 'nextPageToken, files(id, name, mimeType)',
 			)
 		);
 
