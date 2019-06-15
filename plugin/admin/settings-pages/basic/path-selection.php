@@ -152,8 +152,6 @@ function get_drives( $service ) {
 			)
 		);
 
-		
-
 		if ( $response instanceof \Sgdg\Vendor\Google_Service_Exception ) {
 			throw $response;
 		}

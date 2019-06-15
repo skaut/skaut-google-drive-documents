@@ -9,9 +9,6 @@ SgddBoolSetting.prototype.renderInput = function() {
 	var that = this;
 	var value = this.block.getAttribute( this.name );
 	return el( 'input', {checked: 'true' === this.state.value, className: 'sgdd-block-settings-boolean', disabled: undefined === value, onChange: function( e ) {
-      if ( 'false' === that.state.value ) {
-        that.setIdtesttttt();
-      }
       that.change( e );
 		}, type: 'checkbox'});
 };
