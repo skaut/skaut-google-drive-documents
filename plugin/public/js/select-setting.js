@@ -13,13 +13,13 @@ SgddSelectSetting.prototype.renderInput = function() {
 			el( 'input', {checked: 'pixels' === this.state.value, disabled: undefined === value, id: this.name + '_px', name: this.name, onChange: function( e ) {
 			that.change( e );
 		}, type: 'radio', value: 'pixels'}),
-			sgddBlockJsLocalize['pixels']
+			sgddBlockJsLocalize.pixels
 		]),
 		el( 'label', {className: 'sgdd-block-settings-radio', for: this.name + '_per'}, [
 			el( 'input', {checked: 'percentage' === this.state.value, disabled: undefined === value, id: this.name + '_per', name: this.name, onChange: function( e ) {
 			that.change( e );
 		}, type: 'radio', value: 'percentage'}),
-			sgddBlockJsLocalize['percentage']
+			sgddBlockJsLocalize.percentage
 		])
 	]);
 };

@@ -37,9 +37,3 @@ SgddSettingsBase.prototype.change = function( e ) {
 	this.setState({value: value});
   this.block.setAttribute( this.name, undefined === value ? sgddBlockLocalize[this.name][1] : value );
 };
-
-SgddSettingsBase.prototype.setIdtesttttt = function() {
-	var currentPath = sgddBlockLocalize[this.name];
-	console.log( currentPath );
-
-};

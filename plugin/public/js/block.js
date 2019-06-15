@@ -31,17 +31,9 @@ registerBlockType( 'sakut-google-drive-documents/block', {
       type: 'int',
       default: undefined
     },
-    units: {
-      type: 'string',
-      default: undefined
-    },
     folder: {
       type: 'string',
-      default: undefined
-    },
-    permissions: {
-      type: 'string',
-      default: undefined
+      default: 'false'
     }
   },
 
