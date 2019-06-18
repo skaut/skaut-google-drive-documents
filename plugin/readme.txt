@@ -1,6 +1,6 @@
 === Google Drive Documents ===
 Contributors: skaut, kalich5
-Tags: skaut, multisite, plugin, shortcode, google drvie, documents
+Tags: skaut, google drive, google drive documents, team drive, shared drive, documents , multisite, shortcode
 Requires at least: 5.0
 Tested up to: 5.2
 Requires PHP: 7.0
