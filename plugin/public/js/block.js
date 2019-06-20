@@ -3,7 +3,7 @@
 var el = wp.element.createElement,
     registerBlockType = wp.blocks.registerBlockType;
 
-registerBlockType( 'sakut-google-drive-documents/block', {
+registerBlockType( 'skaut-google-drive-documents/block', {
   title: sgddBlockJsLocalize.blockName,
   description: sgddBlockJsLocalize.blockDescription,
   icon: 'welcome-add-page',
@@ -23,6 +23,10 @@ registerBlockType( 'sakut-google-drive-documents/block', {
       type: 'string',
       default: undefined
     },
+    folderId: {
+      type: 'string',
+      default: undefined
+    },
     embedWidth: {
       type: 'int',
       default: undefined
@@ -31,9 +35,9 @@ registerBlockType( 'sakut-google-drive-documents/block', {
       type: 'int',
       default: undefined
     },
-    folder: {
+    folderType: {
       type: 'string',
-      default: 'false'
+      default: ''
     }
   },
 
