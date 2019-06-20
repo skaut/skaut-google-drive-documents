@@ -11,7 +11,7 @@
 namespace Sgdd;
 
 /**
- * Plugin Name: Google Drive Documents
+ * Plugin Name: Files and Docs from Google Drive
  * Plugin URI:  https://github.com/skaut/skaut-google-drive-documents
  * Description: A WordPress plugin to display and edit documents using Google Drive as file storage
  * Version:     0.1
