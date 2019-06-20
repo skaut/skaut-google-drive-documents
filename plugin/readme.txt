@@ -1,4 +1,4 @@
-=== Google Drive Documents ===
+=== Files and Docs from Google Drive ===
 Contributors: skaut, kalich5
 Tags: skaut, google drive, google drive documents, team drive, shared drive, documents , multisite, shortcode
 Requires at least: 5.0
