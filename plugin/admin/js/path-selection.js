@@ -81,6 +81,12 @@ jQuery( document ).ready( function( $ ) {
     });
   }
 
+  /**
+   * Reloads table content on path click
+   * 
+   * @param {string[]} path - Array of folder ids from root
+   * @param {*} element 
+   */
   function pathClick( path, element ) {
     var elementIndex = path.indexOf( $( element ).data( 'id' ) );
     var newPath = path.slice( 0, elementIndex + 1 );
@@ -88,6 +94,12 @@ jQuery( document ).ready( function( $ ) {
     showDir( newPath );
   }
 
+  /**
+   * Reloads table content on directory click
+   * 
+   * @param {string[]} path - Array of folder ids from root
+   * @param {*} element 
+   */
   function dirClick( path, element ) {
     var newID = $( element ).data( 'id' );
 
