@@ -70,11 +70,11 @@ function display( $attr ) {
 
 		$test = print_file( $attr['folderId'] );
 		$link   = $test['id'];
-		$result = '<iframe src="https://drive.google.com/embeddedfolderview?id=' . $link . $type . '" style="' . $size . ' border:0;"></iframe>' . $attr['folderId'] . $attr['folderType'];
+		$result = '<iframe src="https://drive.google.com/embeddedfolderview?id=' . $link . $type . '" style="' . $size . ' border:0;"></iframe>';
 	} else {
 		$test = print_file( $attr['fileId'] );
 		$link   = $test['id'];
-		$result = '<iframe src="https://docs.google.com/viewer?srcid=' . $link . '&pid=explorer&efh=false&a=v&chrome=false&embedded=true" style="' . $size . ' border:0;"></iframe>' . $attr['fileId'] . $attr['folderType'];
+		$result = '<iframe src="https://docs.google.com/viewer?srcid=' . $link . '&pid=explorer&efh=false&a=v&chrome=false&embedded=true" style="' . $size . ' border:0;"></iframe>';
 	}
 
 	return $result;

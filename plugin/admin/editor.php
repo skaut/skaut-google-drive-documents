@@ -14,10 +14,16 @@ if ( ! is_admin() ) {
 	return;
 }
 
+/**
+ * Registers actions into WordPress.
+ */
 function register() {
 	add_action( 'wp_ajax_selectFile', '\\Sgdd\\Admin\\Editor\\ajax_handler' );
 }
 
+/**
+ * Handles ajax call from JS
+ */
 function ajax_handler() {
 	try {
 		file_selection();
@@ -32,6 +38,9 @@ function ajax_handler() {
 	}
 }
 
+/**
+ * Fetch result of folder content and returns to ajax
+ */
 function file_selection() {
 	check_ajax_referer( 'sgdd_block_js' );
 
@@ -55,6 +64,9 @@ function file_selection() {
 	wp_send_json( $result );
 }
 
+/**
+ * Returns folder content
+ */
 function get_folder_content( $service, $folder = null ) {
 	if ( ! isset( $folder ) ) {
 		$folder = end( \Sgdd\Admin\Options\Options::$root_path->get() );
