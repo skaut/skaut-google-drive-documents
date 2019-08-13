@@ -4,7 +4,7 @@ Tags: skaut, google drive, google drive documents, team drive, shared drive, doc
 Requires at least: 5.0
 Tested up to: 5.2
 Requires PHP: 7.0
-Stable tag: 0.1
+Stable tag: 0.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -50,5 +50,8 @@ For more info about all the options see the [documentation page](ODKAZ) about ad
 3. 
 
 == Changelog ==
+= 0.2 =
+* added the ability to view the contents of a folder as a list or grid
+
 = 0.1 =
 * first beta version
