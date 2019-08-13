@@ -137,7 +137,7 @@ class Google_Service_Drive_Resource_Files extends Google_Service_Resource
     return $this->call('export', array($params));
   }
   /**
-   * Generates a set of file IDs which can be provided in create requests.
+   * Generates a set of file IDs which can be provided in create or copy requests.
    * (files.generateIds)
    *
    * @param array $optParams Optional parameters.
