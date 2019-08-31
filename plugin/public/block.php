@@ -62,15 +62,36 @@ function display( $attr ) {
 	}
 	
 	if ( isset( $attr['folderType'] ) ) {
+		$list = show_folder_list( $attr['folderId'] );
+
+		$result = '<table>'
+						. '<tbody>';
+
 		if ( 'list' === $attr['folderType'] ) {
-			$type = '#list';
+			//LIST - almost done
+			foreach( $list as $file ) {
+				//var_dump($file);
+				$result .= '<tr>';
+				$result .= '<td><img src="' . $file['iconLink'] . '"></td>';
+				$result .= '<td><a href="' . $file['webViewLink'] . '" target="_blank">' . $file['name'] . '</a></td>';
+				$result .= '</tr>';
+			}
 		} else {
-			$type = '#grid';
+			//GRID - add setting - num of columns
+			//		 - add thumbnails
+			//		 - fix empty space on first row
+			$i = 0;
+			foreach( $list as $file ) {
+				//var_dump($file);
+				$i++;
+				$i % 3 == 0 ? $result .= '<tr>' : $result .= '';
+				$result .= '<td><a href="' . $file['webViewLink'] . '" target="_blank"><img src="' . $file['thumbnailLink'] . '"></a></td>';
+				$i % 3 == 2 ? $result .= '</tr>' : $result .= '';
+			}
 		}
 
-		$test = print_file( $attr['folderId'] );
-		$link   = $test['id'];
-		$result = '<iframe src="https://drive.google.com/embeddedfolderview?id=' . $link . $type . '" style="' . $size . ' border:0;"></iframe>';
+		$result .= '</tbody>'
+						. '</table>';
 	} else {
 		$test = print_file( $attr['fileId'] );
 		$link   = $test['id'];
@@ -81,6 +102,9 @@ function display( $attr ) {
 }
 
 function print_file( $file_id ) {
+	//TODO: make efficient and more simple
+
+	//Only to set permissions to display file
 	try {
 		$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
 
@@ -103,4 +127,39 @@ function print_file( $file_id ) {
 	} catch ( \Exception $e ) {
 		return $e->getMessage();
 	}
+}
+
+function show_folder_list( $folderId ) {
+	//TODO
+
+	$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
+
+	if ( ! isset( $folderId ) ) {
+		$folderId = end( \Sgdd\Admin\Options\Options::$root_path->get() );
+	}
+
+	$result     = [];
+	$page_token = null;
+
+	do {
+		$response = $service->files->listFiles(
+			array(
+				'q'                         => "'" . $folderId . "' in parents",
+				'supportsAllDrives'         => true,
+				'includeItemsFromAllDrives' => true,
+				'pageToken'                 => $page_token,
+				'pageSize'                  => 1000,
+				'fields'                    => '*',
+			)
+		);
+
+		if ( $response instanceof \Sgdg\Vendor\Google_Service_Exception ) {
+			throw $response;
+		}
+
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+		$page_token = $response->pageToken;
+	} while ( null !== $page_token );
+
+	return $response;
 }
