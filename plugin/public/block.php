@@ -62,13 +62,14 @@ function display( $attr ) {
 	}
 	
 	if ( isset( $attr['folderType'] ) ) {
-		$list = show_folder_list( $attr['folderId'] );
-
-		$result = '<table>'
-						. '<tbody>';
+		$list = show_folder( $attr['folderId'] );
 
 		if ( 'list' === $attr['folderType'] ) {
 			//LIST - almost done
+
+			$result = '<table>'
+						  . '<tbody>';
+
 			foreach( $list as $file ) {
 				//var_dump($file);
 				$result .= '<tr>';
@@ -79,14 +80,21 @@ function display( $attr ) {
 		} else {
 			//GRID - add setting - num of columns
 			//		 - add thumbnails
-			//		 - fix empty space on first row
+
+			$result = '<table style="table-layout:fixed;">'
+						  . '<tbody>';
+
 			$i = 0;
 			foreach( $list as $file ) {
 				//var_dump($file);
-				$i++;
 				$i % 3 == 0 ? $result .= '<tr>' : $result .= '';
-				$result .= '<td><a href="' . $file['webViewLink'] . '" target="_blank"><img src="' . $file['thumbnailLink'] . '"></a></td>';
+				if (!$file['hasThumbnail']){
+					$result .= '<td style="margin:auto;"><a href="' . $file['webViewLink'] . '" target="_blank"><img src="' . preg_replace('(16)', '128',$file['iconLink']) . '"></a><br>' . $file['name'] . '</td>';
+				} else {
+					$result .= '<td style="margin:auto;"><a href="' . $file['webViewLink'] . '" target="_blank"><img src="' . $file['thumbnailLink'] . '"></a><br>' . $file['name'] . '</td>';
+				}
 				$i % 3 == 2 ? $result .= '</tr>' : $result .= '';
+				$i++;
 			}
 		}
 
@@ -129,7 +137,7 @@ function print_file( $file_id ) {
 	}
 }
 
-function show_folder_list( $folderId ) {
+function show_folder( $folderId ) {
 	//TODO
 
 	$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
