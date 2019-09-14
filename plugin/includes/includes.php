@@ -46,6 +46,9 @@ require_once __DIR__ . '/vendor/monolog/monolog/src/Monolog/Handler/HandlerInter
 require_once __DIR__ . '/vendor/monolog/monolog/src/Monolog/Handler/AbstractHandler.php';
 require_once __DIR__ . '/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php';
 require_once __DIR__ . '/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php';
+require_once __DIR__ . '/vendor/monolog/monolog/src/Monolog/Formatter/FormatterInterface.php';
+require_once __DIR__ . '/vendor/monolog/monolog/src/Monolog/Formatter/NormalizerFormatter.php';
+require_once __DIR__ . '/vendor/monolog/monolog/src/Monolog/Formatter/LineFormatter.php';
 
 require_once __DIR__ . '/vendor/google/auth/src/Cache/MemoryCacheItemPool.php';
 require_once __DIR__ . '/vendor/google/auth/src/Cache/Item.php';
