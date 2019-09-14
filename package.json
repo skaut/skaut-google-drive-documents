@@ -29,5 +29,8 @@
     "gulp-replace": "^1.0.0",
     "gulp-shell": "^0.7.1",
     "merge-stream": "^2.0.0"
+  },
+  "dependencies": {
+    "composer": "^4.1.0"
   }
 }
