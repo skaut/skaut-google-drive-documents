@@ -12,10 +12,6 @@ SgddFileSelection.prototype.componentDidMount = function() {
 };
 
 SgddFileSelection.prototype.ajax = function() {
-	console.log( 'FileID: ' + this.getAttribute( 'fileId' ) );
-	console.log( 'FolderID: ' + this.getAttribute( 'folderId' ) );
-	console.log( 'idsPath: ' + this.getAttribute( 'idsPath' ) );
-	console.log( 'namesPath: ' + this.getAttribute( 'namesPath' ) );
 	var that = this;
 	$.ajax({
 		url: sgddBlockJsLocalize.ajaxUrl,
@@ -41,11 +37,6 @@ SgddFileSelection.prototype.ajax = function() {
 };
 
 SgddFileSelection.prototype.render = function() {
-	console.log( 'render' );
-	console.log( 'FileID: ' + this.getAttribute( 'fileId' ) );
-	console.log( 'FolderID: ' + this.getAttribute( 'folderId' ) );
-	console.log( 'idsPath: ' + this.getAttribute( 'idsPath' ) );
-
 	var that = this;
 	var children = [];
 	var namesPath = [ el( 'a', {onClick: function( e ) {
@@ -177,8 +168,6 @@ SgddFileSelection.prototype.folderClick = function( that, e, id ) {
 
 	namesPath = that.getAttribute( 'namesPath' ).concat( newFolder );
 	idsPath = that.getAttribute( 'idsPath' ).concat( id );
-
-	console.log(idsPath);
 
 	that.setAttribute( 'namesPath', namesPath );
 	that.setAttribute( 'idsPath', idsPath );
