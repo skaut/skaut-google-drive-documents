@@ -30,11 +30,11 @@ class SelectField extends SettingField {
 
 	public function display() {
 		echo '<label for="sgdd-' . esc_attr( $this->id ) . '">
-						<input type="radio" id="sgdd-' . esc_attr( $this->id ) . '-px" name="' . esc_attr( $this->id ) . '" value="pixels" ' . ( $this->get() === 'pixels' ? 'checked' : '' ) . '> px
+						<input type="radio" id="sgdd-' . esc_attr( $this->id ) . '-list" name="' . esc_attr( $this->id ) . '" value="list" ' . ( $this->get() === 'list' ? 'checked' : '' ) . '> List
 					</label>
 					<br>
 					<label for="sgdd-' . esc_attr( $this->id ) . '">
-						<input type="radio" id="sgdd-' . esc_attr( $this->id ) . '-per" name="' . esc_attr( $this->id ) . '" value="percentage" ' . ( $this->get() === 'percentage' ? 'checked' : '' ) . '> %
+						<input type="radio" id="sgdd-' . esc_attr( $this->id ) . '-grid" name="' . esc_attr( $this->id ) . '" value="grid" ' . ( $this->get() === 'grid' ? 'checked' : '' ) . '> Grid
 					</label>
 		';
 	}

@@ -17,7 +17,10 @@ class Options {
 	public static $embed_width;
 	public static $embed_height;
 
-	public static $size_unit;
+	public static $folder_type;
+
+	public static $list_width;
+	public static $grid_cols;
 
 	public static function init() {
 		$url                     = wp_parse_url( get_site_url() );
@@ -29,9 +32,12 @@ class Options {
 
 		self::$root_path = new \Sgdd\Admin\Options\OptionTypes\PathField( 'root_path', '', 'basic', 'path_selection', [] );
 
-		self::$embed_width  = new \Sgdd\Admin\Options\OptionTypes\IntegerField( 'embed_width', __( 'Width', 'skaut-google-drive-documents' ), 'advanced', 'embed', '50' );
-		self::$embed_height = new \Sgdd\Admin\Options\OptionTypes\IntegerField( 'embed_height', __( 'Height', 'skaut-google-drive-documents' ), 'advanced', 'embed', '50' );
+		self::$embed_width  = new \Sgdd\Admin\Options\OptionTypes\IntegerField( 'embed_width', __( 'Width', 'skaut-google-drive-documents' ), 'advanced', 'embed', '800' );
+		self::$embed_height = new \Sgdd\Admin\Options\OptionTypes\IntegerField( 'embed_height', __( 'Height', 'skaut-google-drive-documents' ), 'advanced', 'embed', '600' );
 
-		self::$size_unit = new \Sgdd\Admin\Options\OptionTypes\SelectField( 'size_unit', __( 'Units', 'skaut-google-drive-documents' ), 'advanced', 'embed', 'percentage' );
+		self::$folder_type = new \Sgdd\Admin\Options\OptionTypes\SelectField( 'folder_type', __( 'Folder type', 'skaut-google-drive-documents' ), 'advanced', 'embed', 'list' );
+
+		self::$list_width = new \Sgdd\Admin\Options\OptionTypes\IntegerField( 'list_width', __( 'List width', 'skaut-google-drive-documents' ), 'advanced', 'embed', '800' );
+		self::$grid_cols = new \Sgdd\Admin\Options\OptionTypes\IntegerField( 'grid_cols', __( 'Grid columns', 'skaut-google-drive-documents' ), 'advanced', 'embed', '3' );
 	}
 }
