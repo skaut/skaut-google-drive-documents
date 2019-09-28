@@ -35,7 +35,9 @@ function add_block() {
 			'embedHeight'      => [ esc_html__( 'Height', 'skaut-google-drive-documents' ), \Sgdd\Admin\Options\Options::$embed_height->get() ],
 			'list'             => esc_html__( 'List', 'skaut-google-drive-documents' ),
 			'grid'             => esc_html__( 'Grid', 'skaut-google-drive-documents' ),
-			'folderType'       => [ esc_html__( 'List folder as', 'skaut-google-drive-documents' ) ],
+			'folderType'       => [ esc_html__( 'List folder as', 'skaut-google-drive-documents' ), \Sgdd\Admin\Options\Options::$folder_type->get() ],
+			'listWidth'        => [ esc_html__( 'List width', 'skaut-google-drive-documents' ), \Sgdd\Admin\Options\Options::$list_width->get() ],
+			'gridCols'         => [ esc_html__( 'Grid columns', 'skaut-google-drive-documents' ), \Sgdd\Admin\Options\Options::$grid_cols->get() ],
 		]
 	);
 
@@ -51,102 +53,106 @@ function add_block() {
 
 /* -- WIP -- */
 function display( $attr ) {
-	$size = '';
+	//var_dump($attr); //debug
 
-	if ( isset( $attr['embedWidth'] ) ) {
-		$size .= 'width:' . $attr['embedWidth'] . 'px;';
-	}
-
-	if ( isset( $attr['embedHeight'] ) ) {
-		$size .= 'height:' . $attr['embedHeight'] . 'px;';
-	}
-	
 	if ( isset( $attr['folderType'] ) ) {
-		$list = show_folder( $attr['folderId'] );
+		//display folder
+		$folderId;
+		$content;
+		$width;
+		$cols;
+		$result;
 
-		if ( 'list' === $attr['folderType'] ) {
-			//LIST - almost done
-
-			$result = '<table>'
-						  . '<tbody>';
-
-			foreach( $list as $file ) {
-				//var_dump($file);
-				$result .= '<tr>';
-				$result .= '<td><img src="' . $file['iconLink'] . '"></td>';
-				$result .= '<td><a href="' . $file['webViewLink'] . '" target="_blank">' . $file['name'] . '</a></td>';
-				$result .= '</tr>';
-			}
+		//set folderId variable
+		if ( isset( $attr['folderId'] ) ) {
+			$folderId = $attr['folderId'];
 		} else {
-			//GRID - add setting - num of columns
-			//		 - add thumbnails
-
-			$result = '<table style="table-layout:fixed;">'
-						  . '<tbody>';
-
-			$i = 0;
-			foreach( $list as $file ) {
-				//var_dump($file);
-				$i % 3 == 0 ? $result .= '<tr>' : $result .= '';
-				if (!$file['hasThumbnail']){
-					$result .= '<td style="margin:auto;"><a href="' . $file['webViewLink'] . '" target="_blank"><img src="' . preg_replace('(16)', '128',$file['iconLink']) . '"></a><br>' . $file['name'] . '</td>';
-				} else {
-					$result .= '<td style="margin:auto;"><a href="' . $file['webViewLink'] . '" target="_blank"><img src="' . $file['thumbnailLink'] . '"></a><br>' . $file['name'] . '</td>';
-				}
-				$i % 3 == 2 ? $result .= '</tr>' : $result .= '';
-				$i++;
-			}
+			$folderId = \Sgdd\Admin\Options\Options::$root_path->get();
 		}
 
-		$result .= '</tbody>'
-						. '</table>';
-	} else {
-		$test = print_file( $attr['fileId'] );
-		$link   = $test['id'];
-		$result = '<iframe src="https://docs.google.com/viewer?srcid=' . $link . '&pid=explorer&efh=false&a=v&chrome=false&embedded=true" style="' . $size . ' border:0;"></iframe>';
-	}
+		//gdrive request to fetch content of folder
+		$content = fetch_folder_content( $folderId );
 
-	return $result;
+		if ( 'list' === $attr['folderType'] ) {
+			//display list
+			if ( isset( $attr['listWidth'] ) ) {
+				$result = build_result( $content, 'list', array( 'width' => $attr['listWidth'] ) );
+			} else {
+				$result = build_result( $content, 'list', array() );
+			}
+
+			
+		} else {
+			//display grid
+			if ( isset( $attr['gridCols'] ) ) {
+				$cols = $attr['gridCols'];
+			} else {
+				$cols = \Sgdd\Admin\Options\Options::$grid_cols->get();
+			}
+			
+			if ( isset( $attr['listWidth'] ) ) {
+				$result = build_result( $content, 'grid', array( 'width' => $attr['listWidth'], 'cols' => $cols ) );
+			} else {
+				$result = build_result( $content, 'grid', array( 'cols' => $cols ) );
+			}
+			
+		}
+
+		$result .= '</tbody>
+								</table>';
+
+		return $result;
+	} else {
+		//display file
+		$size = '';
+
+		if ( isset( $attr['fileId'] ) ) {
+			$id = $attr['fileId'];
+		} else {
+			//throw error
+			return '<div class="notice notice-error">Error<br>Please select file to display or enable "display folder" function</div>';
+		}
+
+		$temp = set_file_permissions( $id );
+		//var_dump($temp); //debug
+
+		if ( isset( $attr['embedWidth'] ) ) {
+			$size .= 'width:' . $attr['embedWidth'] . 'px; ';
+		}
+	
+		if ( isset( $attr['embedHeight'] ) ) {
+			$size .= 'height:' . $attr['embedHeight'] . 'px; ';
+		}
+
+		$result = '<iframe src="https://drive.google.com/file/d/' . $id . '/preview" style="' . $size . 'border:0;"></iframe>';
+		
+		return $result;
+	}
 }
 
-function print_file( $file_id ) {
-	//TODO: make efficient and more simple
-
-	//Only to set permissions to display file
+function set_file_permissions( $fileId ) {
 	try {
 		$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
-
 		$domain_permission = new \Sgdd\Vendor\Google_Service_Drive_Permission(
 			[
 				'role' => 'reader',
 				'type' => 'anyone',
 			]
 		);
-
-		$request     = $service->permissions->create( $file_id, $domain_permission, [ 'supportsTeamDrives' => true ] );
+		$request     = $service->permissions->create( $fileId, $domain_permission, [ 'supportsTeamDrives' => true ] );
 		$get_options = [
 			'supportsAllDrives' => true,
-			'fields'            => '*',
+			'fields'            => 'id',
 		];
-
-		$response = $service->files->get( $file_id, $get_options );
-
+		$response = $service->files->get( $fileId, $get_options );
 		return $response;
 	} catch ( \Exception $e ) {
 		return $e->getMessage();
 	}
 }
 
-function show_folder( $folderId ) {
-	//TODO
-
+function fetch_folder_content( $folderId ) {
 	$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
-
-	if ( ! isset( $folderId ) ) {
-		$folderId = end( \Sgdd\Admin\Options\Options::$root_path->get() );
-	}
-
-	$result     = [];
 	$page_token = null;
 
 	do {
@@ -157,7 +163,7 @@ function show_folder( $folderId ) {
 				'includeItemsFromAllDrives' => true,
 				'pageToken'                 => $page_token,
 				'pageSize'                  => 1000,
-				'fields'                    => '*',
+				'fields'                    => 'files',
 			)
 		);
 
@@ -170,4 +176,53 @@ function show_folder( $folderId ) {
 	} while ( null !== $page_token );
 
 	return $response;
+}
+
+function build_result( $content, $type, $arg ) {
+	$result;
+
+	if ( $type === 'list' ) {
+		//build list table
+		if ( !empty( $arg ) ) {
+			$result = '<table style="width:' . $arg['width'] . 'px"><tbody>';
+		} else {
+			$result = '<table><tbody>';
+		}
+		
+		foreach ( $content as $element ) {
+			$result .= '<tr>
+				<td><img src="' . $element['iconLink'] . '"></td>
+				<td><a href="' . $element['webViewLink'] . '" target="_blank">' . $element['name'] . '</a></td>
+			</tr>';
+		}
+
+		return $result;
+	} else {
+		//build grid table
+		$i = 0;
+		$width;
+		$cols = $arg['cols'];
+
+		if ( array_key_exists( 'width', $arg ) ) {
+			$result = '<table style="table-layout:fixed; border-collapse:separate; width:' . $arg['width'] . 'px"><tbody>';
+		} else {
+			$result = '<table style="table-layout:fixed; border-collapse:separate;"><tbody>';
+		}
+		
+		foreach ( $content as $element ) {
+			//var_dump($element);  //debug
+
+			$i % $cols == 0 ? $result .= '<tr>' : $result .= '';
+
+			if ( !$element['hasThumbnail'] || preg_match( '/\b(google-apps)/', $element['mimeType'] ) ){
+				$result .= '<td><div class="element"><a href="' . $element['webViewLink'] . '" target="_blank"><div class="image"><img src="' . preg_replace('(16)', '128',$element['iconLink']) . '"></div><div class="caption">' . $element['name'] . '</div></a></div></td>';
+			} else {
+				$result .= '<td><div class="element"><a href="' . $element['webViewLink'] . '" target="_blank"><div class="image"><img src="' . $element['thumbnailLink'] . '"></div><div class="caption">' . $element['name'] . '</div></a></div></td>';
+			}
+			$i % $cols  == $cols - 1 ? $result .= '</tr>' : $result .= '';
+			$i++;
+		}
+
+		return $result;
+	}
 }

@@ -64,3 +64,28 @@
 .sgdd-block-units {
 	display: inline-table;
 }
+
+.element {
+	border: solid 1px;
+	border-color: rgba(51, 51, 51, 0.1);
+	border-radius: 10px;
+	margin: auto;
+	vertical-align: center;
+	padding: 10px;
+}
+
+.image img {
+	display: block;
+	/*max-width: 100px;
+	max-height: 100px;*/
+	margin: auto;
+}
+
+.caption {
+	margin: auto;
+	text-align: center;
+}
+
+.caption a {
+	text-decoration: none !important;
+}

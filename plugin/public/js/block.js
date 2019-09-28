@@ -21,11 +21,11 @@ registerBlockType( 'skaut-google-drive-documents/block', {
     },
     fileId: {
       type: 'string',
-      default: undefined
+      default: ''
     },
     folderId: {
       type: 'string',
-      default: undefined
+      default: ''
     },
     embedWidth: {
       type: 'int',
@@ -35,9 +35,17 @@ registerBlockType( 'skaut-google-drive-documents/block', {
       type: 'int',
       default: undefined
     },
+    listWidth: {
+      type: 'int',
+      default: undefined
+    },
+    gridCols: {
+      type: 'int',
+      default: undefined
+    },
     folderType: {
       type: 'string',
-      default: ''
+      default: undefined
     }
   },
 
