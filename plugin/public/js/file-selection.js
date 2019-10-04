@@ -133,7 +133,7 @@ SgddFileSelection.prototype.upClick = function( that ) {
 	}
 
 	if ( idsPath.length < 1 ) {
-		folderId = sgddBlockJsLocalize.rootPath;
+		folderId = '';
 	} else {
 		folderId = idsPath[idsPath.length - 1];
 	}
