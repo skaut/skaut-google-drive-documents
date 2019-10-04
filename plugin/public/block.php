@@ -18,8 +18,8 @@ function add_block() {
 	\Sgdd\enqueue_script( 'sgdd_settings_base_js', '/public/js/settings-base.js', [ 'wp-element' ] );
 	\Sgdd\enqueue_script( 'sgdd_integer_settings_js', '/public/js/integer-setting.js', [ 'wp-element', 'sgdd_settings_base_js' ] );
 	\Sgdd\enqueue_script( 'sgdd_select_settings_js', '/public/js/select-setting.js', [ 'wp-element', 'sgdd_settings_base_js' ] );
-	wp_enqueue_script( 'thickbox' );
-	wp_enqueue_style( 'thickbox' );
+	/*wp_enqueue_script( 'thickbox' );
+	wp_enqueue_style( 'thickbox' );*/
 
 	wp_localize_script(
 		'sgdd_block_js',
@@ -36,7 +36,7 @@ function add_block() {
 			'list'             => esc_html__( 'List', 'skaut-google-drive-documents' ),
 			'grid'             => esc_html__( 'Grid', 'skaut-google-drive-documents' ),
 			'folderType'       => [ esc_html__( 'List folder as', 'skaut-google-drive-documents' ), \Sgdd\Admin\Options\Options::$folder_type->get() ],
-			'listWidth'        => [ esc_html__( 'List width', 'skaut-google-drive-documents' ), \Sgdd\Admin\Options\Options::$list_width->get() ],
+			'listWidth'        => [ esc_html__( 'Width', 'skaut-google-drive-documents' ), \Sgdd\Admin\Options\Options::$list_width->get() ],
 			'gridCols'         => [ esc_html__( 'Grid columns', 'skaut-google-drive-documents' ), \Sgdd\Admin\Options\Options::$grid_cols->get() ],
 		]
 	);
@@ -51,13 +51,11 @@ function add_block() {
 	);
 }
 
-/* -- WIP -- */
 function display( $attr ) {
-	//var_dump($attr); //debug
-
-	if ( isset( $attr['folderType'] ) ) {
+	if ( isset( $attr['folderType'] ) || !isset( $attr['fileId'] ) ) {
 		//display folder
 		$folderId;
+		$folderType;
 		$content;
 		$width;
 		$cols;
@@ -67,21 +65,30 @@ function display( $attr ) {
 		if ( isset( $attr['folderId'] ) ) {
 			$folderId = $attr['folderId'];
 		} else {
-			$folderId = \Sgdd\Admin\Options\Options::$root_path->get();
+			$root_path_array = \Sgdd\Admin\Options\Options::$root_path->get();
+			$folderId = end( $root_path_array );
+		}
+
+		if ( isset( $attr['folderType'] ) ) {
+			$folderType = $attr['folderType'];
+		} else {
+			$folderType = \Sgdd\Admin\Options\Options::$folder_type->get();
 		}
 
 		//gdrive request to fetch content of folder
-		$content = fetch_folder_content( $folderId );
+		try {
+			$content = fetch_folder_content( $folderId );
+		} catch ( \Exception $e ) {
+			return '<div class="notice notice-error">Error while fetching folder content! <br> ' . $e->getErrors()[0]['message'] . '</div>';
+		}
 
-		if ( 'list' === $attr['folderType'] ) {
+		if ( 'list' === $folderType ) {
 			//display list
 			if ( isset( $attr['listWidth'] ) ) {
 				$result = build_result( $content, 'list', array( 'width' => $attr['listWidth'] ) );
 			} else {
 				$result = build_result( $content, 'list', array() );
-			}
-
-			
+			}	
 		} else {
 			//display grid
 			if ( isset( $attr['gridCols'] ) ) {
@@ -89,13 +96,12 @@ function display( $attr ) {
 			} else {
 				$cols = \Sgdd\Admin\Options\Options::$grid_cols->get();
 			}
-			
+
 			if ( isset( $attr['listWidth'] ) ) {
 				$result = build_result( $content, 'grid', array( 'width' => $attr['listWidth'], 'cols' => $cols ) );
 			} else {
 				$result = build_result( $content, 'grid', array( 'cols' => $cols ) );
 			}
-			
 		}
 
 		$result .= '</tbody>
@@ -105,27 +111,24 @@ function display( $attr ) {
 	} else {
 		//display file
 		$size = '';
+		$id = $attr['fileId'];
 
-		if ( isset( $attr['fileId'] ) ) {
-			$id = $attr['fileId'];
-		} else {
-			//throw error
-			return '<div class="notice notice-error">Error<br>Please select file to display or enable "display folder" function</div>';
+		try {
+			$temp = set_file_permissions( $id );
+		} catch ( \Exception $e ) {
+			return '<div class="notice notice-error">Error while setting permissions! <br> ' . $e->getErrors()[0]['message'] . '</div>';
 		}
-
-		$temp = set_file_permissions( $id );
-		//var_dump($temp); //debug
 
 		if ( isset( $attr['embedWidth'] ) ) {
 			$size .= 'width:' . $attr['embedWidth'] . 'px; ';
 		}
-	
+
 		if ( isset( $attr['embedHeight'] ) ) {
 			$size .= 'height:' . $attr['embedHeight'] . 'px; ';
 		}
 
 		$result = '<iframe src="https://drive.google.com/file/d/' . $id . '/preview" style="' . $size . 'border:0;"></iframe>';
-		
+
 		return $result;
 	}
 }
@@ -167,7 +170,7 @@ function fetch_folder_content( $folderId ) {
 			)
 		);
 
-		if ( $response instanceof \Sgdg\Vendor\Google_Service_Exception ) {
+		if ( $response instanceof \Sgdd\Vendor\Google_Service_Exception ) {
 			throw $response;
 		}
 
@@ -181,6 +184,10 @@ function fetch_folder_content( $folderId ) {
 function build_result( $content, $type, $arg ) {
 	$result;
 
+	if ( empty( $content['files'] ) ) {
+		return 'Vybraný priečinok neobsahuje žiadne položky!';
+	}
+
 	if ( $type === 'list' ) {
 		//build list table
 		if ( !empty( $arg ) ) {
@@ -188,7 +195,7 @@ function build_result( $content, $type, $arg ) {
 		} else {
 			$result = '<table><tbody>';
 		}
-		
+
 		foreach ( $content as $element ) {
 			$result .= '<tr>
 				<td><img src="' . $element['iconLink'] . '"></td>
@@ -208,10 +215,8 @@ function build_result( $content, $type, $arg ) {
 		} else {
 			$result = '<table style="table-layout:fixed; border-collapse:separate;"><tbody>';
 		}
-		
-		foreach ( $content as $element ) {
-			//var_dump($element);  //debug
 
+		foreach ( $content as $element ) {
 			$i % $cols == 0 ? $result .= '<tr>' : $result .= '';
 
 			if ( !$element['hasThumbnail'] || preg_match( '/\b(google-apps)/', $element['mimeType'] ) ){
