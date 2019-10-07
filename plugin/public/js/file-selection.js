@@ -39,7 +39,7 @@ SgddFileSelection.prototype.ajax = function() {
 SgddFileSelection.prototype.render = function() {
 	var that = this;
 	var children = [];
-	var namesPath = [ el( 'a', {onClick: function( e ) {
+	var namesPath = [ el( 'a', {key: 'test', onClick: function( e ) {
 		that.pathClick( that, e );
 	}}, sgddBlockJsLocalize.root ) ];
 	var i;
@@ -88,15 +88,15 @@ SgddFileSelection.prototype.render = function() {
 			el( SgddInspector, {block: this})
 		),
 		el( 'table', { className: 'widefat fixed' }, [
-			el( 'thead', {},
+			el( 'thead', {key: 'thead'},
 				el( 'tr', {},
 					el( 'th', {}, namesPath )
 				)
 			),
 
-			el( 'tbody', {}, children ),
+			el( 'tbody', {key: 'tbody'}, children ),
 
-			el( 'tfoot', {},
+			el( 'tfoot', {key: 'tfoot'},
 				el( 'tr', {},
 					el( 'th', {}, namesPath )
 				)

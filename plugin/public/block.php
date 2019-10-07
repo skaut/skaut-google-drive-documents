@@ -9,17 +9,18 @@ function register() {
 	if ( function_exists( 'register_block_type' ) ) {
 		add_action( 'init', '\\Sgdd\\Pub\\Block\\add_block' );
 	}
+
+	add_action( 'wp_ajax_setPermissions', '\\Sgdd\\Pub\\Block\\ajax_handler' );
 }
 
 function add_block() {
 	\Sgdd\enqueue_script( 'sgdd_block_js', '/public/js/block.js', [ 'wp-blocks', 'wp-components', 'wp-editor', 'wp-element', 'wp-i18n', 'sgdd_file_selection_js' ] );
 	\Sgdd\enqueue_script( 'sgdd_file_selection_js', '/public/js/file-selection.js', [ 'wp-components', 'wp-element', 'sgdd_inspector_js', 'sgdd_settings_base_js' ] );
-	\Sgdd\enqueue_script( 'sgdd_inspector_js', '/public/js/inspector.js', [ 'wp-element', 'sgdd_integer_settings_js', 'sgdd_select_settings_js' ] );
+	\Sgdd\enqueue_script( 'sgdd_inspector_js', '/public/js/inspector.js', [ 'wp-element', 'sgdd_integer_settings_js', 'sgdd_select_settings_js', 'sgdd_button_settings_js' ] );
 	\Sgdd\enqueue_script( 'sgdd_settings_base_js', '/public/js/settings-base.js', [ 'wp-element' ] );
 	\Sgdd\enqueue_script( 'sgdd_integer_settings_js', '/public/js/integer-setting.js', [ 'wp-element', 'sgdd_settings_base_js' ] );
 	\Sgdd\enqueue_script( 'sgdd_select_settings_js', '/public/js/select-setting.js', [ 'wp-element', 'sgdd_settings_base_js' ] );
-	/*wp_enqueue_script( 'thickbox' );
-	wp_enqueue_style( 'thickbox' );*/
+	\Sgdd\enqueue_script( 'sgdd_button_settings_js', '/public/js/button-setting.js', [ 'wp-element' ] );
 
 	wp_localize_script(
 		'sgdd_block_js',
@@ -27,6 +28,7 @@ function add_block() {
 		[
 			'ajaxUrl'          => admin_url( 'admin-ajax.php' ),
 			'nonce'            => wp_create_nonce( 'sgdd_block_js' ),
+			'noncePerm'        => wp_create_nonce( 'sgdd_block_js_permissions' ),
 			'blockName'        => esc_html__( 'Google Drive Documents', 'skaut-google-drive-documents' ),
 			'blockDescription' => esc_html__( 'Embed your files from Google Drive', 'skaut-google-drive-documents' ),
 			'root'             => esc_html__( 'Google Drive', 'skaut-google-drive-documents' ),
@@ -38,6 +40,7 @@ function add_block() {
 			'folderType'       => [ esc_html__( 'List folder as', 'skaut-google-drive-documents' ), \Sgdd\Admin\Options\Options::$folder_type->get() ],
 			'listWidth'        => [ esc_html__( 'Width', 'skaut-google-drive-documents' ), \Sgdd\Admin\Options\Options::$list_width->get() ],
 			'gridCols'         => [ esc_html__( 'Grid columns', 'skaut-google-drive-documents' ), \Sgdd\Admin\Options\Options::$grid_cols->get() ],
+			'test'             => esc_html__( 'Set permissions' ),
 		]
 	);
 
@@ -133,25 +136,91 @@ function display( $attr ) {
 	}
 }
 
-function set_file_permissions( $fileId ) {
+/**
+ * Handles ajax call from JS
+ */
+function ajax_handler() {
 	try {
-		$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
-		$domain_permission = new \Sgdd\Vendor\Google_Service_Drive_Permission(
-			[
-				'role' => 'reader',
-				'type' => 'anyone',
-			]
-		);
-		$request     = $service->permissions->create( $fileId, $domain_permission, [ 'supportsTeamDrives' => true ] );
-		$get_options = [
-			'supportsAllDrives' => true,
-			'fields'            => 'id',
-		];
-		$response = $service->files->get( $fileId, $get_options );
-		return $response;
+		set_permissions();
+	} catch ( \Sgdd\Vendor\Google_Service_Exception $e ) {
+		if ( 'userRateLimitExceeded' === $e->getErrors()[0]['reason'] ) {
+			wp_send_json( [ 'error' => esc_html__( 'The maximum number of requests has been exceeded. Please try again in a minute.', 'skaut-google-drive-documents' ) ] );
+		} else {
+			wp_send_json( [ 'error' => $e->getErrors()[0]['message'] ] );
+		}
 	} catch ( \Exception $e ) {
-		return $e->getMessage();
+		wp_send_json( [ 'error' => $e->getMessage() ] );
 	}
+}
+
+function set_permissions() {
+	check_ajax_referer( 'sgdd_block_js_permissions' );
+
+	if ( $_GET[ 'folderType' ] != '' || $_GET[ 'fileId' ] == '' ) {
+		set_permissions_in_folder( $_GET[ 'folderId' ] );
+	} else {
+		set_file_permissions( $_GET[ 'fileId' ] );
+	}
+}
+
+function set_file_permissions( $fileId ) {
+	$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
+	$domain_permission = new \Sgdd\Vendor\Google_Service_Drive_Permission(
+		[
+			'role' => 'reader',
+			'type' => 'anyone',
+		]
+	);
+	$request = $service->permissions->create( $fileId, $domain_permission, [ 'supportsTeamDrives' => true ] );
+}
+
+function set_permissions_in_folder( $folderId ) {
+	$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
+	$page_token = null;
+
+	do {
+		$response = $service->files->listFiles(
+			array(
+				'q'                         => "'" . $folderId . "' in parents",
+				'supportsAllDrives'         => true,
+				'includeItemsFromAllDrives' => true,
+				'pageToken'                 => $page_token,
+				'pageSize'                  => 1000,
+				'fields'                    => 'files',
+			)
+		);
+
+		if ( $response instanceof \Sgdd\Vendor\Google_Service_Exception ) {
+			return $response;
+		}
+
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+		$page_token = $response->pageToken;
+	} while ( null !== $page_token );
+
+	$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
+	$userPermission = new \Sgdd\Vendor\Google_Service_Drive_Permission(
+		[
+			'role' => 'reader',
+			'type' => 'anyone',
+		]
+	);
+
+	$index = 0;
+
+	$service->getClient()->setUseBatch( true );
+	$batch = $service->createBatch();		
+	
+	foreach($response as $file) {
+		$request = $service->permissions->create($file['id'], $userPermission, [ 'supportsTeamDrives' => true ] );
+		$batch->add($request, 'perm'.$index);
+
+		$index++;
+	}
+
+	//catch errors!!!
+	$results = $batch->execute();
+	return $results;
 }
 
 function fetch_folder_content( $folderId ) {

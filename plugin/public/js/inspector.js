@@ -15,7 +15,8 @@ SgddInspector.prototype.render = function() {
 		el( wp.components.PanelBody, { title: 'List folder options', className: 'sgdd-block-settings' }, [
 			el( SgddIntegerSetting, {block: this.block, name: 'listWidth'}),
 			el( SgddIntegerSetting, {block: this.block, name: 'gridCols'}),
-			el( SgddSelectSetting, {block: this.block, name: 'folderType'})
+			el( SgddSelectSetting, {block: this.block, name: 'folderType'}),
+			el( SgddButtonSetting, {block: this.block, name: 'test'})
 		])
 	];
 };
