@@ -8,6 +8,9 @@ jQuery( document ).ready( function( $ ) {
       path = [];
     }
 
+    $( '#rootPath tbody tr' ).not( '.loadingCircle' ).fadeOut();
+    $( '.loadingCircle' ).fadeIn( 'slow' );
+
     $.ajax({
       url: sgddRootPathLocalize.ajaxUrl,
       type: 'GET',
@@ -16,15 +19,18 @@ jQuery( document ).ready( function( $ ) {
         path: path,
         _ajax_nonce: sgddRootPathLocalize.nonce // eslint-disable-line camelcase
       },
-      beforeSend: function() {
+      /*beforeSend: function() {
         $( '#rootPath tbody tr' ).not( '.loadingCircle' ).fadeOut();
         $( '.loadingCircle' ).fadeIn( 'slow' );
       },
       complete: function() {
         $( '.loadingCircle' ).fadeOut();
         $( '#rootPath tbody tr' ).not( '.loadingCircle' ).fadeIn( 'slow' );
-      },
+      },*/
       success: function( response ) {
+        $( '.loadingCircle' ).fadeOut();
+        $( '#rootPath tbody tr' ).not( '.loadingCircle' ).fadeIn( 'slow' );
+
         var html = '';
         var i;
 

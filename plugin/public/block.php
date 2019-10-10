@@ -114,13 +114,13 @@ function display( $attr ) {
 	} else {
 		//display file
 		$size = '';
-		$id = $attr['fileId'];
+		//$id = $attr['fileId'];
 
-		try {
+		/*try {
 			$temp = set_file_permissions( $id );
 		} catch ( \Exception $e ) {
 			return '<div class="notice notice-error">Error while setting permissions! <br> ' . $e->getErrors()[0]['message'] . '</div>';
-		}
+		}*/
 
 		if ( isset( $attr['embedWidth'] ) ) {
 			$size .= 'width:' . $attr['embedWidth'] . 'px; ';
@@ -157,7 +157,14 @@ function set_permissions() {
 	check_ajax_referer( 'sgdd_block_js_permissions' );
 
 	if ( $_GET[ 'folderType' ] != '' || $_GET[ 'fileId' ] == '' ) {
-		set_permissions_in_folder( $_GET[ 'folderId' ] );
+		if ( $_GET[ 'folderId' ] == '' ) {
+			$root_path = \Sgdd\Admin\Options\Options::$root_path->get();
+			$folder_id = end( $root_path );
+		} else {
+			$folder_id = $_GET[ 'folderId' ];
+		}
+
+		set_permissions_in_folder( $folder_id );
 	} else {
 		set_file_permissions( $_GET[ 'fileId' ] );
 	}
