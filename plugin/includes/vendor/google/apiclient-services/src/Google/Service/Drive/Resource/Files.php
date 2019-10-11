@@ -41,7 +41,8 @@ class Google_Service_Drive_Resource_Files extends Google_Service_Resource
    * inherited from parent folders.
    * @opt_param bool keepRevisionForever Whether to set the 'keepForever' field in
    * the new head revision. This is only applicable to files with binary content
-   * in Google Drive.
+   * in Google Drive. Only 200 revisions for the file can be kept forever. If the
+   * limit is reached, try deleting pinned revisions.
    * @opt_param string ocrLanguage A language hint for OCR processing during image
    * import (ISO 639-1 code).
    * @opt_param bool supportsAllDrives Deprecated - Whether the requesting
@@ -70,7 +71,8 @@ class Google_Service_Drive_Resource_Files extends Google_Service_Resource
    * inherited from parent folders.
    * @opt_param bool keepRevisionForever Whether to set the 'keepForever' field in
    * the new head revision. This is only applicable to files with binary content
-   * in Google Drive.
+   * in Google Drive. Only 200 revisions for the file can be kept forever. If the
+   * limit is reached, try deleting pinned revisions.
    * @opt_param string ocrLanguage A language hint for OCR processing during image
    * import (ISO 639-1 code).
    * @opt_param bool supportsAllDrives Deprecated - Whether the requesting
@@ -234,7 +236,8 @@ class Google_Service_Drive_Resource_Files extends Google_Service_Resource
    * @opt_param string addParents A comma-separated list of parent IDs to add.
    * @opt_param bool keepRevisionForever Whether to set the 'keepForever' field in
    * the new head revision. This is only applicable to files with binary content
-   * in Google Drive.
+   * in Google Drive. Only 200 revisions for the file can be kept forever. If the
+   * limit is reached, try deleting pinned revisions.
    * @opt_param string ocrLanguage A language hint for OCR processing during image
    * import (ISO 639-1 code).
    * @opt_param string removeParents A comma-separated list of parent IDs to

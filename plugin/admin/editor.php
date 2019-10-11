@@ -70,7 +70,7 @@ function file_selection() {
 function get_folder_content( $service, $folder = null ) {
 	if ( ! isset( $folder ) ) {
 		$root_path = \Sgdd\Admin\Options\Options::$root_path->get();
-		$folder = end( $root_path );
+		$folder    = end( $root_path );
 	}
 
 	$result     = [];

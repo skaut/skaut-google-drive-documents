@@ -114,6 +114,7 @@ gulp.task( 'composer-copy-other', function() {
 				'vendor/guzzlehttp/psr7/src/Uri.php',
 				'vendor/guzzlehttp/psr7/src/UriResolver.php',
 				'vendor/guzzlehttp/psr7/src/functions.php',
+				//'vendor/monolog/monolog/src/Monolog/Handler/Handler.php',
 				'vendor/monolog/monolog/src/Monolog/Handler/AbstractHandler.php',
 				'vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php',
 				'vendor/monolog/monolog/src/Monolog/Handler/HandlerInterface.php',

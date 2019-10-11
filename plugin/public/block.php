@@ -55,10 +55,10 @@ function add_block() {
 }
 
 function display( $attr ) {
-	if ( isset( $attr['folderType'] ) || !isset( $attr['fileId'] ) ) {
+	if ( isset( $attr['folderType'] ) || ! isset( $attr['fileId'] ) ) {
 		//display folder
-		$folderId;
-		$folderType;
+		$folder_id;
+		$folder_type;
 		$content;
 		$width;
 		$cols;
@@ -66,32 +66,32 @@ function display( $attr ) {
 
 		//set folderId variable
 		if ( isset( $attr['folderId'] ) ) {
-			$folderId = $attr['folderId'];
+			$folder_id = $attr['folderId'];
 		} else {
 			$root_path_array = \Sgdd\Admin\Options\Options::$root_path->get();
-			$folderId = end( $root_path_array );
+			$folder_id       = end( $root_path_array );
 		}
 
 		if ( isset( $attr['folderType'] ) ) {
-			$folderType = $attr['folderType'];
+			$folder_type = $attr['folderType'];
 		} else {
-			$folderType = \Sgdd\Admin\Options\Options::$folder_type->get();
+			$folder_type = \Sgdd\Admin\Options\Options::$folder_type->get();
 		}
 
 		//gdrive request to fetch content of folder
 		try {
-			$content = fetch_folder_content( $folderId );
+			$content = fetch_folder_content( $folder_id );
 		} catch ( \Exception $e ) {
 			return '<div class="notice notice-error">Error while fetching folder content! <br> ' . $e->getErrors()[0]['message'] . '</div>';
 		}
 
-		if ( 'list' === $folderType ) {
+		if ( 'list' === $folder_type ) {
 			//display list
 			if ( isset( $attr['listWidth'] ) ) {
 				$result = build_result( $content, 'list', array( 'width' => $attr['listWidth'] ) );
 			} else {
 				$result = build_result( $content, 'list', array() );
-			}	
+			}
 		} else {
 			//display grid
 			if ( isset( $attr['gridCols'] ) ) {
@@ -101,9 +101,22 @@ function display( $attr ) {
 			}
 
 			if ( isset( $attr['listWidth'] ) ) {
-				$result = build_result( $content, 'grid', array( 'width' => $attr['listWidth'], 'cols' => $cols ) );
+				$result = build_result(
+					$content,
+					'grid',
+					array(
+						'width' => $attr['listWidth'],
+						'cols'  => $cols,
+					)
+				);
 			} else {
-				$result = build_result( $content, 'grid', array( 'cols' => $cols ) );
+				$result = build_result(
+					$content,
+					'grid',
+					array(
+						'cols' => $cols,
+					)
+				);
 			}
 		}
 
@@ -114,13 +127,7 @@ function display( $attr ) {
 	} else {
 		//display file
 		$size = '';
-		//$id = $attr['fileId'];
-
-		/*try {
-			$temp = set_file_permissions( $id );
-		} catch ( \Exception $e ) {
-			return '<div class="notice notice-error">Error while setting permissions! <br> ' . $e->getErrors()[0]['message'] . '</div>';
-		}*/
+		$id   = $attr['fileId'];
 
 		if ( isset( $attr['embedWidth'] ) ) {
 			$size .= 'width:' . $attr['embedWidth'] . 'px; ';
@@ -156,39 +163,39 @@ function ajax_handler() {
 function set_permissions() {
 	check_ajax_referer( 'sgdd_block_js_permissions' );
 
-	if ( $_GET[ 'folderType' ] != '' || $_GET[ 'fileId' ] == '' ) {
-		if ( $_GET[ 'folderId' ] == '' ) {
+	if ( '' !== $_GET['folderType'] || '' === $_GET['fileId'] ) {
+		if ( '' === $_GET['folderId'] ) {
 			$root_path = \Sgdd\Admin\Options\Options::$root_path->get();
 			$folder_id = end( $root_path );
 		} else {
-			$folder_id = $_GET[ 'folderId' ];
+			$folder_id = $_GET['folderId'];
 		}
 
 		set_permissions_in_folder( $folder_id );
 	} else {
-		set_file_permissions( $_GET[ 'fileId' ] );
+		set_file_permissions( $_GET['fileId'] );
 	}
 }
 
-function set_file_permissions( $fileId ) {
-	$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
+function set_file_permissions( $file_id ) {
+	$service           = \Sgdd\Admin\GoogleAPILib\get_drive_client();
 	$domain_permission = new \Sgdd\Vendor\Google_Service_Drive_Permission(
 		[
 			'role' => 'reader',
 			'type' => 'anyone',
 		]
 	);
-	$request = $service->permissions->create( $fileId, $domain_permission, [ 'supportsTeamDrives' => true ] );
+	$request           = $service->permissions->create( $file_id, $domain_permission, [ 'supportsTeamDrives' => true ] );
 }
 
-function set_permissions_in_folder( $folderId ) {
-	$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
+function set_permissions_in_folder( $folder_id ) {
+	$service    = \Sgdd\Admin\GoogleAPILib\get_drive_client();
 	$page_token = null;
 
 	do {
 		$response = $service->files->listFiles(
 			array(
-				'q'                         => "'" . $folderId . "' in parents",
+				'q'                         => "'" . $folder_id . "' in parents",
 				'supportsAllDrives'         => true,
 				'includeItemsFromAllDrives' => true,
 				'pageToken'                 => $page_token,
@@ -205,8 +212,8 @@ function set_permissions_in_folder( $folderId ) {
 		$page_token = $response->pageToken;
 	} while ( null !== $page_token );
 
-	$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
-	$userPermission = new \Sgdd\Vendor\Google_Service_Drive_Permission(
+	$service         = \Sgdd\Admin\GoogleAPILib\get_drive_client();
+	$user_permission = new \Sgdd\Vendor\Google_Service_Drive_Permission(
 		[
 			'role' => 'reader',
 			'type' => 'anyone',
@@ -216,28 +223,27 @@ function set_permissions_in_folder( $folderId ) {
 	$index = 0;
 
 	$service->getClient()->setUseBatch( true );
-	$batch = $service->createBatch();		
-	
-	foreach($response as $file) {
-		$request = $service->permissions->create($file['id'], $userPermission, [ 'supportsTeamDrives' => true ] );
-		$batch->add($request, 'perm'.$index);
+	$batch = $service->createBatch();
+
+	foreach ( $response as $file ) {
+		$request = $service->permissions->create( $file['id'], $user_permission, [ 'supportsTeamDrives' => true ] );
+		$batch->add( $request, 'perm' . $index );
 
 		$index++;
 	}
 
-	//catch errors!!!
 	$results = $batch->execute();
 	return $results;
 }
 
-function fetch_folder_content( $folderId ) {
-	$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
+function fetch_folder_content( $folder_id ) {
+	$service    = \Sgdd\Admin\GoogleAPILib\get_drive_client();
 	$page_token = null;
 
 	do {
 		$response = $service->files->listFiles(
 			array(
-				'q'                         => "'" . $folderId . "' in parents",
+				'q'                         => "'" . $folder_id . "' in parents",
 				'supportsAllDrives'         => true,
 				'includeItemsFromAllDrives' => true,
 				'pageToken'                 => $page_token,
@@ -264,9 +270,9 @@ function build_result( $content, $type, $arg ) {
 		return 'Vybraný priečinok neobsahuje žiadne položky!';
 	}
 
-	if ( $type === 'list' ) {
+	if ( 'list' === $type ) {
 		//build list table
-		if ( !empty( $arg ) ) {
+		if ( ! empty( $arg ) ) {
 			$result = '<table style="width:' . $arg['width'] . 'px"><tbody>';
 		} else {
 			$result = '<table><tbody>';
@@ -293,14 +299,14 @@ function build_result( $content, $type, $arg ) {
 		}
 
 		foreach ( $content as $element ) {
-			$i % $cols == 0 ? $result .= '<tr>' : $result .= '';
+			0 === ( $i % $cols ) ? $result .= '<tr>' : $result .= '';
 
-			if ( !$element['hasThumbnail'] || preg_match( '/\b(google-apps)/', $element['mimeType'] ) ){
-				$result .= '<td><div class="element"><a href="' . $element['webViewLink'] . '" target="_blank"><div class="image"><img src="' . preg_replace('(16)', '128',$element['iconLink']) . '"></div><div class="caption">' . $element['name'] . '</div></a></div></td>';
+			if ( ! $element['hasThumbnail'] || preg_match( '/\b(google-apps)/', $element['mimeType'] ) ) {
+				$result .= '<td><div class="element"><a href="' . $element['webViewLink'] . '" target="_blank"><div class="image"><img src="' . preg_replace( '(16)', '128', $element['iconLink'] ) . '"></div><div class="caption">' . $element['name'] . '</div></a></div></td>';
 			} else {
 				$result .= '<td><div class="element"><a href="' . $element['webViewLink'] . '" target="_blank"><div class="image"><img src="' . $element['thumbnailLink'] . '"></div><div class="caption">' . $element['name'] . '</div></a></div></td>';
 			}
-			$i % $cols  == $cols - 1 ? $result .= '</tr>' : $result .= '';
+			$i % $cols === $cols - 1 ? $result .= '</tr>' : $result .= '';
 			$i++;
 		}
 
