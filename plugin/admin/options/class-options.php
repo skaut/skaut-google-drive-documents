@@ -38,6 +38,6 @@ class Options {
 		self::$folder_type = new \Sgdd\Admin\Options\OptionTypes\SelectField( 'folder_type', __( 'Folder type', 'skaut-google-drive-documents' ), 'advanced', 'embed', 'list' );
 
 		self::$list_width = new \Sgdd\Admin\Options\OptionTypes\IntegerField( 'list_width', __( 'List width', 'skaut-google-drive-documents' ), 'advanced', 'embed', '800' );
-		self::$grid_cols = new \Sgdd\Admin\Options\OptionTypes\IntegerField( 'grid_cols', __( 'Grid columns', 'skaut-google-drive-documents' ), 'advanced', 'embed', '3' );
+		self::$grid_cols  = new \Sgdd\Admin\Options\OptionTypes\IntegerField( 'grid_cols', __( 'Grid columns', 'skaut-google-drive-documents' ), 'advanced', 'embed', '3' );
 	}
 }
