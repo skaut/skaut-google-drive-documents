@@ -50,6 +50,10 @@ For more info about all the options see the [documentation page](ODKAZ) about ad
 3. 
 
 == Changelog ==
+= 0.3 =
+* bug fixes
+* added new display settings
+
 = 0.2 =
 * added the ability to view the contents of a folder as a list or grid
 
