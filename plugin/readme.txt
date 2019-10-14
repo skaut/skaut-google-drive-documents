@@ -4,7 +4,7 @@ Tags: skaut, google drive, google drive documents, team drive, shared drive, doc
 Requires at least: 5.0
 Tested up to: 5.2
 Requires PHP: 7.0
-Stable tag: 0.2
+Stable tag: 0.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
