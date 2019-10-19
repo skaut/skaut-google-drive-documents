@@ -40,7 +40,7 @@ function add_block() {
 			'folderType'       => [ esc_html__( 'List folder as', 'skaut-google-drive-documents' ), \Sgdd\Admin\Options\Options::$folder_type->get() ],
 			'listWidth'        => [ esc_html__( 'Width', 'skaut-google-drive-documents' ), \Sgdd\Admin\Options\Options::$list_width->get() ],
 			'gridCols'         => [ esc_html__( 'Grid columns', 'skaut-google-drive-documents' ), \Sgdd\Admin\Options\Options::$grid_cols->get() ],
-			'test'             => esc_html__( 'Set permissions' ),
+			'setPermissions'   => esc_html__( 'Set permissions' ),
 		]
 	);
 
@@ -82,7 +82,7 @@ function display( $attr ) {
 		try {
 			$content = fetch_folder_content( $folder_id );
 		} catch ( \Exception $e ) {
-			return '<div class="notice notice-error">Error while fetching folder content! <br> ' . $e->getErrors()[0]['message'] . '</div>';
+			return '<div class="notice notice-error">Error while fetching folder content! <br> ' . $e . '</div>';
 		}
 
 		if ( 'list' === $folder_type ) {

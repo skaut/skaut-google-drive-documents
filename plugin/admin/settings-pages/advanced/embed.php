@@ -10,7 +10,8 @@ function register() {
 }
 
 function add() {
-	add_settings_section( 'sgdd_embed', esc_html__( 'Embed', 'skaut-google-drive-documents' ), '\\Sgdd\\Admin\\SettingsPages\\Advanced\\Embed\\display', 'sgdd_advanced' );
+	add_settings_section( 'sgdd_file', esc_html__( 'File embed settings', 'skaut-google-drive-documents' ), '\\Sgdd\\Admin\\SettingsPages\\Advanced\\Embed\\display', 'sgdd_advanced' );
+	add_settings_section( 'sgdd_folder', esc_html__( 'Folder embed settings', 'skaut-google-drive-documents' ), '\\Sgdd\\Admin\\SettingsPages\\Advanced\\Embed\\display', 'sgdd_advanced' );
 	\Sgdd\Admin\Options\Options::$embed_width->add_field();
 	\Sgdd\Admin\Options\Options::$embed_height->add_field();
 	\Sgdd\Admin\Options\Options::$folder_type->add_field();

@@ -16,7 +16,6 @@ SgddButtonSetting.prototype.render = function() {
 };
 
 SgddButtonSetting.prototype.ajax = function() {
-	//var that = this;
 	$.ajax({
 		url: sgddBlockJsLocalize.ajaxUrl,
 		type: 'GET',
@@ -29,21 +28,31 @@ SgddButtonSetting.prototype.ajax = function() {
 		},
 		beforeSend: function() {},
 		success: function( response ) {
-			//handle success
-			var $el = $(".sgdd-block-settings-button"), originalColor = $el.css("background");
 
-			$el.prop('value', 'Success').css("background-color", "#5cb85c");
-			setTimeout( function(){
-				$el.prop('value', 'Set permissions').css("background", originalColor);
+			//handle success
+			var el;
+			var originalColor;
+
+			el = $( '.sgdd-block-settings-button' );
+			originalColor = el.css( 'background' );
+
+			el.prop( 'value', 'Success' ).css( 'background-color', '#5cb85c' );
+			setTimeout( function() {
+				el.prop( 'value', 'Set permissions' ).css( 'background', originalColor );
 			}, 3000 );
 		},
 		error: function( response ) {
-			//handle errors
-			var $el = $(".sgdd-block-settings-button"), originalColor = $el.css("background");
 
-			$el.prop('value', 'Error').css("background-color", "#d9534f");
-			setTimeout( function(){
-				$el.prop('value', 'Set permissions').css("background", originalColor);
+			//handle errors
+			var el;
+			var originalColor;
+
+			el = $( '.sgdd-block-settings-button' );
+			originalColor = el.css( 'background' );
+
+			el.prop( 'value', 'Error' ).css( 'background-color', '#d9534f' );
+			setTimeout( function() {
+				el.prop( 'value', 'Set permissions' ).css( 'background', originalColor );
 			}, 3000 );
 		}
 	});
