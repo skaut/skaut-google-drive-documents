@@ -1,6 +1,6 @@
 {
   "name": "skaut-google-drive-documents",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "A WordPress plugin to display and edit documents using Google Drive as file storage",
   "keywords": [
     "wordpress",
@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/skaut/skaut-google-drive-documents/issues"
   },
-  "license": "GPL-3.0-or-later",
+  "license": "MIT",
   "author": "Kristian Kosorin",
   "repository": {
     "type": "git",

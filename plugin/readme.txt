@@ -5,8 +5,8 @@ Requires at least: 5.0
 Tested up to: 5.2
 Requires PHP: 7.0
 Stable tag: 0.3
-License: GPLv3 or later
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
+License: MIT
+License URI: https://raw.githubusercontent.com/skaut/skaut-google-drive-documents/master/plugin/license.txt
 
 A WordPress documents using Google Drive as file storage
 
