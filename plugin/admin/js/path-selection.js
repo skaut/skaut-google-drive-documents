@@ -19,20 +19,12 @@ jQuery( document ).ready( function( $ ) {
         path: path,
         _ajax_nonce: sgddRootPathLocalize.nonce // eslint-disable-line camelcase
       },
-      /*beforeSend: function() {
-        $( '#rootPath tbody tr' ).not( '.loadingCircle' ).fadeOut();
-        $( '.loadingCircle' ).fadeIn( 'slow' );
-      },
-      complete: function() {
-        $( '.loadingCircle' ).fadeOut();
-        $( '#rootPath tbody tr' ).not( '.loadingCircle' ).fadeIn( 'slow' );
-      },*/
       success: function( response ) {
-        $( '.loadingCircle' ).fadeOut();
-        $( '#rootPath tbody tr' ).not( '.loadingCircle' ).fadeIn( 'slow' );
-
         var html = '';
         var i;
+
+        $( '.loadingCircle' ).fadeOut();
+        $( '#rootPath tbody tr' ).not( '.loadingCircle' ).fadeIn( 'slow' );
 
         /* Print path */
         if ( 0 < path.length ) {
@@ -89,9 +81,9 @@ jQuery( document ).ready( function( $ ) {
 
   /**
    * Reloads table content on path click
-   * 
+   *
    * @param {string[]} path - Array of folder ids from root
-   * @param {*} element 
+   * @param {*} element
    */
   function pathClick( path, element ) {
     var elementIndex = path.indexOf( $( element ).data( 'id' ) );
@@ -102,9 +94,9 @@ jQuery( document ).ready( function( $ ) {
 
   /**
    * Reloads table content on directory click
-   * 
+   *
    * @param {string[]} path - Array of folder ids from root
-   * @param {*} element 
+   * @param {*} element
    */
   function dirClick( path, element ) {
     var newID = $( element ).data( 'id' );
