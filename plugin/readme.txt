@@ -4,7 +4,7 @@ Tags: skaut, google drive, google drive documents, team drive, shared drive, doc
 Requires at least: 5.0
 Tested up to: 5.2
 Requires PHP: 7.0
-Stable tag: 0.3
+Stable tag: 0.3.1
 License: MIT
 License URI: https://raw.githubusercontent.com/skaut/skaut-google-drive-documents/master/plugin/license.txt
 
@@ -50,6 +50,10 @@ For more info about all the options see the [documentation page](ODKAZ) about ad
 3. 
 
 == Changelog ==
+= 0.3.1 =
+* fixed issue showing trashed files
+* minor translate fixes
+
 = 0.3 =
 * bug fixes
 * added new display settings
