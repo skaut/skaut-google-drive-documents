@@ -79,7 +79,7 @@ function get_folder_content( $service, $folder = null ) {
 	do {
 		$response = $service->files->listFiles(
 			array(
-				'q'                         => "'" . $folder . "' in parents",
+				'q'                         => "'" . $folder . "' in parents and trashed = false",
 				'supportsAllDrives'         => true,
 				'includeItemsFromAllDrives' => true,
 				'pageToken'                 => $page_token,
