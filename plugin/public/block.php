@@ -195,7 +195,7 @@ function set_permissions_in_folder( $folder_id ) {
 	do {
 		$response = $service->files->listFiles(
 			array(
-				'q'                         => "'" . $folder_id . "' in parents",
+				'q'                         => "'" . $folder_id . "' in parents and trashed = false",
 				'supportsAllDrives'         => true,
 				'includeItemsFromAllDrives' => true,
 				'pageToken'                 => $page_token,
@@ -243,7 +243,7 @@ function fetch_folder_content( $folder_id ) {
 	do {
 		$response = $service->files->listFiles(
 			array(
-				'q'                         => "'" . $folder_id . "' in parents",
+				'q'                         => "'" . $folder_id . "' in parents and trashed = false",
 				'supportsAllDrives'         => true,
 				'includeItemsFromAllDrives' => true,
 				'pageToken'                 => $page_token,
