@@ -1,10 +1,19 @@
 <?php
+/**
+ * Block functionality
+ *
+ * @package SGDD
+ * @since 1.0.0
+ */
 namespace Sgdd\Pub\Block;
 
 if ( ! is_admin() ) {
 	return;
 }
 
+/**
+ * Registers actions into WordPress.
+ */
 function register() {
 	if ( function_exists( 'register_block_type' ) ) {
 		add_action( 'init', '\\Sgdd\\Pub\\Block\\add_block' );
@@ -13,6 +22,9 @@ function register() {
 	add_action( 'wp_ajax_setPermissions', '\\Sgdd\\Pub\\Block\\ajax_handler' );
 }
 
+/**
+ * Adds block into WordPress
+ */
 function add_block() {
 	\Sgdd\enqueue_script( 'sgdd_block_js', '/public/js/block.js', [ 'wp-blocks', 'wp-components', 'wp-editor', 'wp-element', 'wp-i18n', 'sgdd_file_selection_js' ] );
 	\Sgdd\enqueue_script( 'sgdd_file_selection_js', '/public/js/file-selection.js', [ 'wp-components', 'wp-element', 'sgdd_inspector_js', 'sgdd_settings_base_js' ] );
@@ -54,6 +66,12 @@ function add_block() {
 	);
 }
 
+/**
+ * Displays block into editor and returns HTML format to frontend.
+ *
+ * @param $attr Attributes fetched from JS request
+ * @return string HTML format to display on frontend
+ */
 function display( $attr ) {
 	if ( isset( $attr['folderType'] ) || ! isset( $attr['fileId'] ) ) {
 		//display folder
@@ -144,7 +162,7 @@ function display( $attr ) {
 }
 
 /**
- * Handles ajax call from JS
+ * Handles Ajax response from JS
  */
 function ajax_handler() {
 	try {
@@ -160,6 +178,9 @@ function ajax_handler() {
 	}
 }
 
+/**
+ * Process Ajax request from JS to set permissions of files.
+ */
 function set_permissions() {
 	check_ajax_referer( 'sgdd_block_js_permissions' );
 
@@ -177,6 +198,11 @@ function set_permissions() {
 	}
 }
 
+/**
+ * Sets permissions of file on Google Drive
+ *
+ * @param $file_id Google Drive id of file which permissions will be modified.
+ */
 function set_file_permissions( $file_id ) {
 	$service           = \Sgdd\Admin\GoogleAPILib\get_drive_client();
 	$domain_permission = new \Sgdd\Vendor\Google_Service_Drive_Permission(
@@ -188,6 +214,12 @@ function set_file_permissions( $file_id ) {
 	$request           = $service->permissions->create( $file_id, $domain_permission, [ 'supportsTeamDrives' => true ] );
 }
 
+/**
+ * Sets permissions of all files in folder.
+ *
+ * @param $folder_type Google Drive id of folder in which permissions of all files will be modified.
+ * @return array NULL
+ */
 function set_permissions_in_folder( $folder_id ) {
 	$service    = \Sgdd\Admin\GoogleAPILib\get_drive_client();
 	$page_token = null;
@@ -263,6 +295,14 @@ function fetch_folder_content( $folder_id ) {
 	return $response;
 }
 
+/**
+ * Function that construct HTML for displaying folder content.
+ *
+ * @param $content Content of folder to be displayed
+ * @param $type Type of displaying folder: list or grid
+ * @param $arg User specified options for displaying folder
+ * @return string HTML format for frontend
+ */
 function build_result( $content, $type, $arg ) {
 	$result;
 

@@ -1,4 +1,11 @@
 <?php
+/**
+ * Functions and template for basic settings page
+ *
+ * @package SGDD
+ * @since 1.0.0
+ */
+
 namespace Sgdd\Admin\SettingsPages\Basic;
 
 require_once __DIR__ . '/basic/oauth-grant.php';
@@ -9,6 +16,9 @@ if ( ! is_admin() ) {
 	return;
 }
 
+/**
+ * Registers actions into WordPress
+ */
 function register() {
 	add_action( 'admin_menu', '\\Sgdd\\Admin\\SettingsPages\\Basic\\add_menu' );
 
@@ -20,10 +30,16 @@ function register() {
 	}
 }
 
+/**
+ * Adds basic settings page to admin menu
+ */
 function add_menu() {
 	add_submenu_page( 'sgdd_basic', __( 'Basic options', 'skaut-google-drive-documents' ), esc_html__( 'Basic options', 'skaut-google-drive-documents' ), 'manage_options', 'sgdd_basic', '\\Sgdd\\Admin\\SettingsPages\\Basic\\display' );
 }
 
+/**
+ * Renders settings page
+ */
 function display() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;

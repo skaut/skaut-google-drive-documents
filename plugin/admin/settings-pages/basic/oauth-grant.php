@@ -1,14 +1,27 @@
 <?php
+/**
+ * Handles oAuth authentification process
+ *
+ * @package SGDD
+ * @since 1.0.0
+ */
 namespace Sgdd\Admin\SettingsPages\Basic\OAuthGrant;
 
 if ( ! is_admin() ) {
 	return;
 }
 
+/**
+ * Register actions into WordPress
+ */
 function register() {
 	add_action( 'admin_init', '\\Sgdd\\Admin\\SettingsPages\\Basic\\OAuthGrant\\add_settings' );
 }
 
+
+/**
+ * Adds settings fields to grant section of basic settings page
+ */
 function add_settings() {
 	add_settings_section( 'sgdd_auth', __( 'Step 1: Authorization', 'skaut-google-drive-documents' ), '\\Sgdd\\Admin\\SettingsPages\\Basic\\OAuthGrant\\display', 'sgdd_basic' );
 
@@ -19,6 +32,9 @@ function add_settings() {
 	\Sgdd\Admin\Options\Options::$client_secret->add_field();
 }
 
+/**
+ * Renders oAuth grant section of basic settings page
+ */
 function display() {
 	$help_link = 'https://github.com/skaut/skaut-google-drive-documents/wiki/N%C3%A1vod-na-nastavenie';
 	$console   = 'https://console.cloud.google.com/apis/dashboard';
