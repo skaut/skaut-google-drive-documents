@@ -1,4 +1,10 @@
 <?php
+/**
+ * Options class
+ *
+ * @package SGDD
+ * @since 1.0.0
+ */
 namespace Sgdd\Admin\Options;
 
 require_once __DIR__ . '/option-types/class-stringfield.php';
@@ -6,22 +12,90 @@ require_once __DIR__ . '/option-types/class-pathfield.php';
 require_once __DIR__ . '/option-types/class-integerfield.php';
 require_once __DIR__ . '/option-types/class-selectfield.php';
 
+/**
+ * A class that contain all configuration settings of plugin.
+ */
 class Options {
+	/**
+	 * Show authorized domain for registering Google app.
+	 *
+	 * @var \Sgdd\Admin\Options\OptionTypes\StringField $authorized_domain
+	 */
 	public static $authorized_domain;
+
+	/**
+	 * Show authorized JavaScript origin for registering Google app.
+	 *
+	 * @var \Sgdd\Admin\Options\OptionTypes\StringField $authorized_origin
+	 */
 	public static $authorized_origin;
+
+	/**
+	 * Show redirect uri for registering Google app.
+	 *
+	 * @var \Sgdd\Admin\Options\OptionTypes\StringField $redirect_uri
+	 */
 	public static $redirect_uri;
+
+	/**
+	 * Client ID of Google app.
+	 *
+	 * @var \Sgdd\Admin\Options\OptionTypes\StringField $client_id
+	 */
 	public static $client_id;
+
+	/**
+	 * Client secret of Google app.
+	 *
+	 * @var \Sgdd\Admin\Options\OptionTypes\StringField $client_secret
+	 */
 	public static $client_secret;
+
+	/**
+	 * Root path of plugin. This is the "highest" point in hierarchy of drive folders accessible.
+	 *
+	 * @var \Sgdd\Admin\Options\OptionTypes\PathField $root_path
+	 */
 	public static $root_path;
 
+	/**
+	 * The width of embeded file.
+	 *
+	 * @var \Sgdd\Admin\Options\OptionTypes\IntegerField $embed_width
+	 */
 	public static $embed_width;
+
+	/**
+	 * The height of embeded file.
+	 *
+	 * @var \Sgdd\Admin\Options\OptionTypes\IntegerField $embed_width
+	 */
 	public static $embed_height;
 
+	/**
+	 * Wbether show folder as list or grif.
+	 *
+	 * @var \Sgdd\Admin\Options\OptionTypes\SelectField $folder_type
+	 */
 	public static $folder_type;
 
+	/**
+	 * Width of list when displaying folder content as list.
+	 *
+	 * @var \Sgdd\Admin\Options\OptionTypes\IntegerField $list_width
+	 */
 	public static $list_width;
+
+	/**
+	 * Number of columns when displaying folder content as grid.
+	 *
+	 * @var \Sgdd\Admin\Options\OptionTypes\IntegerField $grid_cols
+	 */
 	public static $grid_cols;
 
+	/**
+	 * Class initializer function
+	 */
 	public static function init() {
 		$url                     = wp_parse_url( get_site_url() );
 		self::$authorized_domain = new \Sgdd\Admin\Options\OptionTypes\StringField( 'authorized_domain', __( 'Authorised domain', 'skaut-google-drive-documents' ), 'basic', 'auth', $_SERVER['HTTP_HOST'] );

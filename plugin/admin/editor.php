@@ -22,7 +22,7 @@ function register() {
 }
 
 /**
- * Handles ajax call from JS
+ * Handles Ajax response from JS
  */
 function ajax_handler() {
 	try {
@@ -66,6 +66,10 @@ function file_selection() {
 
 /**
  * Returns folder content
+ *
+ * @param $service Object of Google Drive Client
+ * @param $folder Folder id
+ * @return array List of content in specified folder
  */
 function get_folder_content( $service, $folder = null ) {
 	if ( ! isset( $folder ) ) {

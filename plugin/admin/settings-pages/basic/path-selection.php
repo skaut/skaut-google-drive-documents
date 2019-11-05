@@ -1,22 +1,39 @@
 <?php
+/**
+ * Handles root folder selection
+ *
+ * @package SGDD
+ * @since 1.0.0
+ */
 namespace Sgdd\Admin\SettingsPages\Basic\PathSelection;
 
 if ( ! is_admin() ) {
 	return;
 }
 
+/**
+ * Register actions into WordPress
+ */
 function register() {
 	add_action( 'admin_init', '\\Sgdd\\Admin\\SettingsPages\\Basic\\PathSelection\\add_settings' );
 	add_action( 'admin_enqueue_scripts', '\\Sgdd\\Admin\\SettingsPages\\Basic\\PathSelection\\register_script' );
 	add_action( 'wp_ajax_listDrive', '\\Sgdd\\Admin\\SettingsPages\\Basic\\PathSelection\\ajax_handler' );
 }
 
+/**
+ * Add settings fields to path select section of basic settings page
+ */
 function add_settings() {
 	add_settings_section( 'sgdd_path_select', __( 'Step 2: Root Path Selection', 'skaut-google-drive-documents' ), '\\Sgdd\\Admin\\SettingsPages\\Basic\\PathSelection\\display', 'sgdd_basic' );
 
 	\Sgdd\Admin\Options\Options::$root_path->register();
 }
 
+/**
+ * Register script that handles Ajax request to list folders
+ *
+ * @param $hook Dynamic hook which refers to plugin settings page
+ */
 function register_script( $hook ) {
 	\Sgdd\enqueue_style( 'sgdd_path_selection_css', '/admin/css/path-selection.css' );
 	if ( 'toplevel_page_sgdd_basic' === $hook ) {
@@ -34,6 +51,9 @@ function register_script( $hook ) {
 	}
 }
 
+/**
+ * Handels Ajax response from JS
+ */
 function ajax_handler() {
 	try {
 		drive_path_selection();
@@ -48,6 +68,9 @@ function ajax_handler() {
 	}
 }
 
+/**
+ * Fetch availible folders on gdrive
+ */
 function drive_path_selection() {
 	check_ajax_referer( 'sgdd_path_selection' );
 
@@ -64,7 +87,7 @@ function drive_path_selection() {
 	];
 
 	if ( ! empty( $path ) ) {
-		$result['pathNames'] = get_path_name( $path, $service );
+		$result['pathNames'] = get_path_name( $service, $path );
 		$result['content']   = get_drive_content( $service, end( $path ) );
 	} else {
 		$result['pathNames'] = [ 'Shared Drive List' ];
@@ -74,7 +97,14 @@ function drive_path_selection() {
 	wp_send_json( $result );
 }
 
-function get_path_name( $path, $service ) {
+/**
+ * Translates grive folder path to folder name
+ *
+ * @param $service Object of Google Drive Client
+ * @param $path Array of folder ids specified as root
+ * @return array List of folder names
+ */
+function get_path_name( $service, $path ) {
 	$result = [];
 
 	if ( count( $path ) > 0 ) {
@@ -99,6 +129,13 @@ function get_path_name( $path, $service ) {
 	return $result;
 }
 
+/**
+ * Fetch content of folder on gdrie
+ *
+ * @param $service Object of Google Drive Client
+ * @param $root Root folder id specified in settings
+ * @return array List of content in specified folder
+ */
 function get_drive_content( $service, $root ) {
 	$result     = [];
 	$page_token = null;
@@ -134,6 +171,12 @@ function get_drive_content( $service, $root ) {
 	return $result;
 }
 
+/**
+ * Fetch all google drive from account (main drive and all shared drives connected to account)
+ *
+ * @param $service Object of Google Drive Client
+ * @return array List of all gdrives connected to account
+ */
 function get_drives( $service ) {
 	$result     = [
 		[
@@ -170,6 +213,9 @@ function get_drives( $service ) {
 	return $result;
 }
 
+/**
+ * Renders folder selection section of basic settings page
+ */
 function display() {
 	?>
 
