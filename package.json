@@ -28,7 +28,7 @@
     "gulp-composer": "^0.4.5",
     "gulp-eslint": "^6.0.0",
     "gulp-replace": "^1.0.0",
-    "gulp-shell": "^0.7.1",
+    "gulp-shell": "^0.8.0",
     "merge-stream": "^2.0.0"
   },
   "dependencies": {
