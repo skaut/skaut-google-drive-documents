@@ -1,21 +1,31 @@
-'use strict';
-var el = wp.element.createElement;
+"use strict";
 
-var SgddIntegerSetting = function( attributes ) {
-	SgddSettingsBase.call( this, attributes );
+const SgddIntegerSetting = function(attributes) {
+  SgddSettingsBase.call(this, attributes); //eslint-disable-line no-undef
 };
-SgddIntegerSetting.prototype = Object.create( SgddSettingsBase.prototype );
+
+SgddIntegerSetting.prototype = Object.create(SgddSettingsBase.prototype); //eslint-disable-line no-undef
 SgddIntegerSetting.prototype.renderInput = function() {
-	var that = this;
-	var value = this.block.getAttribute( this.name );
-	return el( 'input', {className: 'sgdd-block-settings-integer components-range-control__number', disabled: undefined === value, onChange: function( e ) {
-			that.change( e );
-		}, placeholder: sgddBlockJsLocalize[this.name][1], type: 'number', value: this.state.value});
+  const that = this;
+  const value = this.block.getAttribute(this.name);
+  const el = wp.element.createElement;
+
+  return el("input", {
+    className: "sgdd-block-settings-integer components-range-control__number",
+    disabled: undefined === value,
+    key: this.name,
+    onChange(e) {
+      that.change(e);
+    },
+    placeholder: sgddBlockJsLocalize[this.name][1], //eslint-disable-line no-undef
+    type: "number",
+    value: this.state.value
+  });
 };
-SgddIntegerSetting.prototype.getValue = function( element ) {
-	var value = parseInt( element.value );
-	if ( isNaN( value ) ) {
-		return undefined;
-	}
-	return value;
+SgddIntegerSetting.prototype.getValue = function(element) {
+  const value = parseInt(element.value);
+  if (isNaN(value)) {
+    return undefined;
+  }
+  return value;
 };

@@ -25,3 +25,7 @@ wp-content/plugins/hello.php
 
 composer.lock
 package-lock.json
+
+
+/backup
+*.zip

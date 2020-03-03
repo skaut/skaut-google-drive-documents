@@ -184,7 +184,7 @@ function ajax_handler() {
 function set_permissions() {
 	check_ajax_referer( 'sgdd_block_js_permissions' );
 
-	if ( '' !== $_GET['folderType'] || '' === $_GET['fileId'] ) {
+	if ( ! isset( $_GET['folderType'] ) || '' === $_GET['fileId'] ) {
 		if ( '' === $_GET['folderId'] ) {
 			$root_path = \Sgdd\Admin\Options\Options::$root_path->get();
 			$folder_id = end( $root_path );

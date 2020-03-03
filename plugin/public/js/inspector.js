@@ -1,22 +1,62 @@
-'use strict';
+"use strict";
 
-var el = wp.element.createElement;
-var SgddInspector = function( attributes ) {
-	this.block = attributes.block;
+const SgddInspector = function(attributes) {
+  this.block = attributes.block;
 };
 
-SgddInspector.prototype = Object.create( wp.element.Component.prototype );
+SgddInspector.prototype = Object.create(wp.element.Component.prototype);
 SgddInspector.prototype.render = function() {
-	return [
-		el( wp.components.PanelBody, { title: 'File embed options', className: 'sgdd-block-settings' }, [
-			el( SgddIntegerSetting, {block: this.block, name: 'embedWidth'}),
-			el( SgddIntegerSetting, {block: this.block, name: 'embedHeight'})
-		]),
-		el( wp.components.PanelBody, { title: 'Folder embed options', className: 'sgdd-block-settings' }, [
-			el( SgddIntegerSetting, {block: this.block, name: 'listWidth'}),
-			el( SgddIntegerSetting, {block: this.block, name: 'gridCols'}),
-			el( SgddSelectSetting, {block: this.block, name: 'folderType'}),
-			el( SgddButtonSetting, {block: this.block, name: 'setPermissions'})
-		])
-	];
+  const el = wp.element.createElement;
+  return [
+    el(
+      wp.components.PanelBody,
+      {
+        title: "File embed options",
+        className: "sgdd-block-settings",
+        key: "file-options"
+      },
+      [
+        el(SgddIntegerSetting, {
+          block: this.block,
+          name: "embedWidth",
+          key: "width"
+        }),
+        el(SgddIntegerSetting, {
+          block: this.block,
+          name: "embedHeight",
+          key: "height"
+        })
+      ]
+    ),
+    el(
+      wp.components.PanelBody,
+      {
+        title: "Folder embed options",
+        className: "sgdd-block-settings",
+        key: "folder-options"
+      },
+      [
+        el(SgddIntegerSetting, {
+          block: this.block,
+          name: "listWidth",
+          key: "list-width"
+        }),
+        el(SgddIntegerSetting, {
+          block: this.block,
+          name: "gridCols",
+          key: "grid-cols"
+        }),
+        el(SgddSelectSetting, {
+          block: this.block,
+          name: "folderType",
+          key: "folder-type"
+        }),
+        el(SgddButtonSetting, {
+          block: this.block,
+          name: "setPermissions",
+          key: "set-permissions"
+        })
+      ]
+    )
+  ];
 };
