@@ -1,58 +1,57 @@
-'use strict';
+"use strict";
 
-var el = wp.element.createElement,
-    registerBlockType = wp.blocks.registerBlockType;
+const registerBlockType = wp.blocks.registerBlockType;
 
-registerBlockType( 'skaut-google-drive-documents/block', {
-  title: sgddBlockJsLocalize.blockName,
-  description: sgddBlockJsLocalize.blockDescription,
-  icon: 'welcome-add-page',
-  category: 'common',
-  keywords: [ 'docs', 'documents', 'drive' ],
+registerBlockType("skaut-google-drive-documents/block", {
+  title: sgddBlockJsLocalize.blockName, //eslint-disable-line no-undef
+  description: sgddBlockJsLocalize.blockDescription, //eslint-disable-line no-undef
+  icon: "welcome-add-page",
+  category: "common",
+  keywords: ["docs", "documents", "drive"],
 
   attributes: {
     namesPath: {
-      type: 'array',
+      type: "array",
       default: []
     },
     idsPath: {
-      type: 'array',
+      type: "array",
       default: []
     },
     fileId: {
-      type: 'string',
-      default: ''
+      type: "string",
+      default: ""
     },
     folderId: {
-      type: 'string',
-      default: ''
+      type: "string",
+      default: ""
     },
     embedWidth: {
-      type: 'int',
+      type: "int",
       default: undefined
     },
     embedHeight: {
-      type: 'int',
+      type: "int",
       default: undefined
     },
     listWidth: {
-      type: 'int',
+      type: "int",
       default: undefined
     },
     gridCols: {
-      type: 'int',
+      type: "int",
       default: undefined
     },
     folderType: {
-      type: 'string',
+      type: "string",
       default: undefined
     }
   },
 
-  edit: SgddFileSelection,
+  edit: SgddFileSelection, //eslint-disable-line no-undef
   save: renderFrontend
 });
 
-function renderFrontend( props ) {
+function renderFrontend() {
   return null;
 }

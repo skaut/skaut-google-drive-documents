@@ -52,7 +52,7 @@ function add_menu() {
 		'manage_options',
 		'sgdd_basic',
 		'\\Sgdd\\Admin\\SettingsPages\\Basic\\display',
-		plugins_url( '/skaut-google-drive-documents/admin/icon.png' )
+		plugins_url( trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) . '/icon.png' )
 	);
 }
 

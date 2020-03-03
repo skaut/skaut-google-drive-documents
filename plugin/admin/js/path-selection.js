@@ -1,80 +1,92 @@
-'use strict';
+(function($) {
+  "use strict";
 
-jQuery(document).ready(function ($) {
   function showDir(path) {
-
     /* If path is not initialized */
     if (!(path instanceof Array)) {
       path = [];
     }
 
-    $('#rootPath tbody tr').not('.loadingCircle').fadeOut();
-    $('.loadingCircle').fadeIn('slow');
+    $("#rootPath tbody tr")
+      .not(".loadingCircle")
+      .fadeOut();
+    $(".loadingCircle").fadeIn("slow");
 
     $.ajax({
-      url: sgddRootPathLocalize.ajaxUrl,
-      type: 'GET',
+      url: sgddRootPathLocalize.ajaxUrl, //eslint-disable-line no-undef
+      type: "GET",
       data: {
-        action: 'listDrive',
-        path: path,
-        _ajax_nonce: sgddRootPathLocalize.nonce // eslint-disable-line camelcase
+        action: "listDrive",
+        path,
+        _ajax_nonce: sgddRootPathLocalize.nonce // eslint-disable-line camelcase, no-undef
       },
-      success: function (response) {
-        var html = '';
-        var i;
+      success(response) {
+        let html = "";
+        let i;
 
-        $('.loadingCircle').fadeOut();
-        $('#rootPath tbody tr').not('.loadingCircle').fadeIn('slow');
+        $(".loadingCircle").fadeOut();
+        $("#rootPath tbody tr")
+          .not(".loadingCircle")
+          .fadeIn("slow");
 
         /* Print path */
         if (0 < path.length) {
-          html += '<a data-id="">' + sgddRootPathLocalize.driveList + '</a> > ';
+          html += '<a data-id="">' + sgddRootPathLocalize.driveList + "</a> > "; //eslint-disable-line no-undef
           for (i = 0; i < response.pathNames.length; i++) {
             if (0 < i) {
-              html += ' > ';
+              html += " > ";
             }
-            html += '<a data-id="' + path[i] + '">' + response.pathNames[i] + '</a>';
+            html +=
+              '<a data-id="' + path[i] + '">' + response.pathNames[i] + "</a>";
           }
         } else {
-          html += '<a data-id="">' + sgddRootPathLocalize.driveList + '</a>';
-          $('#submit').attr('disabled', 'disabled');
+          html += '<a data-id="">' + sgddRootPathLocalize.driveList + "</a>"; //eslint-disable-line no-undef
+          $("#submit").attr("disabled", "disabled");
         }
-        $('.tablePath').html(html);
+        $(".tablePath").html(html);
 
         /* Up directory dots */
         html = '<tr class="loadingCircle"></tr>';
         if (0 < path.length) {
           html += '<tr><td class="row-title"><label>..</label></tr>';
-          $('.tableBody').html(html);
+          $(".tableBody").html(html);
         }
 
         /* List dir content */
         for (i = 0; i < response.content.length; i++) {
           html += '<tr class="';
 
-          if (0 == i % 2) {
-            html += 'alternate';
+          if (0 === i % 2) {
+            html += "alternate";
           }
 
-          html += '"><td class="row-title"><label data-id="' + response.content[i].pathId + '">' + response.content[i].pathName + '</label>';
+          html +=
+            '"><td class="row-title"><label data-id="' +
+            response.content[i].pathId +
+            '">' +
+            response.content[i].pathName +
+            "</label>";
         }
-        $('.tableBody').html(html);
+        $(".tableBody").html(html);
 
-        $('.tableBody label').click(function () {
+        $(".tableBody label").click(function() {
           dirClick(path, this);
-          $('#submit').removeAttr('disabled');
+          $("#submit").removeAttr("disabled");
         });
 
-        $('.tablePath a').click(function () {
+        $(".tablePath a").click(function() {
           pathClick(path, this);
-          $('#submit').removeAttr('disabled');
+          $("#submit").removeAttr("disabled");
         });
 
-        $('#sgdd_root_path').val(JSON.stringify(path));
+        $("#sgdd_root_path").val(JSON.stringify(path));
       },
-      error: function (response) {
-        var html = '<div class="notice notice-error"><p>' + response.error + '</p></div>';
-        $('#rootPath').replaceWith(html);
+      error(response) {
+        const html =
+          '<div class="notice notice-error"><p>' +
+          response.error +
+          "</p></div>";
+        $("#rootPath").replaceWith(html);
       }
     });
   }
@@ -86,8 +98,8 @@ jQuery(document).ready(function ($) {
    * @param {*} element
    */
   function pathClick(path, element) {
-    var elementIndex = path.indexOf($(element).data('id'));
-    var newPath = path.slice(0, elementIndex + 1);
+    const elementIndex = path.indexOf($(element).data("id"));
+    const newPath = path.slice(0, elementIndex + 1);
 
     showDir(newPath);
   }
@@ -99,7 +111,7 @@ jQuery(document).ready(function ($) {
    * @param {*} element
    */
   function dirClick(path, element) {
-    var newID = $(element).data('id');
+    const newID = $(element).data("id");
 
     if (newID) {
       path.push(newID);
@@ -110,5 +122,5 @@ jQuery(document).ready(function ($) {
     showDir(path);
   }
 
-  showDir(sgddRootPathLocalize.path);
-});
+  showDir(sgddRootPathLocalize.path); //eslint-disable-line no-undef
+})(jQuery);

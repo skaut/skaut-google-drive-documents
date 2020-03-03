@@ -20,10 +20,10 @@
   },
   "devDependencies": {
     "@wordpress/eslint-plugin": "^4.0.0",
-    "eslint": "^6.5.1",
+    "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-compat": "^3.3.0",
-    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-compat": "^3.5.1",
+    "eslint-plugin-import": "^2.20.1",
     "gulp": "^4.0.2",
     "gulp-composer": "^0.4.5",
     "gulp-eslint": "^6.0.0",

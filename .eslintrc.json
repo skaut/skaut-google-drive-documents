@@ -1,6 +1,7 @@
 {
 	"env": {
-		"browser": true
+		"browser": true,
+		"jquery": true
 	},
 	"plugins": ["compat"],
 	"extends": [ "plugin:@wordpress/eslint-plugin/recommended" ],

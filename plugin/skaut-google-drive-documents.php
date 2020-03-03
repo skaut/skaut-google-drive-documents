@@ -87,7 +87,7 @@ function activate() {
  */
 function activation_info() {
 	if ( get_transient( 'sgdd_activation_info' ) ) {
-		$help_link = 'https://napoveda.skaut.cz/dobryweb/' . substr( get_locale(), 0, 2 ) . '-skaut-google-drive-documents';
+		$help_link = 'https://github.com/skaut/skaut-google-drive-documents/wiki/N%C3%A1vod-na-nastavenie';
 
 		echo '<div class="notice notice-info is-dismissible"><p>';
 		// translators: 1: Start of a link to the settings 2: End of the link to the settings 3: Start of a help link 4: End of the help link.
@@ -105,7 +105,8 @@ function activation_info() {
  * @param array  $deps An array of registered script handles this script depends on.
  */
 function enqueue_script( $handle, $src, $deps = [] ) {
-	wp_enqueue_script( $handle, plugins_url( '/skaut-google-drive-documents' . $src ), $deps, filemtime( WP_PLUGIN_DIR . '/skaut-google-drive-documents' . $src ), true );
+	$dir = plugin_dir_path( __FILE__ );
+	wp_enqueue_script( $handle, plugins_url( basename( __DIR__ ) . $src ), $deps, filemtime( $dir . $src ), true );
 }
 
 /**
@@ -116,7 +117,8 @@ function enqueue_script( $handle, $src, $deps = [] ) {
  * @param array  $deps An array of registered script handles this script depends on.
  */
 function enqueue_style( $handle, $src, $deps = [] ) {
-	wp_enqueue_style( $handle, plugins_url( '/skaut-google-drive-documents' . $src ), $deps, filemtime( WP_PLUGIN_DIR . '/skaut-google-drive-documents' . $src ) );
+	$dir = plugin_dir_path( __FILE__ );
+	wp_enqueue_style( $handle, plugins_url( basename( __DIR__ ) . $src ), $deps, filemtime( $dir . $src ) );
 }
 
 init();
