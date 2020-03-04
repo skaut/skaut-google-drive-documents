@@ -2,7 +2,7 @@
 Contributors: skaut, kalich5, xkosorin
 Tags: skaut, google drive, google drive documents, team drive, shared drive, documents , multisite, shortcode
 Requires at least: 5.0
-Tested up to: 5.2
+Tested up to: 5.3.2
 Requires PHP: 7.0
 Stable tag: 1.0.0
 License: MIT
@@ -11,8 +11,6 @@ License URI: https://raw.githubusercontent.com/skaut/skaut-google-drive-document
 A WordPress documents using Google Drive as file storage
 
 == Description ==
-
-THIS IS A PLUGIN IN BETA VERSION.
 
 To see the plugin in action, head on to our [demo page](https://demo-skaut-google-drive-documents.skauting.cz/).
 
@@ -34,7 +32,7 @@ To see the plugin in action, head on to our [demo page](https://demo-skaut-googl
 
 == Frequently Asked Questions ==
 = How to configure this plugin? =
-See our [documentation](ODKAZ).
+See our [documentation (SK)](https://github.com/skaut/skaut-google-drive-documents/wiki/N%C3%A1vod-na-nastavenie).
 
 = How do I create a Google app? =
 We have a special page in our [documentation](ODKAZ) just about that.
@@ -50,6 +48,10 @@ For more info about all the options see the [documentation page](ODKAZ) about ad
 3. 
 
 == Changelog ==
+= 1.0.0 =
+* bug fixes
+* code cleanup
+
 = 0.3.1 =
 * fixed issue showing trashed files
 * minor translate fixes
