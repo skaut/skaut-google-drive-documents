@@ -4,17 +4,23 @@ updates:
   directory: "/"
   schedule:
     interval: daily
-    time: "01:00"
-  open-pull-requests-limit: 10
+  assignees:
+    - marekdedic
+    - kalich5
+    - vitekr
 - package-ecosystem: composer
   directory: "/"
   schedule:
     interval: daily
-    time: "01:00"
-  open-pull-requests-limit: 10
+  assignees:
+    - marekdedic
+    - kalich5
+    - vitekr
 - package-ecosystem: npm
   directory: "/"
   schedule:
     interval: daily
-    time: "01:00"
-  open-pull-requests-limit: 10
+  assignees:
+    - marekdedic
+    - kalich5
+    - vitekr
