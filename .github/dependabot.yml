@@ -1,0 +1,26 @@
+version: 2
+updates:
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: daily
+  assignees:
+    - marekdedic
+    - kalich5
+    - vitekr
+- package-ecosystem: composer
+  directory: "/"
+  schedule:
+    interval: daily
+  assignees:
+    - marekdedic
+    - kalich5
+    - vitekr
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+  assignees:
+    - marekdedic
+    - kalich5
+    - vitekr
