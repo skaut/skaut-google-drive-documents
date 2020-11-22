@@ -69,9 +69,9 @@ function add_block() {
 
 /**
  * Parses input string with dimension, e.g.:
- *  - 100 -> 100px,
- *  - 100px -> 100px,
- *  - 100% -> 100%.
+ *  - '100' -> '100px',
+ *  - '100px' -> '100px',
+ *  - '100%' -> '100%'.
  * 
  * @param $in Input string
  * @return string If $in contains only digits append to it 'px' otherwise return unmodified $in
@@ -175,7 +175,7 @@ function display( $attr ) {
 			$size .= 'height:' . parse_dimension( $attr['embedHeight'] ) . '; ';
 		}
 
-		$result = '<iframe src="https://drive.google.com/file/d/' . $id . '/preview" style="' . $size . 'border:0;"></iframe>';
+		$result = '<iframe class="sgdd-embedded-file" src="https://drive.google.com/file/d/' . $id . '/preview" style="' . $size . 'border:0;"></iframe>';
 
 		return $result;
 	}
@@ -325,6 +325,7 @@ function fetch_folder_content( $folder_id ) {
  */
 function build_result( $content, $type, $arg ) {
 	$result;
+	$style;
 
 	if ( empty( $content['files'] ) ) {
 		return 'Vybraný priečinok neobsahuje žiadne položky!';
@@ -333,10 +334,10 @@ function build_result( $content, $type, $arg ) {
 	if ( 'list' === $type ) {
 		//build list table
 		if ( ! empty( $arg ) ) {
-			$result = '<table style="width:' . parse_dimension( $arg['width'] ) . ';"><tbody>';
-		} else {
-			$result = '<table><tbody>';
+			$style = ' style="width:' . parse_dimension( $arg['width'] ) . ';"';
 		}
+
+		$result = '<table class="sgdd-embedded-folder-list"' . $style . '><tbody>';
 
 		foreach ( $content as $element ) {
 			$result .= '<tr>
@@ -352,11 +353,13 @@ function build_result( $content, $type, $arg ) {
 		$width;
 		$cols = $arg['cols'];
 
+		$style = ' style="table-layout:fixed; border-collapse:separate;';
 		if ( array_key_exists( 'width', $arg ) ) {
-			$result = '<table style="table-layout:fixed; border-collapse:separate; width:' . parse_dimension( $arg['width'] ) . ';"><tbody>';
-		} else {
-			$result = '<table style="table-layout:fixed; border-collapse:separate;"><tbody>';
+			$style .= ' width:' . parse_dimension( $arg['width'] ) . ';';
 		}
+		$style .= '"';
+
+		$result = '<table class="sgdd-embedded-folder-grid"' . $style . '><tbody>';
 
 		foreach ( $content as $element ) {
 			0 === ( $i % $cols ) ? $result .= '<tr>' : $result .= '';
