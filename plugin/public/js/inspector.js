@@ -16,12 +16,12 @@ SgddInspector.prototype.render = function() {
         key: "file-options"
       },
       [
-        el(SgddIntegerSetting, {
+        el(SgddStringSetting, {
           block: this.block,
           name: "embedWidth",
           key: "width"
         }),
-        el(SgddIntegerSetting, {
+        el(SgddStringSetting, {
           block: this.block,
           name: "embedHeight",
           key: "height"
@@ -36,7 +36,7 @@ SgddInspector.prototype.render = function() {
         key: "folder-options"
       },
       [
-        el(SgddIntegerSetting, {
+        el(SgddStringSetting, {
           block: this.block,
           name: "listWidth",
           key: "list-width"
