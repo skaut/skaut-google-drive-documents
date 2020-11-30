@@ -37,28 +37,43 @@ class SelectField extends SettingField {
 	 * @return int Sanitized value.
 	 */
 	public function sanitize( $value ) {
-		if ( 'pixels' === $value ) {
-			return 'pixels';
-		}
-
-		if ( 'percentage' === $value ) {
-			return 'percentage';
-		}
-
-		return $this->default_value;
+		return esc_html( $value );
 	}
 
 	/**
 	 * Display field for updating the option
 	 */
 	public function display() {
-		echo '<label for="sgdd-' . esc_attr( $this->id ) . '">
-						<input type="radio" id="sgdd-' . esc_attr( $this->id ) . '-list" name="' . esc_attr( $this->id ) . '" value="list" ' . ( $this->get() === 'list' ? 'checked' : '' ) . '> List
-					</label>
-					<br>
-					<label for="sgdd-' . esc_attr( $this->id ) . '">
-						<input type="radio" id="sgdd-' . esc_attr( $this->id ) . '-grid" name="' . esc_attr( $this->id ) . '" value="grid" ' . ( $this->get() === 'grid' ? 'checked' : '' ) . '> Grid
-					</label>
-		';
+		$display = '';
+		$inputs;
+
+		// Folder view type
+		if ( 'sgdd_folder_type' === $this->id ) {
+			$inputs = array(
+				array( 'list', __( 'List', 'skaut-google-drive-documents' ) ),
+				array( 'grid', __( 'Grid', 'skaut-google-drive-documents' ) )
+			);
+		}
+		// Order files by
+		else if ( 'sgdd_order_by' === $this->id ) {
+			$inputs = array(
+				array( 'name_asc', __( 'Name (ascending)', 'skaut-google-drive-documents' ) ),
+				array( 'name_dsc', __( 'Name (descending)', 'skaut-google-drive-documents' ) ),
+				array( 'time_asc', __( 'Time (ascending)', 'skaut-google-drive-documents' ) ),
+				array( 'time_dsc', __( 'Time (descending)', 'skaut-google-drive-documents' ) )
+			);
+		}
+
+		foreach ($inputs as &$input) {
+			if ( $display !== '' ) {
+				$display .= '<br>';
+			}
+
+			$display .= '<label for="sgdd-' . esc_attr( $this->id ) . '">
+					<input type="radio" id="sgdd-' . esc_attr( $this->id ) . "-" . $input[0] . '" name="' . esc_attr( $this->id ) . '" value="' . $input[0] . '" ' . ( $this->get() === $input[0] ? 'checked' : '' ) . '> ' . $input[1] .
+				'</label>';
+		}
+
+		echo $display;
 	}
 }
