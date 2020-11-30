@@ -40,9 +40,10 @@ SgddFileSelection.prototype.render = function() {
   const children = [];
   const namesPath = [
     el(
-      "a",
+      "label",
       {
-        key: "link",
+        className: "sgdd-block-settings-folder",
+        key: "path-root",
         onClick(e) {
           that.pathClick(that, e);
         }
@@ -67,10 +68,10 @@ SgddFileSelection.prototype.render = function() {
         children.unshift(
           el(
             "tr",
-            { className: "folder", key: "tr" + id },
+            { className: "sgdd-block-settings-folder", key: "tr-" + id },
             el(
               "td",
-              { key: "td" + id },
+              { key: "td-" + id },
               el(
                 "label",
                 {
@@ -83,34 +84,18 @@ SgddFileSelection.prototype.render = function() {
             )
           )
         );
-      } else if (id === this.getAttribute("fileId")) {
-        children.push(
-          el(
-            "tr",
-            { className: "selected", key: "tr" + id },
-            el(
-              "td",
-              { key: "td" + id },
-              el(
-                "label",
-                {
-                  onClick() {
-                    that.fileClick(that, id);
-                  }
-                },
-                this.state.list[i].fileName
-              )
-            )
-          )
-        );
       } else {
+        var style = "sgdd-block-settings-file";
+        if (id === this.getAttribute("fileId")) {
+          style += "-selected";
+        }
         children.push(
           el(
             "tr",
-            { className: "file", key: "tr" + id },
+            { className: style, key: "tr-" + id },
             el(
               "td",
-              { key: "td" + id },
+              { key: "td-" + id },
               el(
                 "label",
                 {
@@ -130,10 +115,11 @@ SgddFileSelection.prototype.render = function() {
       namesPath.push(" > ");
       namesPath.push(
         el(
-          "a",
+          "label",
           {
             "data-id": this.getAttribute("namesPath")[i],
-            key: i,
+            className: "sgdd-block-settings-folder",
+            key: "path-" + i,
             onClick(e) {
               that.pathClick(that, e);
             }
@@ -147,10 +133,10 @@ SgddFileSelection.prototype.render = function() {
       children.unshift(
         el(
           "tr",
-          { key: "tr_dots" },
+          { className: "sgdd-block-settings-folder-up", key: "tr-path-up" },
           el(
             "td",
-            { key: "td_dots" },
+            { key: "td-path-up" },
             el(
               "label",
               {
@@ -172,11 +158,11 @@ SgddFileSelection.prototype.render = function() {
       { key: "ic" },
       el(SgddInspector, { block: this }) //eslint-disable-line no-undef
     ),
-    el("table", { className: "widefat fixed", key: "table" }, [
+    el("table", { className: "widefat fixed striped", key: "table" }, [
       el(
         "thead",
         { key: "thead" },
-        el("tr", { key: "tr" }, el("th", { key: "th" }, namesPath))
+        el("tr", { key: "tr-thead" }, el("th", { key: "th-thead" }, namesPath))
       ),
 
       el("tbody", { key: "tbody" }, children),
@@ -184,7 +170,7 @@ SgddFileSelection.prototype.render = function() {
       el(
         "tfoot",
         { key: "tfoot" },
-        el("tr", { key: "tr" }, el("th", { key: "th" }, namesPath))
+        el("tr", { key: "tr-tfoot" }, el("th", { key: "th-tfoot" }, namesPath))
       )
     ])
   ]);
