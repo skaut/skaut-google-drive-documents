@@ -51,6 +51,11 @@ SgddInspector.prototype.render = function() {
           name: "folderType",
           key: "folder-type"
         }),
+        el(SgddSelectSetting, {
+          block: this.block,
+          name: "orderBy",
+          key: "order-by"
+        }),
         el(SgddButtonSetting, {
           block: this.block,
           name: "setPermissions",
