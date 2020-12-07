@@ -1,4 +1,5 @@
 <?php
+
 namespace Sgdd\Vendor\GuzzleHttp\Psr7;
 
 use Sgdd\Vendor\InvalidArgumentException;
@@ -51,7 +52,7 @@ class Request implements RequestInterface
         }
 
         if ($body !== '' && $body !== null) {
-            $this->stream = stream_for($body);
+            $this->stream = Utils::streamFor($body);
         }
     }
 

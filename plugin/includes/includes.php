@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__ . '/vendor/psr/http-client/src/ClientInterface.php';
 require_once __DIR__ . '/vendor/psr/http-message/src/UriInterface.php';
 require_once __DIR__ . '/vendor/psr/http-message/src/MessageInterface.php';
 require_once __DIR__ . '/vendor/psr/http-message/src/RequestInterface.php';
@@ -22,26 +23,34 @@ require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/RequestOptions.php';
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/RedirectMiddleware.php';
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/Middleware.php';
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/ClientInterface.php';
+require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/ClientTrait.php';
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/Client.php';
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/HandlerStack.php';
+require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/Utils.php';
 
 require_once __DIR__ . '/vendor/guzzlehttp/psr7/src/functions.php';
 require_once __DIR__ . '/vendor/guzzlehttp/psr7/src/Stream.php';
 require_once __DIR__ . '/vendor/guzzlehttp/psr7/src/MessageTrait.php';
+require_once __DIR__ . '/vendor/guzzlehttp/psr7/src/Query.php';
 require_once __DIR__ . '/vendor/guzzlehttp/psr7/src/Request.php';
 require_once __DIR__ . '/vendor/guzzlehttp/psr7/src/Uri.php';
 require_once __DIR__ . '/vendor/guzzlehttp/psr7/src/UriResolver.php';
 require_once __DIR__ . '/vendor/guzzlehttp/psr7/src/Response.php';
+require_once __DIR__ . '/vendor/guzzlehttp/psr7/src/Utils.php';
 
 require_once __DIR__ . '/vendor/guzzlehttp/promises/src/functions.php';
+require_once __DIR__ . '/vendor/guzzlehttp/promises/src/Create.php';
+require_once __DIR__ . '/vendor/guzzlehttp/promises/src/Is.php';
 require_once __DIR__ . '/vendor/guzzlehttp/promises/src/PromiseInterface.php';
 require_once __DIR__ . '/vendor/guzzlehttp/promises/src/Promise.php';
 require_once __DIR__ . '/vendor/guzzlehttp/promises/src/TaskQueueInterface.php';
 require_once __DIR__ . '/vendor/guzzlehttp/promises/src/TaskQueue.php';
 require_once __DIR__ . '/vendor/guzzlehttp/promises/src/FulfilledPromise.php';
+require_once __DIR__ . '/vendor/guzzlehttp/promises/src/Utils.php';
 
 require_once __DIR__ . '/vendor/monolog/monolog/src/Monolog/ResettableInterface.php';
 require_once __DIR__ . '/vendor/monolog/monolog/src/Monolog/Logger.php';
+require_once __DIR__ . '/vendor/monolog/monolog/src/Monolog/Utils.php';
 require_once __DIR__ . '/vendor/monolog/monolog/src/Monolog/Handler/HandlerInterface.php';
 require_once __DIR__ . '/vendor/monolog/monolog/src/Monolog/Handler/AbstractHandler.php';
 require_once __DIR__ . '/vendor/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php';
@@ -53,6 +62,7 @@ require_once __DIR__ . '/vendor/monolog/monolog/src/Monolog/Formatter/LineFormat
 require_once __DIR__ . '/vendor/google/auth/src/Cache/MemoryCacheItemPool.php';
 require_once __DIR__ . '/vendor/google/auth/src/Cache/Item.php';
 require_once __DIR__ . '/vendor/google/auth/src/HttpHandler/Guzzle6HttpHandler.php';
+require_once __DIR__ . '/vendor/google/auth/src/HttpHandler/Guzzle7HttpHandler.php';
 require_once __DIR__ . '/vendor/google/auth/src/HttpHandler/HttpHandlerFactory.php';
 require_once __DIR__ . '/vendor/google/auth/src/CacheTrait.php';
 require_once __DIR__ . '/vendor/google/auth/src/FetchAuthTokenInterface.php';
@@ -65,6 +75,7 @@ require_once __DIR__ . '/vendor/google/apiclient/src/Google/Task/Runner.php';
 require_once __DIR__ . '/vendor/google/apiclient/src/Google/AccessToken/Revoke.php';
 require_once __DIR__ . '/vendor/google/apiclient/src/Google/AuthHandler/AuthHandlerFactory.php';
 require_once __DIR__ . '/vendor/google/apiclient/src/Google/AuthHandler/Guzzle6AuthHandler.php';
+require_once __DIR__ . '/vendor/google/apiclient/src/Google/AuthHandler/Guzzle7AuthHandler.php';
 require_once __DIR__ . '/vendor/google/apiclient/src/Google/Exception.php';
 require_once __DIR__ . '/vendor/google/apiclient/src/Google/Service/Resource.php';
 require_once __DIR__ . '/vendor/google/apiclient/src/Google/Service/Exception.php';

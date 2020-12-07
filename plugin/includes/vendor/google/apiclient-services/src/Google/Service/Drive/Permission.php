@@ -34,6 +34,7 @@ class Google_Service_Drive_Permission extends Google_Collection
   protected $teamDrivePermissionDetailsType = 'Google_Service_Drive_PermissionTeamDrivePermissionDetails';
   protected $teamDrivePermissionDetailsDataType = 'array';
   public $type;
+  public $view;
 
   public function setAllowFileDiscovery($allowFileDiscovery)
   {
@@ -100,14 +101,14 @@ class Google_Service_Drive_Permission extends Google_Collection
     return $this->kind;
   }
   /**
-   * @param Google_Service_Drive_PermissionPermissionDetails
+   * @param Google_Service_Drive_PermissionPermissionDetails[]
    */
   public function setPermissionDetails($permissionDetails)
   {
     $this->permissionDetails = $permissionDetails;
   }
   /**
-   * @return Google_Service_Drive_PermissionPermissionDetails
+   * @return Google_Service_Drive_PermissionPermissionDetails[]
    */
   public function getPermissionDetails()
   {
@@ -130,14 +131,14 @@ class Google_Service_Drive_Permission extends Google_Collection
     return $this->role;
   }
   /**
-   * @param Google_Service_Drive_PermissionTeamDrivePermissionDetails
+   * @param Google_Service_Drive_PermissionTeamDrivePermissionDetails[]
    */
   public function setTeamDrivePermissionDetails($teamDrivePermissionDetails)
   {
     $this->teamDrivePermissionDetails = $teamDrivePermissionDetails;
   }
   /**
-   * @return Google_Service_Drive_PermissionTeamDrivePermissionDetails
+   * @return Google_Service_Drive_PermissionTeamDrivePermissionDetails[]
    */
   public function getTeamDrivePermissionDetails()
   {
@@ -150,5 +151,13 @@ class Google_Service_Drive_Permission extends Google_Collection
   public function getType()
   {
     return $this->type;
+  }
+  public function setView($view)
+  {
+    $this->view = $view;
+  }
+  public function getView()
+  {
+    return $this->view;
   }
 }
