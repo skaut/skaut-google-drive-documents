@@ -325,7 +325,7 @@ function fetch_folder_content( $folder_id ) {
  */
 function build_result( $content, $type, $arg ) {
 	$result;
-	$style;
+	$style = '';
 
 	if ( empty( $content['files'] ) ) {
 		return 'Vybraný priečinok neobsahuje žiadne položky!';
