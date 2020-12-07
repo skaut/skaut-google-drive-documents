@@ -39,7 +39,7 @@ use Sgdd\Vendor\Monolog\Handler\SyslogHandler as MonologSyslogHandler;
  */
 class Google_Client
 {
-  const LIBVER = "2.4.0";
+  const LIBVER = "2.7.2";
   const USER_AGENT_SUFFIX = "google-api-php-client/";
   const OAUTH2_REVOKE_URI = 'https://oauth2.googleapis.com/revoke';
   const OAUTH2_TOKEN_URI = 'https://oauth2.googleapis.com/token';
@@ -103,6 +103,16 @@ class Google_Client
           // https://developers.google.com/console
           'client_id' => '',
           'client_secret' => '',
+
+          // Path to JSON credentials or an array representing those credentials
+          // @see Google_Client::setAuthConfig
+          'credentials' => null,
+          // @see Google_Client::setScopes
+          'scopes' => null,
+          // Sets X-Goog-User-Project, which specifies a user project to bill
+          // for access charges associated with the request
+          'quota_project' => null,
+
           'redirect_uri' => null,
           'state' => null,
 
@@ -150,6 +160,29 @@ class Google_Client
         ],
         $config
     );
+
+    if (!is_null($this->config['credentials'])) {
+      $this->setAuthConfig($this->config['credentials']);
+      unset($this->config['credentials']);
+    }
+
+    if (!is_null($this->config['scopes'])) {
+      $this->setScopes($this->config['scopes']);
+      unset($this->config['scopes']);
+    }
+
+    // Set a default token callback to update the in-memory access token
+    if (is_null($this->config['token_callback'])) {
+      $this->config['token_callback'] = function ($cacheKey, $newAccessToken) {
+        $this->setAccessToken(
+            [
+              'access_token' => $newAccessToken,
+              'expires_in' => 3600, // Google default
+              'created' => time(),
+            ]
+        );
+      };
+    }
   }
 
   /**
@@ -269,7 +302,7 @@ class Google_Client
   {
     if (null === $refreshToken) {
       if (!isset($this->token['refresh_token'])) {
-        throw new LogicException(
+        throw new \LogicException(
             'refresh token must be passed in or set as part of setAccessToken'
         );
       }
@@ -713,7 +746,7 @@ class Google_Client
    * Verify an id_token. This method will verify the current id_token, if one
    * isn't provided.
    *
-   * @throws LogicException If no token was provided and no token was set using `setAccessToken`.
+   * @throws \LogicException If no token was provided and no token was set using `setAccessToken`.
    * @throws UnexpectedValueException If the token is not a valid JWT.
    * @param string|null $idToken The token (id_token) that should be verified.
    * @return array|false Returns the token payload as an array if the verification was
@@ -730,7 +763,7 @@ class Google_Client
     if (null === $idToken) {
       $token = $this->getAccessToken();
       if (!isset($token['id_token'])) {
-        throw new LogicException(
+        throw new \LogicException(
             'id_token must be passed in or set as part of setAccessToken'
         );
       }
@@ -746,8 +779,11 @@ class Google_Client
   /**
    * Set the scopes to be requested. Must be called before createAuthUrl().
    * Will remove any previously configured scopes.
-   * @param string|array $scope_or_scopes, ie: array('https://www.googleapis.com/auth/plus.login',
-   * 'https://www.googleapis.com/auth/moderator')
+   * @param string|array $scope_or_scopes, ie:
+   *    array(
+   *        'https://www.googleapis.com/auth/plus.login',
+   *        'https://www.googleapis.com/auth/moderator'
+   *    );
    */
   public function setScopes($scope_or_scopes)
   {
@@ -800,6 +836,7 @@ class Google_Client
    * Helper method to execute deferred HTTP requests.
    *
    * @param $request Psr\Http\Message\RequestInterface|Google_Http_Batch
+   * @param string $expectedClass
    * @throws Google_Exception
    * @return object of the type of the expected class or Psr\Http\Message\ResponseInterface.
    */
@@ -908,7 +945,7 @@ class Google_Client
       $json = file_get_contents($config);
 
       if (!$config = json_decode($json, true)) {
-        throw new LogicException('invalid json for auth config');
+        throw new \LogicException('invalid json for auth config');
       }
     }
 
@@ -1105,22 +1142,29 @@ class Google_Client
 
   protected function createDefaultHttpClient()
   {
-    $options = ['exceptions' => false];
+    $guzzleVersion = null;
+    if (defined('\Sgdd\Vendor\GuzzleHttp\ClientInterface::MAJOR_VERSION')) {
+      $guzzleVersion = ClientInterface::MAJOR_VERSION;
+    } elseif (defined('\Sgdd\Vendor\GuzzleHttp\ClientInterface::VERSION')) {
+      $guzzleVersion = (int)substr(ClientInterface::VERSION, 0, 1);
+    }
 
-    $version = ClientInterface::VERSION;
-    if ('5' === $version[0]) {
+    $options = ['exceptions' => false];
+    if (5 === $guzzleVersion) {
       $options = [
         'base_url' => $this->config['base_path'],
         'defaults' => $options,
       ];
       if ($this->isAppEngine()) {
         // set StreamHandler on AppEngine by default
-        $options['handler']  = new StreamHandler();
+        $options['handler'] = new StreamHandler();
         $options['defaults']['verify'] = '/etc/ca-certificates.crt';
       }
-    } else {
-      // guzzle 6
+    } elseif (6 === $guzzleVersion || 7 === $guzzleVersion) {
+      // guzzle 6 or 7
       $options['base_uri'] = $this->config['base_path'];
+    } else {
+      throw new \LogicException('Could not find supported version of Guzzle.');
     }
 
     return new Client($options);
@@ -1139,10 +1183,20 @@ class Google_Client
         'client_email' => $this->config['client_email'],
         'private_key' => $signingKey,
         'type' => 'service_account',
+        'quota_project_id' => $this->config['quota_project'],
       );
-      $credentials = CredentialsLoader::makeCredentials($scopes, $serviceAccountCredentials);
+      $credentials = CredentialsLoader::makeCredentials(
+          $scopes,
+          $serviceAccountCredentials
+      );
     } else {
-      $credentials = ApplicationDefaultCredentials::getCredentials($scopes);
+      $credentials = ApplicationDefaultCredentials::getCredentials(
+          $scopes,
+          null,
+          null,
+          null,
+          $this->config['quota_project']
+      );
     }
 
     // for service account domain-wide authority (impersonating a user)

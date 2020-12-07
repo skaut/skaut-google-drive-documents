@@ -1,4 +1,5 @@
 <?php
+
 namespace Sgdd\Vendor\GuzzleHttp\Psr7;
 
 use Sgdd\Vendor\Psr\Http\Message\UriInterface;

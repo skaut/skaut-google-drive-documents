@@ -47,6 +47,7 @@ gulp.task("composer-copy-apiclient", function() {
           "vendor/google/apiclient/src/Google/AccessToken/Revoke.php",
           "vendor/google/apiclient/src/Google/AuthHandler/AuthHandlerFactory.php",
           "vendor/google/apiclient/src/Google/AuthHandler/Guzzle6AuthHandler.php",
+          "vendor/google/apiclient/src/Google/AuthHandler/Guzzle7AuthHandler.php",
           "vendor/google/apiclient/src/Google/Client.php",
           "vendor/google/apiclient/src/Google/Collection.php",
           "vendor/google/apiclient/src/Google/Exception.php",
@@ -69,9 +70,16 @@ gulp.task("composer-copy-apiclient", function() {
           "class_exists('\\\\Sgdd\\\\Vendor\\\\"
         )
       )
+      .pipe(
+        replace(
+          /defined\('\\GuzzleHttp/g,
+          "defined\('\\Sgdd\\Vendor\\GuzzleHttp"
+        )
+      )
       .pipe(replace(/ Iterator/g, " \\Iterator"))
       .pipe(replace(/ Countable/g, " \\Countable"))
-      .pipe(replace(/ Exception/g, " \\Exception")),
+      .pipe(replace(/ Exception/g, " \\Exception"))
+      .pipe(replace(/ LogicException/g, " \\LogicException")),
     gulp
       .src(["vendor/google/apiclient/src/Google/Model.php"], {
         base: "vendor/"
@@ -117,11 +125,13 @@ gulp.task("composer-copy-other", function() {
         "vendor/google/auth/src/CacheTrait.php",
         "vendor/google/auth/src/FetchAuthTokenInterface.php",
         "vendor/google/auth/src/HttpHandler/Guzzle6HttpHandler.php",
+        "vendor/google/auth/src/HttpHandler/Guzzle7HttpHandler.php",
         "vendor/google/auth/src/HttpHandler/HttpHandlerFactory.php",
         "vendor/google/auth/src/Middleware/ScopedAccessTokenMiddleware.php",
         "vendor/google/auth/src/OAuth2.php",
         "vendor/guzzlehttp/guzzle/src/Client.php",
         "vendor/guzzlehttp/guzzle/src/ClientInterface.php",
+        "vendor/guzzlehttp/guzzle/src/ClientTrait.php",
         "vendor/guzzlehttp/guzzle/src/Handler/CurlFactory.php",
         "vendor/guzzlehttp/guzzle/src/Handler/CurlFactoryInterface.php",
         "vendor/guzzlehttp/guzzle/src/Handler/CurlHandler.php",
@@ -134,19 +144,25 @@ gulp.task("composer-copy-other", function() {
         "vendor/guzzlehttp/guzzle/src/PrepareBodyMiddleware.php",
         "vendor/guzzlehttp/guzzle/src/RedirectMiddleware.php",
         "vendor/guzzlehttp/guzzle/src/RequestOptions.php",
+        "vendor/guzzlehttp/guzzle/src/Utils.php",
         "vendor/guzzlehttp/guzzle/src/functions.php",
+        "vendor/guzzlehttp/promises/src/Create.php",
         "vendor/guzzlehttp/promises/src/FulfilledPromise.php",
+        "vendor/guzzlehttp/promises/src/Is.php",
         "vendor/guzzlehttp/promises/src/Promise.php",
         "vendor/guzzlehttp/promises/src/PromiseInterface.php",
         "vendor/guzzlehttp/promises/src/TaskQueue.php",
         "vendor/guzzlehttp/promises/src/TaskQueueInterface.php",
+        "vendor/guzzlehttp/promises/src/Utils.php",
         "vendor/guzzlehttp/promises/src/functions.php",
         "vendor/guzzlehttp/psr7/src/MessageTrait.php",
+        "vendor/guzzlehttp/psr7/src/Query.php",
         "vendor/guzzlehttp/psr7/src/Request.php",
         "vendor/guzzlehttp/psr7/src/Response.php",
         "vendor/guzzlehttp/psr7/src/Stream.php",
         "vendor/guzzlehttp/psr7/src/Uri.php",
         "vendor/guzzlehttp/psr7/src/UriResolver.php",
+        "vendor/guzzlehttp/psr7/src/Utils.php",
         "vendor/guzzlehttp/psr7/src/functions.php",
         //'vendor/monolog/monolog/src/Monolog/Handler/Handler.php',
         "vendor/monolog/monolog/src/Monolog/Handler/AbstractHandler.php",
@@ -158,8 +174,10 @@ gulp.task("composer-copy-other", function() {
         "vendor/monolog/monolog/src/Monolog/Formatter/NormalizerFormatter.php",
         "vendor/monolog/monolog/src/Monolog/Logger.php",
         "vendor/monolog/monolog/src/Monolog/ResettableInterface.php",
+        "vendor/monolog/monolog/src/Monolog/Utils.php",
         "vendor/psr/cache/src/CacheItemInterface.php",
         "vendor/psr/cache/src/CacheItemPoolInterface.php",
+        "vendor/psr/http-client/src/ClientInterface.php",
         "vendor/psr/http-message/src/MessageInterface.php",
         "vendor/psr/http-message/src/RequestInterface.php",
         "vendor/psr/http-message/src/ResponseInterface.php",
@@ -172,6 +190,13 @@ gulp.task("composer-copy-other", function() {
     .pipe(replace(/\nnamespace /g, "\nnamespace Sgdd\\Vendor\\"))
     .pipe(replace(/\nuse /g, "\nuse Sgdd\\Vendor\\"))
     .pipe(replace(" \\GuzzleHttp", " \\Sgdd\\Vendor\\GuzzleHttp"))
+    .pipe(replace(" \\Psr\\Http\\Client\\ClientInterface", " \\Sgdd\\Vendor\\Psr\\Http\\Client\\ClientInterface"))
+	  .pipe(
+		replace(
+		  /defined\('GuzzleHttp/g,
+		  "defined\('\\Sgdd\\Vendor\\GuzzleHttp"
+		)
+	  )
     .pipe(gulp.dest("plugin/includes/vendor/"));
 });
 
