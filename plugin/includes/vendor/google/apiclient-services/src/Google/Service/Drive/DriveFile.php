@@ -24,6 +24,8 @@ class Google_Service_Drive_DriveFile extends Google_Collection
   protected $capabilitiesDataType = '';
   protected $contentHintsType = 'Google_Service_Drive_DriveFileContentHints';
   protected $contentHintsDataType = '';
+  protected $contentRestrictionsType = 'Google_Service_Drive_ContentRestriction';
+  protected $contentRestrictionsDataType = 'array';
   public $copyRequiresWriterPermission;
   public $createdTime;
   public $description;
@@ -64,6 +66,8 @@ class Google_Service_Drive_DriveFile extends Google_Collection
   public $sharedWithMeTime;
   protected $sharingUserType = 'Google_Service_Drive_User';
   protected $sharingUserDataType = '';
+  protected $shortcutDetailsType = 'Google_Service_Drive_DriveFileShortcutDetails';
+  protected $shortcutDetailsDataType = '';
   public $size;
   public $spaces;
   public $starred;
@@ -119,6 +123,20 @@ class Google_Service_Drive_DriveFile extends Google_Collection
   public function getContentHints()
   {
     return $this->contentHints;
+  }
+  /**
+   * @param Google_Service_Drive_ContentRestriction[]
+   */
+  public function setContentRestrictions($contentRestrictions)
+  {
+    $this->contentRestrictions = $contentRestrictions;
+  }
+  /**
+   * @return Google_Service_Drive_ContentRestriction[]
+   */
+  public function getContentRestrictions()
+  {
+    return $this->contentRestrictions;
   }
   public function setCopyRequiresWriterPermission($copyRequiresWriterPermission)
   {
@@ -341,14 +359,14 @@ class Google_Service_Drive_DriveFile extends Google_Collection
     return $this->ownedByMe;
   }
   /**
-   * @param Google_Service_Drive_User
+   * @param Google_Service_Drive_User[]
    */
   public function setOwners($owners)
   {
     $this->owners = $owners;
   }
   /**
-   * @return Google_Service_Drive_User
+   * @return Google_Service_Drive_User[]
    */
   public function getOwners()
   {
@@ -371,14 +389,14 @@ class Google_Service_Drive_DriveFile extends Google_Collection
     return $this->permissionIds;
   }
   /**
-   * @param Google_Service_Drive_Permission
+   * @param Google_Service_Drive_Permission[]
    */
   public function setPermissions($permissions)
   {
     $this->permissions = $permissions;
   }
   /**
-   * @return Google_Service_Drive_Permission
+   * @return Google_Service_Drive_Permission[]
    */
   public function getPermissions()
   {
@@ -429,6 +447,20 @@ class Google_Service_Drive_DriveFile extends Google_Collection
   public function getSharingUser()
   {
     return $this->sharingUser;
+  }
+  /**
+   * @param Google_Service_Drive_DriveFileShortcutDetails
+   */
+  public function setShortcutDetails(Google_Service_Drive_DriveFileShortcutDetails $shortcutDetails)
+  {
+    $this->shortcutDetails = $shortcutDetails;
+  }
+  /**
+   * @return Google_Service_Drive_DriveFileShortcutDetails
+   */
+  public function getShortcutDetails()
+  {
+    return $this->shortcutDetails;
   }
   public function setSize($size)
   {
