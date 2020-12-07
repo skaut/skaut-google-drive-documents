@@ -67,7 +67,7 @@ class Google_Service_Drive extends Google_Service
   public $replies;
   public $revisions;
   public $teamdrives;
-  
+
   /**
    * Constructs the internal representation of the Drive service.
    *
@@ -145,6 +145,10 @@ class Google_Service_Drive extends Google_Service
                   'location' => 'query',
                   'type' => 'boolean',
                 ),
+                'includePermissionsForView' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'includeRemoved' => array(
                   'location' => 'query',
                   'type' => 'boolean',
@@ -198,6 +202,10 @@ class Google_Service_Drive extends Google_Service
                 'includeItemsFromAllDrives' => array(
                   'location' => 'query',
                   'type' => 'boolean',
+                ),
+                'includePermissionsForView' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
                 'includeRemoved' => array(
                   'location' => 'query',
@@ -459,9 +467,17 @@ class Google_Service_Drive extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'enforceSingleParent' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
                 'ignoreDefaultVisibility' => array(
                   'location' => 'query',
                   'type' => 'boolean',
+                ),
+                'includePermissionsForView' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
                 'keepRevisionForever' => array(
                   'location' => 'query',
@@ -484,9 +500,17 @@ class Google_Service_Drive extends Google_Service
               'path' => 'files',
               'httpMethod' => 'POST',
               'parameters' => array(
+                'enforceSingleParent' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
                 'ignoreDefaultVisibility' => array(
                   'location' => 'query',
                   'type' => 'boolean',
+                ),
+                'includePermissionsForView' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
                 'keepRevisionForever' => array(
                   'location' => 'query',
@@ -518,6 +542,10 @@ class Google_Service_Drive extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'enforceSingleParent' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
                 'supportsAllDrives' => array(
                   'location' => 'query',
                   'type' => 'boolean',
@@ -530,7 +558,12 @@ class Google_Service_Drive extends Google_Service
             ),'emptyTrash' => array(
               'path' => 'files/trash',
               'httpMethod' => 'DELETE',
-              'parameters' => array(),
+              'parameters' => array(
+                'enforceSingleParent' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
+              ),
             ),'export' => array(
               'path' => 'files/{fileId}/export',
               'httpMethod' => 'GET',
@@ -572,6 +605,10 @@ class Google_Service_Drive extends Google_Service
                   'location' => 'query',
                   'type' => 'boolean',
                 ),
+                'includePermissionsForView' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'supportsAllDrives' => array(
                   'location' => 'query',
                   'type' => 'boolean',
@@ -600,6 +637,10 @@ class Google_Service_Drive extends Google_Service
                 'includeItemsFromAllDrives' => array(
                   'location' => 'query',
                   'type' => 'boolean',
+                ),
+                'includePermissionsForView' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
                 'includeTeamDriveItems' => array(
                   'location' => 'query',
@@ -651,6 +692,14 @@ class Google_Service_Drive extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
+                'enforceSingleParent' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
+                'includePermissionsForView' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'keepRevisionForever' => array(
                   'location' => 'query',
                   'type' => 'boolean',
@@ -689,6 +738,10 @@ class Google_Service_Drive extends Google_Service
                   'location' => 'query',
                   'type' => 'boolean',
                 ),
+                'includePermissionsForView' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'supportsAllDrives' => array(
                   'location' => 'query',
                   'type' => 'boolean',
@@ -720,6 +773,14 @@ class Google_Service_Drive extends Google_Service
                 'emailMessage' => array(
                   'location' => 'query',
                   'type' => 'string',
+                ),
+                'enforceSingleParent' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
+                'moveToNewOwnersRoot' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
                 ),
                 'sendNotificationEmail' => array(
                   'location' => 'query',
@@ -804,6 +865,10 @@ class Google_Service_Drive extends Google_Service
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
+                ),
+                'includePermissionsForView' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
                 'pageSize' => array(
                   'location' => 'query',
