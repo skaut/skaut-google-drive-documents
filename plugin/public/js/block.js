@@ -27,15 +27,15 @@ registerBlockType("skaut-google-drive-documents/block", {
       default: ""
     },
     embedWidth: {
-      type: "int",
+      type: "string",
       default: undefined
     },
     embedHeight: {
-      type: "int",
+      type: "string",
       default: undefined
     },
     listWidth: {
-      type: "int",
+      type: "string",
       default: undefined
     },
     gridCols: {

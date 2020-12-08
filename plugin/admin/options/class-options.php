@@ -106,12 +106,12 @@ class Options {
 
 		self::$root_path = new \Sgdd\Admin\Options\OptionTypes\PathField( 'root_path', '', 'basic', 'path_selection', [] );
 
-		self::$embed_width  = new \Sgdd\Admin\Options\OptionTypes\IntegerField( 'embed_width', __( 'Width', 'skaut-google-drive-documents' ), 'advanced', 'file', '800' );
-		self::$embed_height = new \Sgdd\Admin\Options\OptionTypes\IntegerField( 'embed_height', __( 'Height', 'skaut-google-drive-documents' ), 'advanced', 'file', '600' );
+		self::$embed_width  = new \Sgdd\Admin\Options\OptionTypes\StringField( 'embed_width', __( 'Width', 'skaut-google-drive-documents' ), 'advanced', 'file', '100%' );
+		self::$embed_height = new \Sgdd\Admin\Options\OptionTypes\StringField( 'embed_height', __( 'Height', 'skaut-google-drive-documents' ), 'advanced', 'file', '600px' );
 
 		self::$folder_type = new \Sgdd\Admin\Options\OptionTypes\SelectField( 'folder_type', __( 'Folder view type', 'skaut-google-drive-documents' ), 'advanced', 'folder', 'list' );
 
-		self::$list_width = new \Sgdd\Admin\Options\OptionTypes\IntegerField( 'list_width', __( 'List width', 'skaut-google-drive-documents' ), 'advanced', 'folder', '800' );
+		self::$list_width = new \Sgdd\Admin\Options\OptionTypes\StringField( 'list_width', __( 'List width', 'skaut-google-drive-documents' ), 'advanced', 'folder', '100%' );
 		self::$grid_cols  = new \Sgdd\Admin\Options\OptionTypes\IntegerField( 'grid_cols', __( 'Grid columns', 'skaut-google-drive-documents' ), 'advanced', 'folder', '3' );
 	}
 }
