@@ -28,9 +28,10 @@ function register() {
 function add_block() {
 	\Sgdd\enqueue_script( 'sgdd_block_js', '/public/js/block.js', [ 'wp-blocks', 'wp-components', 'wp-editor', 'wp-element', 'wp-i18n', 'sgdd_file_selection_js' ] );
 	\Sgdd\enqueue_script( 'sgdd_file_selection_js', '/public/js/file-selection.js', [ 'wp-components', 'wp-element', 'sgdd_inspector_js', 'sgdd_settings_base_js' ] );
-	\Sgdd\enqueue_script( 'sgdd_inspector_js', '/public/js/inspector.js', [ 'wp-element', 'sgdd_integer_settings_js', 'sgdd_select_settings_js', 'sgdd_button_settings_js' ] );
+	\Sgdd\enqueue_script( 'sgdd_inspector_js', '/public/js/inspector.js', [ 'wp-element', 'sgdd_integer_settings_js', 'sgdd_string_settings_js', 'sgdd_select_settings_js', 'sgdd_button_settings_js' ] );
 	\Sgdd\enqueue_script( 'sgdd_settings_base_js', '/public/js/settings-base.js', [ 'wp-element' ] );
 	\Sgdd\enqueue_script( 'sgdd_integer_settings_js', '/public/js/integer-setting.js', [ 'wp-element', 'sgdd_settings_base_js' ] );
+	\Sgdd\enqueue_script( 'sgdd_string_settings_js', '/public/js/string-setting.js', [ 'wp-element', 'sgdd_settings_base_js' ] );
 	\Sgdd\enqueue_script( 'sgdd_select_settings_js', '/public/js/select-setting.js', [ 'wp-element', 'sgdd_settings_base_js' ] );
 	\Sgdd\enqueue_script( 'sgdd_button_settings_js', '/public/js/button-setting.js', [ 'wp-element' ] );
 
@@ -64,6 +65,25 @@ function add_block() {
 			'render_callback' => '\\Sgdd\\Pub\\Block\\display',
 		]
 	);
+}
+
+/**
+ * Parses input string with dimension, e.g.:
+ *  - '100' -> '100px',
+ *  - '100px' -> '100px',
+ *  - '100%' -> '100%'.
+ * 
+ * @param $in Input string
+ * @return string If $in contains only digits append to it 'px' otherwise return unmodified $in
+ */
+function parse_dimension( $in ) {
+	$out = $in;
+
+	if ( ctype_digit( $in ) ) {
+		$out .= 'px';
+	}
+
+	return $out;
 }
 
 /**
@@ -148,14 +168,14 @@ function display( $attr ) {
 		$id   = $attr['fileId'];
 
 		if ( isset( $attr['embedWidth'] ) ) {
-			$size .= 'width:' . $attr['embedWidth'] . 'px; ';
+			$size .= 'width:' . parse_dimension( $attr['embedWidth'] ) . '; ';
 		}
 
 		if ( isset( $attr['embedHeight'] ) ) {
-			$size .= 'height:' . $attr['embedHeight'] . 'px; ';
+			$size .= 'height:' . parse_dimension( $attr['embedHeight'] ) . '; ';
 		}
 
-		$result = '<iframe src="https://drive.google.com/file/d/' . $id . '/preview" style="' . $size . 'border:0;"></iframe>';
+		$result = '<iframe class="sgdd-embedded-file" src="https://drive.google.com/file/d/' . $id . '/preview" style="' . $size . 'border:0;"></iframe>';
 
 		return $result;
 	}
@@ -305,6 +325,7 @@ function fetch_folder_content( $folder_id ) {
  */
 function build_result( $content, $type, $arg ) {
 	$result;
+	$style = '';
 
 	if ( empty( $content['files'] ) ) {
 		return 'Vybraný priečinok neobsahuje žiadne položky!';
@@ -313,10 +334,10 @@ function build_result( $content, $type, $arg ) {
 	if ( 'list' === $type ) {
 		//build list table
 		if ( ! empty( $arg ) ) {
-			$result = '<table style="width:' . $arg['width'] . 'px"><tbody>';
-		} else {
-			$result = '<table><tbody>';
+			$style = ' style="width:' . parse_dimension( $arg['width'] ) . ';"';
 		}
+
+		$result = '<table class="sgdd-embedded-folder-list"' . $style . '><tbody>';
 
 		foreach ( $content as $element ) {
 			$result .= '<tr>
@@ -332,11 +353,13 @@ function build_result( $content, $type, $arg ) {
 		$width;
 		$cols = $arg['cols'];
 
+		$style = ' style="table-layout:fixed; border-collapse:separate;';
 		if ( array_key_exists( 'width', $arg ) ) {
-			$result = '<table style="table-layout:fixed; border-collapse:separate; width:' . $arg['width'] . 'px"><tbody>';
-		} else {
-			$result = '<table style="table-layout:fixed; border-collapse:separate;"><tbody>';
+			$style .= ' width:' . parse_dimension( $arg['width'] ) . ';';
 		}
+		$style .= '"';
+
+		$result = '<table class="sgdd-embedded-folder-grid"' . $style . '><tbody>';
 
 		foreach ( $content as $element ) {
 			0 === ( $i % $cols ) ? $result .= '<tr>' : $result .= '';

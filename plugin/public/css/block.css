@@ -46,7 +46,7 @@
 	right: 0 !important;
 }
 
-.sgdd-block-settings-integer {
+.sgdd-block-settings-integer, .sgdd-block-settings-string {
 	margin: 0 !important;
 	width: 100px !important;
 	right: 0 !important;
