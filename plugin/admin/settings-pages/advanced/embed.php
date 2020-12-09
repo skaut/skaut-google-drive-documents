@@ -28,6 +28,7 @@ function add() {
 	\Sgdd\Admin\Options\Options::$embed_width->add_field();
 	\Sgdd\Admin\Options\Options::$embed_height->add_field();
 	\Sgdd\Admin\Options\Options::$folder_type->add_field();
+	\Sgdd\Admin\Options\Options::$order_by->add_field();
 	\Sgdd\Admin\Options\Options::$list_width->add_field();
 	\Sgdd\Admin\Options\Options::$grid_cols->add_field();
 }
