@@ -3,10 +3,6 @@
   	font-weight: bold;
 }
 
-.sgdd-block-settings-folder label::before {
-	content: "> ";
-}
-
 .sgdd-block-settings-folder label, .sgdd-block-settings-folder-up label {
 	color: var(--wp-admin-theme-color);
 }
