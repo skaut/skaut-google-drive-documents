@@ -45,6 +45,10 @@ registerBlockType("skaut-google-drive-documents/block", {
     folderType: {
       type: "string",
       default: undefined
+    },
+    orderBy: {
+      type: "string",
+      default: undefined
     }
   },
 

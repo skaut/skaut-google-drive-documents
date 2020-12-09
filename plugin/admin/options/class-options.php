@@ -73,11 +73,18 @@ class Options {
 	public static $embed_height;
 
 	/**
-	 * Wbether show folder as list or grif.
+	 * Whether show folder as list or grif.
 	 *
 	 * @var \Sgdd\Admin\Options\OptionTypes\SelectField $folder_type
 	 */
 	public static $folder_type;
+
+	/**
+	 * How to order files from folder.
+	 *
+	 * @var \Sgdd\Admin\Options\OptionTypes\SelectField $order_by
+	 */
+	public static $order_by;
 
 	/**
 	 * Width of list when displaying folder content as list.
@@ -110,6 +117,8 @@ class Options {
 		self::$embed_height = new \Sgdd\Admin\Options\OptionTypes\StringField( 'embed_height', __( 'Height', 'skaut-google-drive-documents' ), 'advanced', 'file', '600px' );
 
 		self::$folder_type = new \Sgdd\Admin\Options\OptionTypes\SelectField( 'folder_type', __( 'Folder view type', 'skaut-google-drive-documents' ), 'advanced', 'folder', 'list' );
+
+		self::$order_by = new \Sgdd\Admin\Options\OptionTypes\SelectField( 'order_by', __( 'Order files by', 'skaut-google-drive-documents' ), 'advanced', 'folder', 'name_asc' );
 
 		self::$list_width = new \Sgdd\Admin\Options\OptionTypes\StringField( 'list_width', __( 'List width', 'skaut-google-drive-documents' ), 'advanced', 'folder', '100%' );
 		self::$grid_cols  = new \Sgdd\Admin\Options\OptionTypes\IntegerField( 'grid_cols', __( 'Grid columns', 'skaut-google-drive-documents' ), 'advanced', 'folder', '3' );
