@@ -121,9 +121,7 @@ function display( $attr ) {
 			$folder_type = \Sgdd\Admin\Options\Options::$folder_type->get();
 		}
 
-		if ( isset( $attr['orderBy'] ) ) {
-			$order_by = $attr['orderBy'];
-		}
+		$order_by = isset( $attr['orderBy'] ) ? $attr['orderBy'] : '';
 
 		//gdrive request to fetch content of folder
 		try {
