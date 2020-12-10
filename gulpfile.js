@@ -1,45 +1,26 @@
 const gulp = require("gulp");
+
 const composer = require("gulp-composer");
 const shell = require("gulp-shell");
 const merge = require("merge-stream");
 const replace = require("gulp-replace");
 
-gulp.task("composer-check-updates", function(done) {
-  composer("show -l", { "self-install": false, async: false });
-  done();
+gulp.task( 'build:css:admin', function() {
+	return gulp.src( [ 'src/css/admin/*.css' ] )
+		.pipe( gulp.dest( 'dist/admin/css/' ) );
+});
+
+gulp.task( 'build:css:frontend', function() {
+	return gulp.src( [ 'src/css/frontend/*.css' ] )
+		.pipe( gulp.dest( 'dist/public/css/' ) );
 });
 
 gulp.task(
-  "npm-check-updates",
-  shell.task(["npm outdated"], { ignoreErrors: true })
+	'build:css',
+	gulp.parallel( 'build:css:admin', 'build:css:frontend' )
 );
 
-gulp.task("composer-do-update", function(done) {
-  composer("update ", { "self-install": false, async: false });
-  done();
-});
-
-gulp.task("composer-copy-apiclient-services", function() {
-  return gulp
-    .src(
-      [
-        "vendor/google/apiclient-services/src/Google/Service/Drive.php",
-        "vendor/google/apiclient-services/src/Google/Service/Drive/Drive.php",
-        "vendor/google/apiclient-services/src/Google/Service/Drive/DriveList.php",
-        "vendor/google/apiclient-services/src/Google/Service/Drive/DriveFileImageMediaMetadata.php",
-        "vendor/google/apiclient-services/src/Google/Service/Drive/DriveFile.php",
-        "vendor/google/apiclient-services/src/Google/Service/Drive/FileList.php",
-        "vendor/google/apiclient-services/src/Google/Service/Drive/Resource/*",
-        "vendor/google/apiclient-services/src/Google/Service/Drive/Permission.php"
-      ],
-      { base: "vendor/" }
-    )
-    .pipe(replace(/^<\?php/, "<?php\nnamespace Sgdd\\Vendor;"))
-    .pipe(replace(/\nuse /g, "\nuse Sgdd\\Vendor\\"))
-    .pipe(gulp.dest("plugin/includes/vendor/"));
-});
-
-gulp.task("composer-copy-apiclient", function() {
+gulp.task("build:deps:composer:apiclient", function() {
   return merge(
     gulp
       .src(
@@ -113,10 +94,50 @@ gulp.task("composer-copy-apiclient", function() {
           "public function call($name, $arguments, $expectedClass = null)\n  {\n    $expectedClass = '\\\\Sgdd\\\\Vendor\\\\' . $expectedClass;"
         )
       )
-  ).pipe(gulp.dest("plugin/includes/vendor/"));
+  ).pipe(gulp.dest("dist/includes/vendor/"));
 });
 
-gulp.task("composer-copy-other", function() {
+gulp.task('build:deps:composer:apiclient-services', function() {
+  return gulp
+    .src(
+      [
+        "vendor/google/apiclient-services/src/Google/Service/Drive.php",
+        "vendor/google/apiclient-services/src/Google/Service/Drive/Drive.php",
+        "vendor/google/apiclient-services/src/Google/Service/Drive/DriveList.php",
+        "vendor/google/apiclient-services/src/Google/Service/Drive/DriveFileImageMediaMetadata.php",
+        "vendor/google/apiclient-services/src/Google/Service/Drive/DriveFile.php",
+        "vendor/google/apiclient-services/src/Google/Service/Drive/FileList.php",
+        "vendor/google/apiclient-services/src/Google/Service/Drive/Resource/*",
+        "vendor/google/apiclient-services/src/Google/Service/Drive/Permission.php"
+      ],
+      { base: "vendor/" }
+    )
+    .pipe(replace(/^<\?php/, "<?php\nnamespace Sgdd\\Vendor;"))
+    .pipe(replace(/\nuse /g, "\nuse Sgdd\\Vendor\\"))
+    .pipe(gulp.dest("dist/includes/vendor/"));
+});
+
+gulp.task("build:deps:composer:licenses", function() {
+  return gulp
+    .src(
+      [
+        "vendor/google/apiclient-services/LICENSE",
+        "vendor/google/apiclient/LICENSE",
+        "vendor/google/auth/LICENSE",
+        "vendor/guzzlehttp/guzzle/LICENSE",
+        "vendor/guzzlehttp/promises/LICENSE",
+        "vendor/guzzlehttp/psr7/LICENSE",
+        "vendor/monolog/monolog/LICENSE",
+        "vendor/psr/cache/LICENSE.txt",
+        "vendor/psr/http-message/LICENSE",
+        "vendor/psr/log/LICENSE"
+      ],
+      { base: "vendor/" }
+    )
+    .pipe(gulp.dest("dist/includes/vendor/"));
+});
+
+gulp.task("build:deps:composer:other", function() {
   return gulp
     .src(
       [
@@ -197,45 +218,93 @@ gulp.task("composer-copy-other", function() {
 		  "defined\('\\Sgdd\\Vendor\\GuzzleHttp"
 		)
 	  )
-    .pipe(gulp.dest("plugin/includes/vendor/"));
-});
-
-gulp.task("composer-copy-licenses", function() {
-  return gulp
-    .src(
-      [
-        "vendor/google/apiclient-services/LICENSE",
-        "vendor/google/apiclient/LICENSE",
-        "vendor/google/auth/LICENSE",
-        "vendor/guzzlehttp/guzzle/LICENSE",
-        "vendor/guzzlehttp/promises/LICENSE",
-        "vendor/guzzlehttp/psr7/LICENSE",
-        "vendor/monolog/monolog/LICENSE",
-        "vendor/psr/cache/LICENSE.txt",
-        "vendor/psr/http-message/LICENSE",
-        "vendor/psr/log/LICENSE"
-      ],
-      { base: "vendor/" }
-    )
-    .pipe(gulp.dest("plugin/includes/vendor/"));
+    .pipe(gulp.dest("dist/includes/vendor/"));
 });
 
 gulp.task(
-  "composer-copy",
-  gulp.parallel(
-    "composer-copy-apiclient-services",
-    "composer-copy-apiclient",
-    "composer-copy-other",
-    "composer-copy-licenses"
-  )
+	'build:deps:composer',
+	gulp.parallel(
+		'build:deps:composer:apiclient',
+		'build:deps:composer:apiclient-services',
+		'build:deps:composer:licenses',
+		'build:deps:composer:other'
+	)
 );
 
 gulp.task(
-  "composer-update",
-  gulp.series("composer-do-update", "composer-copy")
+	'build:deps',
+	gulp.parallel( 'build:deps:composer' )
 );
 
+gulp.task( 'build:gif', function () {
+	return gulp
+		.src( [ 'src/gif/loading-icon.gif' ] )
+		.pipe( gulp.dest( 'dist/admin/' ) );
+} );
+
+gulp.task( 'build:js:admin', function() {
+	return gulp.src( [ 'src/js/admin/*.js' ] )
+		.pipe( gulp.dest( 'dist/admin/js/' ) );
+} );
+
+gulp.task( 'build:js:frontend', function() {
+	return gulp.src( [ 'src/js/frontend/*.js' ] )
+		.pipe( gulp.dest( 'dist/public/js/' ) );
+} );
+
+gulp.task( 'build:js', gulp.parallel( 'build:js:admin', 'build:js:frontend' ) );
+
+gulp.task( 'build:php:admin', function () {
+	return gulp
+		.src( [ 'src/php/admin/**/*.php' ] )
+		.pipe( gulp.dest( 'dist/admin/' ) );
+} );
+
+gulp.task( 'build:php:base', function () {
+	return gulp.src( [ 'src/php/*.php' ] ).pipe( gulp.dest( 'dist/' ) );
+} );
+
+gulp.task( 'build:php:bundled', function () {
+	return gulp
+		.src( [ 'src/php/bundled/*.php' ] )
+		.pipe( gulp.dest( 'dist/includes/' ) );
+} );
+
+gulp.task( 'build:php:frontend', function () {
+	return gulp
+		.src( [ 'src/php/frontend/**/*.php' ] )
+		.pipe( gulp.dest( 'dist/public/' ) );
+} );
+
 gulp.task(
-  "default",
-  gulp.series("composer-check-updates", "npm-check-updates")
+	'build:php',
+	gulp.parallel(
+		'build:php:admin',
+		'build:php:base',
+		'build:php:bundled',
+		'build:php:frontend'
+	)
+);
+
+gulp.task( 'build:png', function () {
+	return gulp
+		.src( [ 'src/png/icon.png' ] )
+		.pipe( gulp.dest( 'dist/admin/' ) );
+} );
+
+gulp.task( 'build:txt', function () {
+	return gulp.src( [ 'src/txt/*.txt' ] ).pipe( gulp.dest( 'dist/' ) );
+} );
+
+gulp.task(
+	'build',
+	gulp.parallel(
+		'build:css',
+		'build:deps',
+		'build:gif',
+		'build:js',
+		'build:php',
+		'build:png',
+		'build:txt'
+	)
 );
