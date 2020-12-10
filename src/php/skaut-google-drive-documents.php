@@ -60,7 +60,7 @@ require_once __DIR__ . '/includes/includes.php';
 function init() {
 	register_activation_hook( __FILE__, '\\Sgdd\\activate' );
 	add_action( 'admin_notices', '\\Sgdd\\activation_info' );
-	add_action( 'plugins_loaded', [ '\\Sgdd\\Admin\\Options\\Options', 'init' ] );
+	add_action( 'plugins_loaded', array( '\\Sgdd\\Admin\\Options\\Options', 'init' ) );
 	\Sgdd\Admin\AdminPage\register();
 	\Sgdd\Pub\Block\register();
 }
@@ -104,7 +104,7 @@ function activation_info() {
  * @param string $src Full URL of the script.
  * @param array  $deps An array of registered script handles this script depends on.
  */
-function enqueue_script( $handle, $src, $deps = [] ) {
+function enqueue_script( $handle, $src, $deps = array() ) {
 	$dir = plugin_dir_path( __FILE__ );
 	wp_enqueue_script( $handle, plugins_url( basename( __DIR__ ) . $src ), $deps, filemtime( $dir . $src ), true );
 }
@@ -116,7 +116,7 @@ function enqueue_script( $handle, $src, $deps = [] ) {
  * @param string $src Full URL of the script.
  * @param array  $deps An array of registered script handles this script depends on.
  */
-function enqueue_style( $handle, $src, $deps = [] ) {
+function enqueue_style( $handle, $src, $deps = array() ) {
 	$dir = plugin_dir_path( __FILE__ );
 	wp_enqueue_style( $handle, plugins_url( basename( __DIR__ ) . $src ), $deps, filemtime( $dir . $src ) );
 }

@@ -22,11 +22,11 @@ class PathField extends SettingField {
 		register_setting(
 			$this->page,
 			$this->id,
-			[
+			array(
 				'type'              => 'string',
-				'sanitize_callback' => [ $this, 'sanitize' ],
+				'sanitize_callback' => array( $this, 'sanitize' ),
 				'default'           => $this->default_value,
-			]
+			)
 		);
 	}
 

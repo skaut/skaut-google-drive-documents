@@ -37,16 +37,16 @@ function add_settings() {
 function register_script( $hook ) {
 	\Sgdd\enqueue_style( 'sgdd_path_selection_css', '/admin/css/path-selection.css' );
 	if ( 'toplevel_page_sgdd_basic' === $hook ) {
-		\Sgdd\enqueue_script( 'sgdd_path_selection_ajax', '/admin/js/path-selection.js', [ 'jquery' ] );
+		\Sgdd\enqueue_script( 'sgdd_path_selection_ajax', '/admin/js/path-selection.js', array( 'jquery' ) );
 		wp_localize_script(
 			'sgdd_path_selection_ajax',
 			'sgddRootPathLocalize',
-			[
+			array(
 				'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
 				'nonce'     => wp_create_nonce( 'sgdd_path_selection' ),
 				'path'      => \Sgdd\Admin\Options\Options::$root_path->get(),
 				'driveList' => esc_html__( 'Shared drive list', 'skaut-google-drive-documents' ),
-			]
+			)
 		);
 	}
 }
@@ -59,12 +59,12 @@ function ajax_handler() {
 		drive_path_selection();
 	} catch ( \Sgdd\Vendor\Google_Service_Exception $e ) {
 		if ( 'userRateLimitExceeded' === $e->getErrors()[0]['reason'] ) {
-			wp_send_json( [ 'error' => esc_html__( 'The maximum number of requests has been exceeded. Please try again in a minute.', 'skaut-google-drive-documents' ) ] );
+			wp_send_json( array( 'error' => esc_html__( 'The maximum number of requests has been exceeded. Please try again in a minute.', 'skaut-google-drive-documents' ) ) );
 		} else {
-			wp_send_json( [ 'error' => $e->getErrors()[0]['message'] ] );
+			wp_send_json( array( 'error' => $e->getErrors()[0]['message'] ) );
 		}
 	} catch ( \Exception $e ) {
-		wp_send_json( [ 'error' => $e->getMessage() ] );
+		wp_send_json( array( 'error' => $e->getMessage() ) );
 	}
 }
 
@@ -79,18 +79,18 @@ function drive_path_selection() {
 	}
 
 	$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
-	$path    = isset( $_GET['path'] ) ? $_GET['path'] : [];
+	$path    = isset( $_GET['path'] ) ? $_GET['path'] : array();
 
-	$result = [
-		'pathNames' => [],
-		'content'   => [],
-	];
+	$result = array(
+		'pathNames' => array(),
+		'content'   => array(),
+	);
 
 	if ( ! empty( $path ) ) {
 		$result['pathNames'] = get_path_name( $service, $path );
 		$result['content']   = get_drive_content( $service, end( $path ) );
 	} else {
-		$result['pathNames'] = [ 'Shared Drive List' ];
+		$result['pathNames'] = array( 'Shared Drive List' );
 		$result['content']   = get_drives( $service );
 	}
 
@@ -105,22 +105,22 @@ function drive_path_selection() {
  * @return array List of folder names
  */
 function get_path_name( $service, $path ) {
-	$result = [];
+	$result = array();
 
 	if ( count( $path ) > 0 ) {
 		if ( 'root' === $path[0] ) {
 			$result[] = __( 'My Drive', 'skaut-google-drive-documents' );
 		} else {
-			$response = $service->drives->get( $path[0], [ 'fields' => 'name' ] );
+			$response = $service->drives->get( $path[0], array( 'fields' => 'name' ) );
 			$result[] = $response->getName();
 		}
 	}
 
 	foreach ( array_slice( $path, 1 ) as $path_element ) {
-		$get_options = [
+		$get_options = array(
 			'supportsAllDrives' => true,
 			'fields'            => 'name',
-		];
+		);
 
 		$response = $service->files->get( $path_element, $get_options );
 		$result[] = $response->getName();
@@ -137,11 +137,10 @@ function get_path_name( $service, $path ) {
  * @return array List of content in specified folder
  */
 function get_drive_content( $service, $root ) {
-	$result     = [];
+	$result     = array();
 	$page_token = null;
 
 	do {
-
 		$response = $service->files->listFiles(
 			array(
 				'q'                         => "'" . $root . "' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false",
@@ -158,10 +157,10 @@ function get_drive_content( $service, $root ) {
 		}
 
 		foreach ( $response->files as $file ) {
-				$result[] = [
+				$result[] = array(
 					'pathName' => $file->getName(),
 					'pathId'   => $file->getId(),
-				];
+				);
 		}
 
 		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
@@ -178,12 +177,12 @@ function get_drive_content( $service, $root ) {
  * @return array List of all gdrives connected to account
  */
 function get_drives( $service ) {
-	$result     = [
-		[
+	$result     = array(
+		array(
 			'pathName' => __( 'My Drive', 'skaut-google-drive-documents' ),
 			'pathId'   => 'root',
-		],
-	];
+		),
+	);
 	$page_token = null;
 
 	do {
@@ -200,10 +199,10 @@ function get_drives( $service ) {
 		}
 
 		foreach ( $response->getDrives() as $drive ) {
-				$result[] = [
+				$result[] = array(
 					'pathName' => $drive->getName(),
 					'pathId'   => $drive->getId(),
-				];
+				);
 		}
 
 		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase

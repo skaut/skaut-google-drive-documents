@@ -111,7 +111,7 @@ class Options {
 		self::$client_id         = new \Sgdd\Admin\Options\OptionTypes\StringField( 'client_id', __( 'Client ID', 'skaut-google-drive-documents' ), 'basic', 'auth', '' );
 		self::$client_secret     = new \Sgdd\Admin\Options\OptionTypes\StringField( 'client_secret', __( 'Client secret', 'skaut-google-drive-documents' ), 'basic', 'auth', '' );
 
-		self::$root_path = new \Sgdd\Admin\Options\OptionTypes\PathField( 'root_path', '', 'basic', 'path_selection', [] );
+		self::$root_path = new \Sgdd\Admin\Options\OptionTypes\PathField( 'root_path', '', 'basic', 'path_selection', array() );
 
 		self::$embed_width  = new \Sgdd\Admin\Options\OptionTypes\StringField( 'embed_width', __( 'Width', 'skaut-google-drive-documents' ), 'advanced', 'file', '100%' );
 		self::$embed_height = new \Sgdd\Admin\Options\OptionTypes\StringField( 'embed_height', __( 'Height', 'skaut-google-drive-documents' ), 'advanced', 'file', '600px' );
