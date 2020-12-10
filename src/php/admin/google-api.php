@@ -22,11 +22,11 @@ if ( ! is_admin() ) {
 function get_google_client() {
 	$client = new \Sgdd\Vendor\Google_Client();
 	$client->setAuthConfig(
-		[
+		array(
 			'client_id'     => \Sgdd\Admin\Options\Options::$client_id->get(),
 			'client_secret' => \Sgdd\Admin\Options\Options::$client_secret->get(),
-			'redirect_uris' => [ esc_url_raw( admin_url( 'admin.php?page=sgdd_basic&action=oauth_redirect' ) ) ],
-		]
+			'redirect_uris' => array( esc_url_raw( admin_url( 'admin.php?page=sgdd_basic&action=oauth_redirect' ) ) ),
+		)
 	);
 	$client->setAccessType( 'offline' );
 	$client->setIncludeGrantedScopes( true );

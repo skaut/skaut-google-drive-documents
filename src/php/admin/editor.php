@@ -29,12 +29,12 @@ function ajax_handler() {
 		file_selection();
 	} catch ( \Sgdd\Vendor\Google_Service_Exception $e ) {
 		if ( 'userRateLimitExceeded' === $e->getErrors()[0]['reason'] ) {
-			wp_send_json( [ 'error' => esc_html__( 'The maximum number of requests has been exceeded. Please try again in a minute.', 'skaut-google-drive-documents' ) ] );
+			wp_send_json( array( 'error' => esc_html__( 'The maximum number of requests has been exceeded. Please try again in a minute.', 'skaut-google-drive-documents' ) ) );
 		} else {
-			wp_send_json( [ 'error' => $e->getErrors()[0]['message'] ] );
+			wp_send_json( array( 'error' => $e->getErrors()[0]['message'] ) );
 		}
 	} catch ( \Exception $e ) {
-		wp_send_json( [ 'error' => $e->getMessage() ] );
+		wp_send_json( array( 'error' => $e->getMessage() ) );
 	}
 }
 
@@ -53,7 +53,7 @@ function file_selection() {
 	}
 
 	$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
-	$path    = isset( $_GET['idsPath'] ) ? $_GET['idsPath'] : [];
+	$path    = isset( $_GET['idsPath'] ) ? $_GET['idsPath'] : array();
 
 	if ( 0 < count( $path ) ) {
 		$result = get_folder_content( $service, end( $path ) );
@@ -77,7 +77,7 @@ function get_folder_content( $service, $folder = null ) {
 		$folder    = end( $root_path );
 	}
 
-	$result     = [];
+	$result     = array();
 	$page_token = null;
 
 	do {
@@ -97,11 +97,11 @@ function get_folder_content( $service, $folder = null ) {
 		}
 
 		foreach ( $response->getFiles() as $file ) {
-				$result[] = [
+				$result[] = array(
 					'fileName' => $file->getName(),
 					'fileId'   => $file->getId(),
 					'folder'   => $file->getMimeType() === 'application/vnd.google-apps.folder' ? true : false,
-				];
+				);
 		}
 
 		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase

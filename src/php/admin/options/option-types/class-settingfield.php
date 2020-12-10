@@ -88,7 +88,7 @@ abstract class SettingField {
 	 */
 	public function add_field() {
 		$this->register();
-		add_settings_field( $this->id, $this->title, [ $this, 'display' ], $this->page, $this->section );
+		add_settings_field( $this->id, $this->title, array( $this, 'display' ), $this->page, $this->section );
 	}
 
 	/**
