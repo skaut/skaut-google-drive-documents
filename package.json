@@ -20,6 +20,7 @@
   },
   "scripts": {
     "build": "gulp build",
+	"lint:php:phan": "export PHAN_DISABLE_XDEBUG_WARN=1; vendor/bin/phan",
     "lint:php:phpcs": "vendor/bin/phpcs",
     "lint:php:phpmd": "vendor/bin/phpmd src text phpmd.xml",
     "lint:php": "run-s -c lint:php:*",
