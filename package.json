@@ -20,6 +20,8 @@
   },
   "scripts": {
     "build": "gulp build",
+    "lint:php:phpcs": "vendor/bin/phpcs",
+    "lint:php": "run-s -c lint:php:*",
 	"lint:js:eslint": "eslint src/**/*.js gulpfile.js",
     "lint:js": "run-s -c lint:js:*",
 	"lint": "run-s -c lint:*"
