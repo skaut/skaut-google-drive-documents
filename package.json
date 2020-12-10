@@ -18,6 +18,12 @@
     "type": "git",
     "url": "git+https://github.com/skaut/skaut-google-drive-documents.git"
   },
+  "scripts": {
+	  "build": "gulp build"
+  },
+  "dependencies": {
+    "composer": "^4.1.0"
+  },
   "devDependencies": {
     "@wordpress/eslint-plugin": "^7.0.0",
     "eslint": "^7.15.0",
@@ -30,8 +36,5 @@
     "gulp-replace": "^1.0.0",
     "gulp-shell": "^0.8.0",
     "merge-stream": "^2.0.0"
-  },
-  "dependencies": {
-    "composer": "^4.1.0"
   }
 }
