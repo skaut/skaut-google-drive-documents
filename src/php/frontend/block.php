@@ -188,7 +188,7 @@ function display_file( $attr ) {
 function ajax_handler() {
 	try {
 		set_permissions();
-	} catch ( \Sgdd\Vendor\Google_Service_Exception $e ) {
+	} catch ( \Sgdd\Vendor\Google\Service\Exception $e ) {
 		if ( 'userRateLimitExceeded' === $e->getErrors()[0]['reason'] ) {
 			wp_send_json( array( 'error' => esc_html__( 'The maximum number of requests has been exceeded. Please try again in a minute.', 'skaut-google-drive-documents' ) ) );
 		} else {
@@ -226,12 +226,9 @@ function set_permissions() {
  */
 function set_file_permissions( $file_id ) {
 	$service           = \Sgdd\Admin\GoogleAPILib\get_drive_client();
-	$domain_permission = new \Sgdd\Vendor\Google_Service_Drive_Permission(
-		array(
-			'role' => 'reader',
-			'type' => 'anyone',
-		)
-	);
+	$domain_permission = new \Sgdd\Vendor\Google_Service_Drive_Permission();
+	$domain_permission->setRole( 'reader' );
+	$domain_permission->setType( 'anyone' );
 	$service->permissions->create( $file_id, $domain_permission, array( 'supportsTeamDrives' => true ) );
 }
 
@@ -240,7 +237,7 @@ function set_file_permissions( $file_id ) {
  *
  * @param string $folder_id Google Drive id of folder in which permissions of all files will be modified.
  *
- * @throws \Sgdd\Vendor\Google_Service_Exception An error occured.
+ * @throws \Sgdd\Vendor\Google\Service\Exception An error occured.
  *
  * @return array NULL
  */
@@ -260,7 +257,7 @@ function set_permissions_in_folder( $folder_id ) {
 			)
 		);
 
-		if ( $response instanceof \Sgdd\Vendor\Google_Service_Exception ) {
+		if ( $response instanceof \Sgdd\Vendor\Google\Service\Exception ) {
 			throw $response;
 		}
 
@@ -269,12 +266,9 @@ function set_permissions_in_folder( $folder_id ) {
 	} while ( null !== $page_token );
 
 	$service         = \Sgdd\Admin\GoogleAPILib\get_drive_client();
-	$user_permission = new \Sgdd\Vendor\Google_Service_Drive_Permission(
-		array(
-			'role' => 'reader',
-			'type' => 'anyone',
-		)
-	);
+	$user_permission = new \Sgdd\Vendor\Google_Service_Drive_Permission();
+	$user_permission->setRole( 'reader' );
+	$user_permission->setType( 'anyone' );
 
 	$index = 0;
 
@@ -338,7 +332,7 @@ function fetch_folder_content( $folder_id, $order_by ) {
 			)
 		);
 
-		if ( $response instanceof \Sgdd\Vendor\Google_Service_Exception ) {
+		if ( $response instanceof \Sgdd\Vendor\Google\Service\Exception ) {
 			throw $response;
 		}
 

@@ -27,7 +27,7 @@ function register() {
 function ajax_handler() {
 	try {
 		file_selection();
-	} catch ( \Sgdd\Vendor\Google_Service_Exception $e ) {
+	} catch ( \Sgdd\Vendor\Google\Service\Exception $e ) {
 		if ( 'userRateLimitExceeded' === $e->getErrors()[0]['reason'] ) {
 			wp_send_json( array( 'error' => esc_html__( 'The maximum number of requests has been exceeded. Please try again in a minute.', 'skaut-google-drive-documents' ) ) );
 		} else {
@@ -97,7 +97,7 @@ function get_folder_content( $service, $folder = null ) {
 			)
 		);
 
-		if ( $response instanceof \Sgdd\Vendor\Google_Service_Exception ) {
+		if ( $response instanceof \Sgdd\Vendor\Google\Service\Exception ) {
 			throw $response;
 		}
 
