@@ -58,7 +58,7 @@ function register_script( $hook ) {
 function ajax_handler() {
 	try {
 		drive_path_selection();
-	} catch ( \Sgdd\Vendor\Google_Service_Exception $e ) {
+	} catch ( \Sgdd\Vendor\Google\Service\Exception $e ) {
 		if ( 'userRateLimitExceeded' === $e->getErrors()[0]['reason'] ) {
 			wp_send_json( array( 'error' => esc_html__( 'The maximum number of requests has been exceeded. Please try again in a minute.', 'skaut-google-drive-documents' ) ) );
 		} else {
@@ -160,19 +160,18 @@ function get_drive_content( $service, $root ) {
 			)
 		);
 
-		if ( $response instanceof \Sgdd\Vendor\Google_Service_Exception ) {
+		if ( $response instanceof \Sgdd\Vendor\Google\Service\Exception ) {
 			throw $response;
 		}
 
-		foreach ( $response->files as $file ) {
+		foreach ( $response->getFiles() as $file ) {
 				$result[] = array(
 					'pathName' => $file->getName(),
 					'pathId'   => $file->getId(),
 				);
 		}
 
-		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-		$page_token = $response->pageToken;
+		$page_token = $response->getNextPageToken();
 	} while ( null !== $page_token );
 
 	return $result;
@@ -205,7 +204,7 @@ function get_drives( $service ) {
 			)
 		);
 
-		if ( $response instanceof \Sgdd\Vendor\Google_Service_Exception ) {
+		if ( $response instanceof \Sgdd\Vendor\Google\Service\Exception ) {
 			throw $response;
 		}
 
@@ -217,7 +216,7 @@ function get_drives( $service ) {
 		}
 
 		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-		$page_token = $response->pageToken;
+		$page_token = $response->getNextPageToken();
 	} while ( null !== $page_token );
 
 	return $result;
