@@ -103,13 +103,6 @@ function parse_dimension( $in ) {
 function display( $attr ) {
 	// display folder.
 	if ( isset( $attr['folderType'] ) || ! isset( $attr['fileId'] ) ) {
-		$folder_id;
-		$folder_type;
-		$order_by;
-		$content;
-		$cols;
-		$result;
-
 		// set folderId variable.
 		if ( isset( $attr['folderId'] ) ) {
 			$folder_id = $attr['folderId'];
@@ -124,7 +117,7 @@ function display( $attr ) {
 			$folder_type = \Sgdd\Admin\Options\Options::$folder_type->get();
 		}
 
-		$order_by = isset( $attr['orderBy'] ) ? $attr['orderBy'] : '';
+		$order_by = $attr['orderBy'] ?? '';
 
 		// gdrive request to fetch content of folder.
 		try {
@@ -221,13 +214,16 @@ function set_file_permissions( $file_id ) {
 			'type' => 'anyone',
 		)
 	);
-	$request           = $service->permissions->create( $file_id, $domain_permission, array( 'supportsTeamDrives' => true ) );
+	$service->permissions->create( $file_id, $domain_permission, array( 'supportsTeamDrives' => true ) );
 }
 
 /**
  * Sets permissions of all files in folder.
  *
  * @param string $folder_id Google Drive id of folder in which permissions of all files will be modified.
+ *
+ * @throws \Sgdd\Vendor\Google_Service_Exception An error occured.
+ *
  * @return array NULL
  */
 function set_permissions_in_folder( $folder_id ) {
@@ -247,7 +243,7 @@ function set_permissions_in_folder( $folder_id ) {
 		);
 
 		if ( $response instanceof \Sgdd\Vendor\Google_Service_Exception ) {
-			return $response;
+			throw $response;
 		}
 
 		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
@@ -345,7 +341,6 @@ function fetch_folder_content( $folder_id, $order_by ) {
  * @return string HTML format for frontend.
  */
 function build_result( $content, $type, $arg ) {
-	$result;
 	$style = '';
 
 	if ( empty( $content['files'] ) ) {
@@ -384,8 +379,7 @@ function build_result( $content, $type, $arg ) {
 				$result .= '<tr>';
 			}
 
-			$thumbnail = '';
-			if ( ! $element['hasThumbnail'] || preg_match( '/\b(google-apps)/', $element['mimeType'] ) ) {
+			if ( ! boolval( $element['hasThumbnail'] ) || 1 === preg_match( '/\b(google-apps)/', $element['mimeType'] ) ) {
 				$thumbnail = '<img src="' . preg_replace( '(16)', '128', $element['iconLink'] ) . '">';
 			} else {
 				$thumbnail = '<img src="' . $element['thumbnailLink'] . '">';

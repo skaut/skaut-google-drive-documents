@@ -65,7 +65,7 @@ class StringField extends SettingField {
 	 *
 	 * @param string $value The unsanitized input.
 	 *
-	 * @return int Sanitized value.
+	 * @return string Sanitized value.
 	 */
 	public function sanitize( $value ) {
 		return esc_html( $value );

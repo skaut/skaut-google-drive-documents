@@ -121,12 +121,13 @@ function get_path_name( $service, $path ) {
 	}
 
 	foreach ( array_slice( $path, 1 ) as $path_element ) {
-		$get_options = array(
-			'supportsAllDrives' => true,
-			'fields'            => 'name',
+		$response = $service->files->get(
+			$path_element,
+			array(
+				'supportsAllDrives' => true,
+				'fields'            => 'name',
+			)
 		);
-
-		$response = $service->files->get( $path_element, $get_options );
 		$result[] = $response->getName();
 	}
 
@@ -159,7 +160,7 @@ function get_drive_content( $service, $root ) {
 			)
 		);
 
-		if ( $response instanceof \Sgdg\Vendor\Google_Service_Exception ) {
+		if ( $response instanceof \Sgdd\Vendor\Google_Service_Exception ) {
 			throw $response;
 		}
 
@@ -204,7 +205,7 @@ function get_drives( $service ) {
 			)
 		);
 
-		if ( $response instanceof \Sgdg\Vendor\Google_Service_Exception ) {
+		if ( $response instanceof \Sgdd\Vendor\Google_Service_Exception ) {
 			throw $response;
 		}
 

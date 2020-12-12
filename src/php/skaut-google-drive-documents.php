@@ -86,12 +86,10 @@ function activate() {
  * Function that shows setup notice after activation
  */
 function activation_info() {
-	if ( get_transient( 'sgdd_activation_info' ) ) {
-		$help_link = 'https://github.com/skaut/skaut-google-drive-documents/wiki/N%C3%A1vod-na-nastavenie';
-
+	if ( false !== get_transient( 'sgdd_activation_info' ) ) {
 		echo '<div class="notice notice-info is-dismissible"><p>';
 		// translators: 1: Start of a link to the settings 2: End of the link to the settings 3: Start of a help link 4: End of the help link.
-		printf( esc_html__( 'Google Drive Documents needs to be %1$sconfigured%2$s before it can be used. See the %3$sdocumentation%4$s for more information.', 'skaut-google-drive-documents' ), '<a href="' . esc_url( admin_url( 'admin.php?page=sgdd_basic' ) ) . '">', '</a>', '<a href="' . esc_url( $help_link ) . '" target="_blank">', '</a>' );
+		printf( esc_html__( 'Google Drive Documents needs to be %1$sconfigured%2$s before it can be used. See the %3$sdocumentation%4$s for more information.', 'skaut-google-drive-documents' ), '<a href="' . esc_url( admin_url( 'admin.php?page=sgdd_basic' ) ) . '">', '</a>', '<a href="' . esc_url( 'https://github.com/skaut/skaut-google-drive-documents/wiki/N%C3%A1vod-na-nastavenie' ) . '" target="_blank">', '</a>' );
 		echo '</p></div>';
 		delete_transient( 'sgdd_activation_info' );
 	}

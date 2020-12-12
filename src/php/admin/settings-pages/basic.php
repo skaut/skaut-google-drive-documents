@@ -22,7 +22,7 @@ if ( ! is_admin() ) {
 function register() {
 	add_action( 'admin_menu', '\\Sgdd\\Admin\\SettingsPages\\Basic\\add_menu' );
 
-	if ( ! get_option( 'sgdd_access_token' ) ) {
+	if ( false === get_option( 'sgdd_access_token' ) ) {
 		\Sgdd\Admin\SettingsPages\Basic\OAuthGrant\register();
 	} else {
 		\Sgdd\Admin\SettingsPages\Basic\OAuthRevoke\register();
@@ -49,7 +49,6 @@ function display() {
 	<div class="wrap">
 		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 		<form action="options.php?action=update&option_page=sgdd_basic" method="post">
-			<?php settings_fields( 'sgdd_basic' ); ?>
 			<?php do_settings_sections( 'sgdd_basic' ); ?>
 			<?php submit_button( __( 'Save Settings', 'skaut-google-drive-documents' ) ); ?>
 		</form>

@@ -101,6 +101,6 @@ abstract class SettingField {
 	 * @return mixed Value of option.
 	 */
 	public function get( $default_value = null ) {
-		return get_option( $this->id, ( isset( $default_value ) ? $default_value : $this->default_value ) );
+		return get_option( $this->id, $default_value ?? $this->default_value );
 	}
 };
