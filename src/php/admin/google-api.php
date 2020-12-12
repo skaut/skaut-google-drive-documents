@@ -20,7 +20,7 @@ if ( ! is_admin() ) {
  * @return object Google Client object.
  */
 function get_google_client() {
-	$client = new \Sgdd\Vendor\Google_Client();
+	$client = new \Sgdd\Vendor\Google\Client();
 	$client->setAuthConfig(
 		array(
 			'client_id'     => \Sgdd\Admin\Options\Options::$client_id->get(),
@@ -97,7 +97,7 @@ function oauth_redirect() {
 		try {
 			\Sgdd\Admin\SettingsPages\Basic\PathSelection\get_drives( $drive_client );
 			update_option( 'sgdd_access_token', $access_token );
-		} catch ( \Sgdd\Vendor\Google_Service_Exception $e ) {
+		} catch ( \Sgdd\Vendor\Google\Service\Exception $e ) {
 			if ( 'accessNotConfigured' === $e->getErrors()[0]['reason'] ) {
 				// translators: %s: Link to the Google developers console.
 				add_settings_error( 'general', 'oauth_failed', sprintf( esc_html__( 'Google Drive API is not enabled. Please enable it at %s and try again after a while.', 'skaut-google-drive-documents' ), '<a href="https://console.developers.google.com/apis/library/drive.googleapis.com" target="_blank">https://console.developers.google.com/apis/library/drive.googleapis.com</a>' ), 'error' );
