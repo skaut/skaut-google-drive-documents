@@ -1,7 +1,8 @@
+/* eslint-env node */
+'use strict';
+
 const gulp = require( 'gulp' );
 
-const composer = require( 'gulp-composer' );
-const shell = require( 'gulp-shell' );
 const merge = require( 'merge-stream' );
 const replace = require( 'gulp-replace' );
 

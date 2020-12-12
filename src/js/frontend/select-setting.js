@@ -1,5 +1,6 @@
 'use strict';
 
+// eslint-disable-next-line no-redeclare
 const SgddSelectSetting = function ( attributes ) {
 	SgddSettingsBase.call( this, attributes ); //eslint-disable-line no-undef
 };
@@ -9,10 +10,10 @@ SgddSelectSetting.prototype.renderInput = function () {
 	const value = this.block.getAttribute( this.name );
 	const el = wp.element.createElement;
 
-	var inputs;
+	let inputs;
 	switch ( this.name ) {
 		case 'orderBy':
-			var inputs = [
+			inputs = [
 				[ 'name_asc', sgddBlockJsLocalize.name_asc ], //eslint-disable-line no-undef
 				[ 'name_dsc', sgddBlockJsLocalize.name_dsc ], //eslint-disable-line no-undef
 				[ 'time_asc', sgddBlockJsLocalize.time_asc ], //eslint-disable-line no-undef
@@ -21,7 +22,7 @@ SgddSelectSetting.prototype.renderInput = function () {
 			break;
 
 		case 'folderType':
-			var inputs = [
+			inputs = [
 				[ 'list', sgddBlockJsLocalize.list ], //eslint-disable-line no-undef
 				[ 'grid', sgddBlockJsLocalize.grid ], //eslint-disable-line no-undef
 			];
