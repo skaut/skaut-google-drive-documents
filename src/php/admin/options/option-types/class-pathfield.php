@@ -5,6 +5,7 @@
  * @package SGDD
  * @since 1.0.0
  */
+
 namespace Sgdd\Admin\Options\OptionTypes;
 
 require_once __DIR__ . '/class-settingfield.php';
@@ -33,7 +34,8 @@ class PathField extends SettingField {
 	/**
 	 * Sanitize the input.
 	 *
-	 * @param $value The unsanitized input.
+	 * @param string|null $value The unsanitized input.
+	 *
 	 * @return int Sanitized value.
 	 */
 	public function sanitize( $value ) {

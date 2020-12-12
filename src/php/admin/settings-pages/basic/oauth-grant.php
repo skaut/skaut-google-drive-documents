@@ -5,6 +5,7 @@
  * @package SGDD
  * @since 1.0.0
  */
+
 namespace Sgdd\Admin\SettingsPages\Basic\OAuthGrant;
 
 if ( ! is_admin() ) {

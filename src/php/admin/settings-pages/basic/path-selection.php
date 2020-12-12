@@ -5,6 +5,7 @@
  * @package SGDD
  * @since 1.0.0
  */
+
 namespace Sgdd\Admin\SettingsPages\Basic\PathSelection;
 
 if ( ! is_admin() ) {
@@ -32,7 +33,7 @@ function add_settings() {
 /**
  * Register script that handles Ajax request to list folders
  *
- * @param $hook Dynamic hook which refers to plugin settings page
+ * @param string $hook Dynamic hook which refers to plugin settings page.
  */
 function register_script( $hook ) {
 	\Sgdd\enqueue_style( 'sgdd_path_selection_css', '/admin/css/path-selection.css' );
@@ -70,6 +71,8 @@ function ajax_handler() {
 
 /**
  * Fetch availible folders on gdrive
+ *
+ * @throws \Exception An error occured.
  */
 function drive_path_selection() {
 	check_ajax_referer( 'sgdd_path_selection' );
@@ -79,7 +82,7 @@ function drive_path_selection() {
 	}
 
 	$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
-	$path    = isset( $_GET['path'] ) ? $_GET['path'] : array();
+	$path    = isset( $_GET['path'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_GET['path'] ) ) : array();
 
 	$result = array(
 		'pathNames' => array(),
@@ -100,8 +103,9 @@ function drive_path_selection() {
 /**
  * Translates grive folder path to folder name
  *
- * @param $service Object of Google Drive Client
- * @param $path Array of folder ids specified as root
+ * @param \Sgdd\Vendor\Google_Service_Drive $service Object of Google Drive Client.
+ * @param array                             $path Array of folder ids specified as root.
+ *
  * @return array List of folder names
  */
 function get_path_name( $service, $path ) {
@@ -132,8 +136,11 @@ function get_path_name( $service, $path ) {
 /**
  * Fetch content of folder on gdrie
  *
- * @param $service Object of Google Drive Client
- * @param $root Root folder id specified in settings
+ * @param \Sgdd\Vendor\Google_Service_Drive $service Object of Google Drive Client.
+ * @param string                            $root Root folder id specified in settings.
+ *
+ * @throws \Exception An error occured.
+ *
  * @return array List of content in specified folder
  */
 function get_drive_content( $service, $root ) {
@@ -173,7 +180,10 @@ function get_drive_content( $service, $root ) {
 /**
  * Fetch all google drive from account (main drive and all shared drives connected to account)
  *
- * @param $service Object of Google Drive Client
+ * @param \Sgdd\Vendor\Google_Service_Drive $service Object of Google Drive Client.
+ *
+ * @throws \Exception An error occured.
+ *
  * @return array List of all gdrives connected to account
  */
 function get_drives( $service ) {

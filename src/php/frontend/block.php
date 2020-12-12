@@ -5,6 +5,7 @@
  * @package SGDD
  * @since 1.0.0
  */
+
 namespace Sgdd\Pub\Block;
 
 if ( ! is_admin() ) {
@@ -78,7 +79,8 @@ function add_block() {
  *  - '100px' -> '100px',
  *  - '100%' -> '100%'.
  *
- * @param $in Input string
+ * @param string $in Input string.
+ *
  * @return string If $in contains only digits append to it 'px' otherwise return unmodified $in
  */
 function parse_dimension( $in ) {
@@ -94,11 +96,12 @@ function parse_dimension( $in ) {
 /**
  * Displays block into editor and returns HTML format to frontend.
  *
- * @param $attr Attributes fetched from JS request
+ * @param array $attr Attributes fetched from JS request.
+ *
  * @return string HTML format to display on frontend
  */
 function display( $attr ) {
-	// display folder
+	// display folder.
 	if ( isset( $attr['folderType'] ) || ! isset( $attr['fileId'] ) ) {
 		$folder_id;
 		$folder_type;
@@ -107,7 +110,7 @@ function display( $attr ) {
 		$cols;
 		$result;
 
-		// set folderId variable
+		// set folderId variable.
 		if ( isset( $attr['folderId'] ) ) {
 			$folder_id = $attr['folderId'];
 		} else {
@@ -123,7 +126,7 @@ function display( $attr ) {
 
 		$order_by = isset( $attr['orderBy'] ) ? $attr['orderBy'] : '';
 
-		// gdrive request to fetch content of folder
+		// gdrive request to fetch content of folder.
 		try {
 			$content = fetch_folder_content( $folder_id, $order_by );
 		} catch ( \Exception $e ) {
@@ -147,9 +150,8 @@ function display( $attr ) {
 		);
 
 		return $result;
-	}
-	// display file
-	else {
+	} else {
+		// display file.
 		$id    = $attr['fileId'];
 		$style = 'style="border:0;';
 
@@ -192,24 +194,24 @@ function ajax_handler() {
 function set_permissions() {
 	check_ajax_referer( 'sgdd_block_js_permissions' );
 
-	if ( ! isset( $_GET['folderType'] ) || '' === $_GET['fileId'] ) {
-		if ( '' === $_GET['folderId'] ) {
+	if ( ! isset( $_GET['folderType'] ) || ! isset( $_GET['fileId'] ) || '' === $_GET['fileId'] ) {
+		if ( ! isset( $_GET['folderId'] ) || '' === $_GET['folderId'] ) {
 			$root_path = \Sgdd\Admin\Options\Options::$root_path->get();
 			$folder_id = end( $root_path );
 		} else {
-			$folder_id = $_GET['folderId'];
+			$folder_id = sanitize_text_field( wp_unslash( $_GET['folderId'] ) );
 		}
 
 		set_permissions_in_folder( $folder_id );
 	} else {
-		set_file_permissions( $_GET['fileId'] );
+		set_file_permissions( sanitize_text_field( wp_unslash( $_GET['fileId'] ) ) );
 	}
 }
 
 /**
  * Sets permissions of file on Google Drive
  *
- * @param $file_id Google Drive id of file which permissions will be modified.
+ * @param string $file_id Google Drive id of file which permissions will be modified.
  */
 function set_file_permissions( $file_id ) {
 	$service           = \Sgdd\Admin\GoogleAPILib\get_drive_client();
@@ -225,7 +227,7 @@ function set_file_permissions( $file_id ) {
 /**
  * Sets permissions of all files in folder.
  *
- * @param $folder_type Google Drive id of folder in which permissions of all files will be modified.
+ * @param string $folder_id Google Drive id of folder in which permissions of all files will be modified.
  * @return array NULL
  */
 function set_permissions_in_folder( $folder_id ) {
@@ -276,6 +278,14 @@ function set_permissions_in_folder( $folder_id ) {
 	return $results;
 }
 
+/**
+ * Fetches the content of a Google Drive folder
+ *
+ * @param string $folder_id The ID of the folder.
+ * @param string $order_by The ordering to use.
+ *
+ * @throws \Exception A error occured.
+ */
 function fetch_folder_content( $folder_id, $order_by ) {
 	$service    = \Sgdd\Admin\GoogleAPILib\get_drive_client();
 	$page_token = null;
@@ -328,10 +338,11 @@ function fetch_folder_content( $folder_id, $order_by ) {
 /**
  * Function that construct HTML for displaying folder content.
  *
- * @param $content Content of folder to be displayed
- * @param $type Type of displaying folder: list or grid
- * @param $arg User specified options for displaying folder
- * @return string HTML format for frontend
+ * @param array  $content Content of folder to be displayed.
+ * @param string $type Type of displaying folder: list or grid.
+ * @param array  $arg User specified options for displaying folder.
+ *
+ * @return string HTML format for frontend.
  */
 function build_result( $content, $type, $arg ) {
 	$result;
@@ -341,7 +352,7 @@ function build_result( $content, $type, $arg ) {
 		return '<div class="notice notice-info">' . __( 'The selected folder does not contain any items.', 'skaut-google-drive-documents' ) . '</div>';
 	}
 
-	// build list table
+	// build list table.
 	if ( 'list' === $type ) {
 		if ( array_key_exists( 'width', $arg ) ) {
 			$style = ' style="width:' . parse_dimension( $arg['width'] ) . ';"';
@@ -355,9 +366,8 @@ function build_result( $content, $type, $arg ) {
 					<td><a href="' . $element['webViewLink'] . '" target="_blank">' . $element['name'] . '</a></td>
 				</tr>';
 		}
-	}
-	// build grid table
-	else {
+	} else {
+		// build grid table.
 		$i    = 0;
 		$cols = $arg['cols'];
 
@@ -388,7 +398,7 @@ function build_result( $content, $type, $arg ) {
 					</a>
 				</div></td>';
 
-			if ( ( $i % $cols === $cols - 1 ) || ( ( $i + 1 ) === sizeof( $content ) ) ) {
+			if ( ( $i % $cols === $cols - 1 ) || ( ( $i + 1 ) === count( $content ) ) ) {
 				$result .= '</tr>';
 			}
 
