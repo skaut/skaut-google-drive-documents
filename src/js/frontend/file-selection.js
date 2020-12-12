@@ -1,5 +1,6 @@
 'use strict';
 
+// eslint-disable-next-line no-redeclare
 const SgddFileSelection = function ( props ) {
 	this.props = props;
 	this.state = { error: undefined, list: undefined };
@@ -13,13 +14,13 @@ SgddFileSelection.prototype.componentDidMount = function () {
 SgddFileSelection.prototype.ajax = function () {
 	const that = this;
 	jQuery.ajax( {
-		url: sgddBlockJsLocalize.ajaxUrl, //eslint-disable-line no-undef
+		url: sgddBlockJsLocalize.ajaxUrl,
 		type: 'GET',
 		data: {
 			action: 'selectFile',
 			namesPath: this.getAttribute( 'namesPath' ),
 			idsPath: this.getAttribute( 'idsPath' ),
-			_ajax_nonce: sgddBlockJsLocalize.nonce, // eslint-disable-line camelcase, no-undef
+			_ajax_nonce: sgddBlockJsLocalize.nonce,
 		},
 		success( response ) {
 			if ( response.error ) {
@@ -48,7 +49,7 @@ SgddFileSelection.prototype.render = function () {
 					that.pathClick( that, e );
 				},
 			},
-			sgddBlockJsLocalize.root //eslint-disable-line no-undef
+			sgddBlockJsLocalize.root
 		),
 	];
 
@@ -175,7 +176,7 @@ SgddFileSelection.prototype.render = function () {
 		el(
 			wp.blockEditor.InspectorControls,
 			{ key: 'ic' },
-			el( SgddInspector, { block: this } ) //eslint-disable-line no-undef
+			el( SgddInspector, { block: this } )
 		),
 		el( 'table', { className: 'widefat fixed striped', key: 'table' }, [
 			el(

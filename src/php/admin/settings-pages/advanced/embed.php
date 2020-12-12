@@ -33,6 +33,9 @@ function add() {
 	\Sgdd\Admin\Options\Options::$grid_cols->add_field();
 }
 
+/**
+ * Displays the settings errors
+ */
 function display() {
 	settings_errors();
 }

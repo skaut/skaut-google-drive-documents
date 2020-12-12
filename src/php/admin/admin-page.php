@@ -61,24 +61,24 @@ function add_menu() {
  */
 function action_handler() {
 	// phpcs:ignore WordPress.Security.NonceVerification
-	if ( isset( $_GET['page'] ) && 'sgdd_basic' === sanitize_key( $_GET['page'] ) ) {
+	if ( isset( $_GET['page'] ) && 'sgdd_basic' === $_GET['page'] ) {
 		if ( isset( $_GET['action'] ) ) {
 			// phpcs:ignore WordPress.Security.NonceVerification
 			if ( 'oauth_grant' === $_GET['action'] ) {
 				if ( isset( $_GET['_wpnonce'] ) ) {
-					wp_verify_nonce( sanitize_key( $_GET['_wpnonce'] ), 'oauth_grant' );
+					wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'oauth_grant' );
 					\Sgdd\Admin\GoogleAPILib\oauth_grant();
 				} else {
-					die( 'Verification error!' );
+					add_settings_error( 'general', 'oauth_failed', esc_html__( 'Verification error!', 'skaut-google-drive-documents' ), 'error' );
 				}
 			} elseif ( 'oauth_redirect' === $_GET['action'] ) {
 				\Sgdd\Admin\GoogleAPILib\oauth_redirect();
 			} elseif ( 'oauth_revoke' === $_GET['action'] ) {
 				if ( isset( $_GET['_wpnonce'] ) ) {
-					wp_verify_nonce( sanitize_key( $_GET['_wpnonce'] ), 'oauth_revoke' );
+					wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'oauth_revoke' );
 					\Sgdd\Admin\GoogleAPILib\oauth_revoke();
 				} else {
-					die( 'Verification error!' );
+					add_settings_error( 'general', 'oauth_failed', esc_html__( 'Verification error!', 'skaut-google-drive-documents' ), 'error' );
 				}
 			}
 		}

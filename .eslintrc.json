@@ -1,11 +1,33 @@
 {
+	"parserOptions": {
+		"sourceType": "script"
+	},
 	"env": {
 		"browser": true,
-		"jquery": true
+		"node": false
 	},
-	"plugins": ["compat"],
-	"extends": [ "plugin:@wordpress/eslint-plugin/recommended" ],
+	"plugins": [
+		"compat"
+	],
+	"extends": [
+		"eslint:recommended",
+		"plugin:@wordpress/eslint-plugin/recommended"
+	],
 	"rules": {
-		"compat/compat": "error"
+		"compat/compat": "warn",
+		"camelcase": "off",
+		"no-warning-comments": "warn",
+		"strict": ["error", "global"]
+	},
+	"globals": {
+		"jQuery": "readonly",
+		"sgddBlockJsLocalize": "readonly",
+		"SgddButtonSetting": "readonly",
+		"SgddFileSelection": "readonly",
+		"SgddInspector": "readonly",
+		"SgddIntegerSetting": "readonly",
+		"SgddSelectSetting": "readonly",
+		"SgddSettingsBase": "readonly",
+		"SgddStringSetting": "readonly"
 	}
 }

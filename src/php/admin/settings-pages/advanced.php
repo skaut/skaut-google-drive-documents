@@ -40,7 +40,6 @@ function display() {
 	<div class="wrap">
 		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 		<form action="options.php?action=update&option_page=sgdd_advanced" method="post">
-			<?php settings_fields( 'sgdd_advanced' ); ?>
 			<?php do_settings_sections( 'sgdd_advanced' ); ?>
 			<?php submit_button( __( 'Save Settings', 'skaut-google-drive-documents' ) ); ?>
 		</form>

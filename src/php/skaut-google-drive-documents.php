@@ -60,7 +60,7 @@ require_once __DIR__ . '/includes/includes.php';
 function init() {
 	register_activation_hook( __FILE__, '\\Sgdd\\activate' );
 	add_action( 'admin_notices', '\\Sgdd\\activation_info' );
-	add_action( 'plugins_loaded', [ '\\Sgdd\\Admin\\Options\\Options', 'init' ] );
+	add_action( 'plugins_loaded', array( '\\Sgdd\\Admin\\Options\\Options', 'init' ) );
 	\Sgdd\Admin\AdminPage\register();
 	\Sgdd\Pub\Block\register();
 }
@@ -86,12 +86,10 @@ function activate() {
  * Function that shows setup notice after activation
  */
 function activation_info() {
-	if ( get_transient( 'sgdd_activation_info' ) ) {
-		$help_link = 'https://github.com/skaut/skaut-google-drive-documents/wiki/N%C3%A1vod-na-nastavenie';
-
+	if ( false !== get_transient( 'sgdd_activation_info' ) ) {
 		echo '<div class="notice notice-info is-dismissible"><p>';
 		// translators: 1: Start of a link to the settings 2: End of the link to the settings 3: Start of a help link 4: End of the help link.
-		printf( esc_html__( 'Google Drive Documents needs to be %1$sconfigured%2$s before it can be used. See the %3$sdocumentation%4$s for more information.', 'skaut-google-drive-documents' ), '<a href="' . esc_url( admin_url( 'admin.php?page=sgdd_basic' ) ) . '">', '</a>', '<a href="' . esc_url( $help_link ) . '" target="_blank">', '</a>' );
+		printf( esc_html__( 'Google Drive Documents needs to be %1$sconfigured%2$s before it can be used. See the %3$sdocumentation%4$s for more information.', 'skaut-google-drive-documents' ), '<a href="' . esc_url( admin_url( 'admin.php?page=sgdd_basic' ) ) . '">', '</a>', '<a href="' . esc_url( 'https://github.com/skaut/skaut-google-drive-documents/wiki/N%C3%A1vod-na-nastavenie' ) . '" target="_blank">', '</a>' );
 		echo '</p></div>';
 		delete_transient( 'sgdd_activation_info' );
 	}
@@ -104,7 +102,7 @@ function activation_info() {
  * @param string $src Full URL of the script.
  * @param array  $deps An array of registered script handles this script depends on.
  */
-function enqueue_script( $handle, $src, $deps = [] ) {
+function enqueue_script( $handle, $src, $deps = array() ) {
 	$dir = plugin_dir_path( __FILE__ );
 	wp_enqueue_script( $handle, plugins_url( basename( __DIR__ ) . $src ), $deps, filemtime( $dir . $src ), true );
 }
@@ -116,7 +114,7 @@ function enqueue_script( $handle, $src, $deps = [] ) {
  * @param string $src Full URL of the script.
  * @param array  $deps An array of registered script handles this script depends on.
  */
-function enqueue_style( $handle, $src, $deps = [] ) {
+function enqueue_style( $handle, $src, $deps = array() ) {
 	$dir = plugin_dir_path( __FILE__ );
 	wp_enqueue_style( $handle, plugins_url( basename( __DIR__ ) . $src ), $deps, filemtime( $dir . $src ) );
 }
