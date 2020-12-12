@@ -15,6 +15,7 @@
 			url: sgddRootPathLocalize.ajaxUrl,
 			type: 'GET',
 			data: {
+				_ajax_nonce: sgddRootPathLocalize.nonce, // eslint-disable-line camelcase
 				action: 'listDrive',
 				path,
 			},
@@ -92,7 +93,7 @@
 			error( response ) {
 				const html =
 					'<div class="notice notice-error"><p>' +
-					response.error +
+					response.responseText +
 					'</p></div>';
 				$( '#rootPath' ).replaceWith( html );
 			},
