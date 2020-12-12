@@ -33,14 +33,14 @@ class StringField extends SettingField {
 	/**
 	 * StringField class constructor.
 	 *
-	 * @param string $id An unique name of the option used as key to reference it. Prefix "sgdd_" will be added.
+	 * @param string $setting_id An unique name of the option used as key to reference it. Prefix "sgdd_" will be added.
 	 * @param string $title Name of the option displayed to user.
 	 * @param string $page Setting page in which the option will be displayed. Prefix "sgdd_" will be added.
 	 * @param string $section Section within page in which the option will be displayed. Prefix "sgdd_" will be added.
 	 * @param string $default_value Default valur of option if user do not specify one.
 	 */
-	public function __construct( $id, $title, $page, $section, $default_value ) {
-		parent::__construct( $id, $title, $page, $section, $default_value );
+	public function __construct( $setting_id, $title, $page, $section, $default_value ) {
+		parent::__construct( $setting_id, $title, $page, $section, $default_value );
 		$this->read_only  = false;
 		$this->selectable = false;
 	}
@@ -51,7 +51,7 @@ class StringField extends SettingField {
 	public function register() {
 		register_setting(
 			$this->page,
-			$this->id,
+			$this->setting_id,
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => array( $this, 'sanitize' ),
@@ -88,11 +88,11 @@ class StringField extends SettingField {
 	 */
 	public function display() {
 		if ( $this->read_only && $this->selectable ) {
-			echo "<input onClick='this.select();' type='text' name='" . esc_attr( $this->id ) . "' value='" . esc_attr( get_option( $this->id, $this->default_value ) ) . "' readonly class='regular-text'>";
+			echo "<input onClick='this.select();' type='text' name='" . esc_attr( $this->setting_id ) . "' value='" . esc_attr( get_option( $this->setting_id, $this->default_value ) ) . "' readonly class='regular-text'>";
 		} elseif ( $this->read_only && ! $this->selectable ) {
-			echo "<input type='text' name='" . esc_attr( $this->id ) . "' value='" . esc_attr( get_option( $this->id, $this->default_value ) ) . "' readonly class='regular-text'>";
+			echo "<input type='text' name='" . esc_attr( $this->setting_id ) . "' value='" . esc_attr( get_option( $this->setting_id, $this->default_value ) ) . "' readonly class='regular-text'>";
 		} else {
-			echo "<input type='text' name='" . esc_attr( $this->id ) . "' value='" . esc_attr( get_option( $this->id, $this->default_value ) ) . "' class='regular-text'>";
+			echo "<input type='text' name='" . esc_attr( $this->setting_id ) . "' value='" . esc_attr( get_option( $this->setting_id, $this->default_value ) ) . "' class='regular-text'>";
 		}
 	}
 }

@@ -69,7 +69,7 @@ function action_handler() {
 					wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'oauth_grant' );
 					\Sgdd\Admin\GoogleAPILib\oauth_grant();
 				} else {
-					die( 'Verification error!' );
+					add_settings_error( 'general', 'oauth_failed', esc_html__( 'Verification error!', 'skaut-google-drive-documents' ), 'error' );
 				}
 			} elseif ( 'oauth_redirect' === $_GET['action'] ) {
 				\Sgdd\Admin\GoogleAPILib\oauth_redirect();
@@ -78,7 +78,7 @@ function action_handler() {
 					wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'oauth_revoke' );
 					\Sgdd\Admin\GoogleAPILib\oauth_revoke();
 				} else {
-					die( 'Verification error!' );
+					add_settings_error( 'general', 'oauth_failed', esc_html__( 'Verification error!', 'skaut-google-drive-documents' ), 'error' );
 				}
 			}
 		}

@@ -15,9 +15,9 @@ abstract class SettingField {
 	/**
 	 * Name of option used as key to reference it.
 	 *
-	 * @var string $id
+	 * @var string $setting_id
 	 */
-	protected $id;
+	protected $setting_id;
 
 	/**
 	 * Name of option displayed to user.
@@ -50,14 +50,14 @@ abstract class SettingField {
 	/**
 	 * SettingField class constructor.
 	 *
-	 * @param string $id An unique name of the option used as key to reference it. Prefix "sgdd_" will be added.
+	 * @param string $setting_id An unique name of the option used as key to reference it. Prefix "sgdd_" will be added.
 	 * @param string $title Name of the option displayed to user.
 	 * @param string $page Setting page in which the option will be displayed. Prefix "sgdd_" will be added.
 	 * @param string $section Section within page in which the option will be displayed. Prefix "sgdd_" will be added.
 	 * @param mixed  $default_value Default valur of option if user do not specify one.
 	 */
-	public function __construct( $id, $title, $page, $section, $default_value ) {
-		$this->id            = 'sgdd_' . $id;
+	public function __construct( $setting_id, $title, $page, $section, $default_value ) {
+		$this->setting_id    = 'sgdd_' . $setting_id;
 		$this->title         = $title;
 		$this->page          = 'sgdd_' . $page;
 		$this->section       = 'sgdd_' . $section;
@@ -89,7 +89,7 @@ abstract class SettingField {
 	 */
 	public function add_field() {
 		$this->register();
-		add_settings_field( $this->id, $this->title, array( $this, 'display' ), $this->page, $this->section );
+		add_settings_field( $this->setting_id, $this->title, array( $this, 'display' ), $this->page, $this->section );
 	}
 
 	/**
@@ -101,6 +101,6 @@ abstract class SettingField {
 	 * @return mixed Value of option.
 	 */
 	public function get( $default_value = null ) {
-		return get_option( $this->id, $default_value ?? $this->default_value );
+		return get_option( $this->setting_id, $default_value ?? $this->default_value );
 	}
 };

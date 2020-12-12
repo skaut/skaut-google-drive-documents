@@ -79,18 +79,15 @@ function add_block() {
  *  - '100px' -> '100px',
  *  - '100%' -> '100%'.
  *
- * @param string $in Input string.
+ * @param string $input Input string.
  *
  * @return string If $in contains only digits append to it 'px' otherwise return unmodified $in
  */
-function parse_dimension( $in ) {
-	$out = $in;
-
-	if ( ctype_digit( $in ) ) {
-		$out .= 'px';
+function parse_dimension( $input ) {
+	if ( ctype_digit( $input ) ) {
+		return $input . 'px';
 	}
-
-	return $out;
+	return $input;
 }
 
 /**
@@ -103,65 +100,86 @@ function parse_dimension( $in ) {
 function display( $attr ) {
 	// display folder.
 	if ( isset( $attr['folderType'] ) || ! isset( $attr['fileId'] ) ) {
-		// set folderId variable.
-		if ( isset( $attr['folderId'] ) ) {
-			$folder_id = $attr['folderId'];
-		} else {
-			$root_path_array = \Sgdd\Admin\Options\Options::$root_path->get();
-			$folder_id       = end( $root_path_array );
-		}
-
-		if ( isset( $attr['folderType'] ) ) {
-			$folder_type = $attr['folderType'];
-		} else {
-			$folder_type = \Sgdd\Admin\Options\Options::$folder_type->get();
-		}
-
-		$order_by = $attr['orderBy'] ?? '';
-
-		// gdrive request to fetch content of folder.
-		try {
-			$content = fetch_folder_content( $folder_id, $order_by );
-		} catch ( \Exception $e ) {
-			return '<div class="notice notice-error">' . __( 'Error while fetching folder content!', 'skaut-google-drive-documents' ) . '<br> ' . $e . '</div>';
-		}
-
-		$result_args = array();
-		if ( isset( $attr['listWidth'] ) ) {
-			$result_args['width'] = $attr['listWidth'];
-		}
-		if ( isset( $attr['gridCols'] ) ) {
-			$result_args['cols'] = $attr['gridCols'];
-		} else {
-			$result_args['cols'] = \Sgdd\Admin\Options\Options::$grid_cols->get();
-		}
-
-		$result = build_result(
-			$content,
-			'list' === $folder_type ? 'list' : 'grid',
-			$result_args
-		);
-
-		return $result;
+		return display_folder( $attr );
 	} else {
-		// display file.
-		$id    = $attr['fileId'];
-		$style = 'style="border:0;';
-
-		if ( isset( $attr['embedWidth'] ) ) {
-			$style .= ' width:' . parse_dimension( $attr['embedWidth'] ) . '; ';
-		}
-
-		if ( isset( $attr['embedHeight'] ) ) {
-			$style .= ' height:' . parse_dimension( $attr['embedHeight'] ) . '; ';
-		}
-
-		$style .= '"';
-
-		$result = '<iframe class="sgdd-embedded-file" src="https://drive.google.com/file/d/' . $id . '/preview" ' . $style . '></iframe>';
-
-		return $result;
+		return display_file( $attr );
 	}
+}
+
+/**
+ * Displays folder into editor and returns HTML format to frontend.
+ *
+ * @param array $attr Attributes fetched from JS request.
+ *
+ * @return string HTML format to display on frontend
+ */
+function display_folder( $attr ) {
+	// set folderId variable.
+	if ( isset( $attr['folderId'] ) ) {
+		$folder_id = $attr['folderId'];
+	} else {
+		$root_path_array = \Sgdd\Admin\Options\Options::$root_path->get();
+		$folder_id       = end( $root_path_array );
+	}
+
+	if ( isset( $attr['folderType'] ) ) {
+		$folder_type = $attr['folderType'];
+	} else {
+		$folder_type = \Sgdd\Admin\Options\Options::$folder_type->get();
+	}
+
+	$order_by = $attr['orderBy'] ?? '';
+
+	// gdrive request to fetch content of folder.
+	try {
+		$content = fetch_folder_content( $folder_id, $order_by );
+	} catch ( \Exception $e ) {
+		return '<div class="notice notice-error">' . __( 'Error while fetching folder content!', 'skaut-google-drive-documents' ) . '<br> ' . $e . '</div>';
+	}
+
+	$result_args = array();
+	if ( isset( $attr['listWidth'] ) ) {
+		$result_args['width'] = $attr['listWidth'];
+	}
+	if ( isset( $attr['gridCols'] ) ) {
+		$result_args['cols'] = $attr['gridCols'];
+	} else {
+		$result_args['cols'] = \Sgdd\Admin\Options\Options::$grid_cols->get();
+	}
+
+	$result = build_result(
+		$content,
+		'list' === $folder_type ? 'list' : 'grid',
+		$result_args
+	);
+
+	return $result;
+}
+
+/**
+ * Displays file into editor and returns HTML format to frontend.
+ *
+ * @param array $attr Attributes fetched from JS request.
+ *
+ * @return string HTML format to display on frontend
+ */
+function display_file( $attr ) {
+	$file_id = $attr['fileId'];
+	$style   = 'style="border:0;';
+
+	if ( isset( $attr['embedWidth'] ) ) {
+		$style .= ' width:' . parse_dimension( $attr['embedWidth'] ) . '; ';
+	}
+
+	if ( isset( $attr['embedHeight'] ) ) {
+		$style .= ' height:' . parse_dimension( $attr['embedHeight'] ) . '; ';
+	}
+
+	$style .= '"';
+
+	$result = '<iframe class="sgdd-embedded-file" src="https://drive.google.com/file/d/' . $file_id . '/preview" ' . $style . '></iframe>';
+
+	return $result;
 }
 
 /**
@@ -341,66 +359,90 @@ function fetch_folder_content( $folder_id, $order_by ) {
  * @return string HTML format for frontend.
  */
 function build_result( $content, $type, $arg ) {
-	$style = '';
-
 	if ( empty( $content['files'] ) ) {
 		return '<div class="notice notice-info">' . __( 'The selected folder does not contain any items.', 'skaut-google-drive-documents' ) . '</div>';
 	}
 
 	// build list table.
 	if ( 'list' === $type ) {
-		if ( array_key_exists( 'width', $arg ) ) {
-			$style = ' style="width:' . parse_dimension( $arg['width'] ) . ';"';
-		}
-
-		$result = '<table class="sgdd-embedded-folder-list"' . $style . '><tbody>';
-
-		foreach ( $content as $element ) {
-			$result .= '<tr>
-					<td><img src="' . $element['iconLink'] . '"></td>
-					<td><a href="' . $element['webViewLink'] . '" target="_blank">' . $element['name'] . '</a></td>
-				</tr>';
-		}
+		$result = build_list_table( $content, $arg );
 	} else {
-		// build grid table.
-		$i    = 0;
-		$cols = $arg['cols'];
-
-		$style = ' style="table-layout:fixed; border-collapse:separate;';
-		if ( array_key_exists( 'width', $arg ) ) {
-			$style .= ' width:' . parse_dimension( $arg['width'] ) . ';';
-		}
-		$style .= '"';
-
-		$result = '<table class="sgdd-embedded-folder-grid"' . $style . '><tbody>';
-
-		foreach ( $content as $element ) {
-			if ( 0 === ( $i % $cols ) ) {
-				$result .= '<tr>';
-			}
-
-			if ( ! boolval( $element['hasThumbnail'] ) || 1 === preg_match( '/\b(google-apps)/', $element['mimeType'] ) ) {
-				$thumbnail = '<img src="' . preg_replace( '(16)', '128', $element['iconLink'] ) . '">';
-			} else {
-				$thumbnail = '<img src="' . $element['thumbnailLink'] . '">';
-			}
-
-			$result .= '<td><div class="sgdd-embedded-folder-element">
-					<a href="' . $element['webViewLink'] . '" target="_blank">
-						<div class="sgdd-embedded-folder-thumbnail">' . $thumbnail . '</div>
-						<div class="sgdd-embedded-folder-caption">' . $element['name'] . '</div>
-					</a>
-				</div></td>';
-
-			if ( ( $i % $cols === $cols - 1 ) || ( ( $i + 1 ) === count( $content ) ) ) {
-				$result .= '</tr>';
-			}
-
-			$i++;
-		}
+		$result = build_grid_table( $content, $arg );
 	}
 
 	$result .= '</tbody></table>';
 
+	return $result;
+}
+
+/**
+ * Function that construct list for displaying folder content.
+ *
+ * @param array $content Content of folder to be displayed.
+ * @param array $arg User specified options for displaying folder.
+ *
+ * @return string HTML format for frontend.
+ */
+function build_list_table( $content, $arg ) {
+	$style = '';
+	if ( array_key_exists( 'width', $arg ) ) {
+		$style = ' style="width:' . parse_dimension( $arg['width'] ) . ';"';
+	}
+
+	$result = '<table class="sgdd-embedded-folder-list"' . $style . '><tbody>';
+
+	foreach ( $content as $element ) {
+		$result .= '<tr>
+				<td><img src="' . $element['iconLink'] . '"></td>
+				<td><a href="' . $element['webViewLink'] . '" target="_blank">' . $element['name'] . '</a></td>
+			</tr>';
+	}
+	return $result;
+}
+
+/**
+ * Function that construct grid for displaying folder content.
+ *
+ * @param array $content Content of folder to be displayed.
+ * @param array $arg User specified options for displaying folder.
+ *
+ * @return string HTML format for frontend.
+ */
+function build_grid_table( $content, $arg ) {
+	$row  = 0;
+	$cols = $arg['cols'];
+
+	$style = ' style="table-layout:fixed; border-collapse:separate;';
+	if ( array_key_exists( 'width', $arg ) ) {
+		$style .= ' width:' . parse_dimension( $arg['width'] ) . ';';
+	}
+	$style .= '"';
+
+	$result = '<table class="sgdd-embedded-folder-grid"' . $style . '><tbody>';
+
+	foreach ( $content as $element ) {
+		if ( 0 === ( $row % $cols ) ) {
+			$result .= '<tr>';
+		}
+
+		if ( ! boolval( $element['hasThumbnail'] ) || 1 === preg_match( '/\b(google-apps)/', $element['mimeType'] ) ) {
+			$thumbnail = '<img src="' . preg_replace( '(16)', '128', $element['iconLink'] ) . '">';
+		} else {
+			$thumbnail = '<img src="' . $element['thumbnailLink'] . '">';
+		}
+
+		$result .= '<td><div class="sgdd-embedded-folder-element">
+				<a href="' . $element['webViewLink'] . '" target="_blank">
+					<div class="sgdd-embedded-folder-thumbnail">' . $thumbnail . '</div>
+					<div class="sgdd-embedded-folder-caption">' . $element['name'] . '</div>
+				</a>
+			</div></td>';
+
+		if ( ( $row % $cols === $cols - 1 ) || ( ( $row + 1 ) === count( $content ) ) ) {
+			$result .= '</tr>';
+		}
+
+		$row++;
+	}
 	return $result;
 }

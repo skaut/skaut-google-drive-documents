@@ -22,7 +22,7 @@ class PathField extends SettingField {
 	public function register() {
 		register_setting(
 			$this->page,
-			$this->id,
+			$this->setting_id,
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => array( $this, 'sanitize' ),
@@ -54,6 +54,6 @@ class PathField extends SettingField {
 	 * Display field for updating the option
 	 */
 	public function display() {
-		echo "<input id='" . esc_attr( $this->id ) . "' type='hidden' name='" . esc_attr( $this->id ) . "' value='" . esc_attr( wp_json_encode( $this->get(), JSON_UNESCAPED_UNICODE ) ) . "'>";
+		echo "<input id='" . esc_attr( $this->setting_id ) . "' type='hidden' name='" . esc_attr( $this->setting_id ) . "' value='" . esc_attr( wp_json_encode( $this->get(), JSON_UNESCAPED_UNICODE ) ) . "'>";
 	}
 }
