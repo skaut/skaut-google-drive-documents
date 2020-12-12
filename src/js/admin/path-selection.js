@@ -15,6 +15,7 @@
 			url: sgddRootPathLocalize.ajaxUrl,
 			type: 'GET',
 			data: {
+				_ajax_nonce: sgddRootPathLocalize.nonce, // eslint-disable-line camelcase
 				action: 'listDrive',
 				path,
 			},
