@@ -17,6 +17,6 @@
 		"compat/compat": "warn",
 		"camelcase": "off",
 		"no-warning-comments": "warn",
-		"strict": ["error", "never"]
+		"strict": ["error", "global"]
 	}
 }
