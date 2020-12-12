@@ -8,8 +8,8 @@
 			path = [];
 		}
 
-		$( '#rootPath tbody tr' ).not( '.loadingCircle' ).fadeOut();
-		$( '.loadingCircle' ).fadeIn( 'slow' );
+		$( '#rootPath tbody tr' ).not( '.loading-circle' ).fadeOut();
+		$( '.loading-circle' ).fadeIn( 'slow' );
 
 		$.ajax( {
 			url: sgddRootPathLocalize.ajaxUrl,
@@ -22,9 +22,9 @@
 				let html = '';
 				let i;
 
-				$( '.loadingCircle' ).fadeOut();
+				$( '.loading-circle' ).fadeOut();
 				$( '#rootPath tbody tr' )
-					.not( '.loadingCircle' )
+					.not( '.loading-circle' )
 					.fadeIn( 'slow' );
 
 				/* Print path */
@@ -51,10 +51,10 @@
 						'</a>';
 					$( '#submit' ).attr( 'disabled', 'disabled' );
 				}
-				$( '.tablePath' ).html( html );
+				$( '.table-path' ).html( html );
 
 				/* Up directory dots */
-				html = '<tr class="loadingCircle"></tr>';
+				html = '<tr class="loading-circle"></tr>';
 				if ( 0 < path.length ) {
 					html += '<tr><td class="row-title"><label>..</label></tr>';
 					$( '.tableBody' ).html( html );
@@ -82,7 +82,7 @@
 					$( '#submit' ).removeAttr( 'disabled' );
 				} );
 
-				$( '.tablePath a' ).click( function () {
+				$( '.table-path a' ).click( function () {
 					pathClick( path, this );
 					$( '#submit' ).removeAttr( 'disabled' );
 				} );

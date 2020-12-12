@@ -1,13 +1,13 @@
-.loadingCircle {
-  background: rgba(255, 255, 255, 1) url("../loading-icon.gif");
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  height: 35px;
-  width: 98.58%;
-  position: absolute;
-  display: none;
+.loading-circle {
+	background: rgba(255, 255, 255, 1) url(../loading-icon.gif);
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	height: 35px;
+	width: 98.58%;
+	position: absolute;
+	display: none;
 }
 
-.tablePath a {
-  cursor: pointer;
+.table-path a {
+	cursor: pointer;
 }
