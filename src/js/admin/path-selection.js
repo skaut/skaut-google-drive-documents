@@ -92,7 +92,7 @@
 			error( response ) {
 				const html =
 					'<div class="notice notice-error"><p>' +
-					response.error +
+					response.responseText +
 					'</p></div>';
 				$( '#rootPath' ).replaceWith( html );
 			},
