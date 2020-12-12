@@ -47,7 +47,7 @@ function get_drive_client() {
 	$client       = \Sgdd\Admin\GoogleAPILib\get_google_client();
 	$access_token = get_option( 'sgdd_access_token' );
 
-	if ( ! $access_token ) {
+	if ( false === $access_token ) {
 		throw new \Exception( __( 'Not authorized!', 'skaut-google-drive-documents' ) );
 	}
 
@@ -82,15 +82,14 @@ function oauth_redirect() {
 		add_settings_error( 'general', 'oauth_failed', esc_html__( 'Google API hasn\'t returned an authentication code. Please try again.', 'skaut-google-drive-documents' ), 'error' );
 	}
 
-	if ( count( get_settings_errors() ) === 0 && ! get_option( 'sgdd_access_token' ) ) {
+	if ( count( get_settings_errors() ) === 0 && false === get_option( 'sgdd_access_token' ) ) {
 		$client = get_google_client();
 		// phpcs:ignore
 		$client->authenticate( $_GET['code'] );
 		$access_token = $client->getAccessToken();
 
-		add_option( 'sgdd_access_token', $access_token );
+		update_option( 'sgdd_access_token', $access_token );
 
-		$service = \Sgdd\Admin\GoogleAPILib\get_google_client();
 		// phpcs:ignore WordPress.Security.NonceVerification
 		$client->authenticate( sanitize_text_field( wp_unslash( $_GET['code'] ) ) );
 		$access_token = $client->getAccessToken();
@@ -123,7 +122,7 @@ function oauth_revoke() {
 	$client = get_google_client();
 	$client->revokeToken();
 
-	if ( get_option( 'sgdd_access_token' ) ) {
+	if ( false !== get_option( 'sgdd_access_token' ) ) {
 		delete_option( 'sgdd_access_token' );
 	}
 

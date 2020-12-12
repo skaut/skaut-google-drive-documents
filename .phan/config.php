@@ -21,11 +21,11 @@ return array(
 	'directory_list'                            => array(
 		'src',
 		'.phan',
-		'dist/bundled/vendor',
+		'dist/includes/vendor',
 		'vendor/skaut/phan-wordpress-stubs/stubs',
 	),
 	'exclude_analysis_directory_list'           => array(
-		'dist/bundled/vendor/',
+		'dist/includes/vendor/',
 		'vendor/skaut/phan-wordpress-stubs/stubs',
 	),
 	'plugins'                                   => array(

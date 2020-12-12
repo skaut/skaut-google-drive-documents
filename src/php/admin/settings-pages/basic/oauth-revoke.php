@@ -37,5 +37,5 @@ function add_settings() {
  */
 function display() {
 	settings_errors();
-	echo '<a class="button button-primary" href="' . esc_url_raw( wp_nonce_url( admin_url( 'admin.php?page=sgdd_basic&action=oauth_revoke' ) ), 'oauth_revoke' ) . '">' . esc_html__( 'Revoke Permission', 'skaut-google-drive-documents' ) . '</a>';
+	echo '<a class="button button-primary" href="' . esc_url_raw( wp_nonce_url( admin_url( 'admin.php?page=sgdd_basic&action=oauth_revoke' ) ) ) . '">' . esc_html__( 'Revoke Permission', 'skaut-google-drive-documents' ) . '</a>';
 }

@@ -40,11 +40,11 @@ class PathField extends SettingField {
 	 */
 	public function sanitize( $value ) {
 		if ( is_string( $value ) ) {
-			$value = json_decode( $value, true );
+			return intval( $value );
 		}
 
 		if ( null === $value ) {
-			$value = $this->default_value;
+			return $this->default_value;
 		}
 
 		return $value;

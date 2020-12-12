@@ -46,8 +46,7 @@ class SelectField extends SettingField {
 	 * Display field for updating the option
 	 */
 	public function display() {
-		$display = '';
-		$inputs;
+		$inputs = array();
 
 		// Folder view type.
 		if ( 'sgdd_folder_type' === $this->id ) {
@@ -65,8 +64,11 @@ class SelectField extends SettingField {
 			);
 		}
 
+		$first = true;
 		foreach ( $inputs as &$input ) {
-			if ( '' !== $display ) {
+			if ( $first ) {
+				$first = false;
+			} else {
 				echo( '<br>' );
 			}
 
