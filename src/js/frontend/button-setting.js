@@ -1,5 +1,6 @@
 'use strict';
 
+// eslint-disable-next-line no-redeclare
 const SgddButtonSetting = function ( props ) {
 	this.props = props;
 	this.name = props.name;

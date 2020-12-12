@@ -18,5 +18,12 @@
 		"camelcase": "off",
 		"no-warning-comments": "warn",
 		"strict": ["error", "global"]
+	},
+	"globals": {
+		"jQuery": "readonly",
+		"SgddButtonSetting": "readonly",
+		"SgddIntegerSetting": "readonly",
+		"SgddSelectSetting": "readonly",
+		"SgddStringSetting": "readonly"
 	}
 }

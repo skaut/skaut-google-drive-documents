@@ -1,5 +1,6 @@
 'use strict';
 
+// eslint-disable-next-line no-redeclare
 const SgddIntegerSetting = function ( attributes ) {
 	SgddSettingsBase.call( this, attributes ); //eslint-disable-line no-undef
 };

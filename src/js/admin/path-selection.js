@@ -1,6 +1,7 @@
-( function ( $ ) {
-	'use strict';
+'use strict';
+/* global sgddRootPathLocalize */
 
+( function ( $ ) {
 	function showDir( path ) {
 		/* If path is not initialized */
 		if ( ! ( path instanceof Array ) ) {
