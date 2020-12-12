@@ -22,7 +22,7 @@ class IntegerField extends SettingField {
 	public function register() {
 		register_setting(
 			$this->page,
-			$this->id,
+			$this->setting_id,
 			array(
 				'type'              => 'integer',
 				'sanitize_callback' => array( $this, 'sanitize' ),
@@ -49,6 +49,6 @@ class IntegerField extends SettingField {
 	 * Display field for updating the option
 	 */
 	public function display() {
-		echo "<input type='text' name='" . esc_attr( $this->id ) . "' value='" . esc_attr( get_option( $this->id, $this->default_value ) ) . "' class='regular-text'>";
+		echo "<input type='text' name='" . esc_attr( $this->setting_id ) . "' value='" . esc_attr( get_option( $this->setting_id, $this->default_value ) ) . "' class='regular-text'>";
 	}
 }

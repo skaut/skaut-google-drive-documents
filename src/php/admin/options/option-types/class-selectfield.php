@@ -22,7 +22,7 @@ class SelectField extends SettingField {
 	public function register() {
 		register_setting(
 			$this->page,
-			$this->id,
+			$this->setting_id,
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => array( $this, 'sanitize' ),
@@ -49,12 +49,12 @@ class SelectField extends SettingField {
 		$inputs = array();
 
 		// Folder view type.
-		if ( 'sgdd_folder_type' === $this->id ) {
+		if ( 'sgdd_folder_type' === $this->setting_id ) {
 			$inputs = array(
 				array( 'list', __( 'List', 'skaut-google-drive-documents' ) ),
 				array( 'grid', __( 'Grid', 'skaut-google-drive-documents' ) ),
 			);
-		} elseif ( 'sgdd_order_by' === $this->id ) {
+		} elseif ( 'sgdd_order_by' === $this->setting_id ) {
 			// Order files by.
 			$inputs = array(
 				array( 'name_asc', __( 'Name (ascending)', 'skaut-google-drive-documents' ) ),
@@ -72,8 +72,8 @@ class SelectField extends SettingField {
 				echo( '<br>' );
 			}
 
-			echo( '<label for="sgdd-' . esc_attr( $this->id ) . '">
-					<input type="radio" id="sgdd-' . esc_attr( $this->id . '-' . $input[0] ) . '" name="' . esc_attr( $this->id ) . '" value="' . esc_attr( $input[0] ) . '" ' . ( $this->get() === $input[0] ? 'checked' : '' ) . '> ' . esc_html( $input[1] ) .
+			echo( '<label for="sgdd-' . esc_attr( $this->setting_id ) . '">
+					<input type="radio" id="sgdd-' . esc_attr( $this->setting_id . '-' . $input[0] ) . '" name="' . esc_attr( $this->setting_id ) . '" value="' . esc_attr( $input[0] ) . '" ' . ( $this->get() === $input[0] ? 'checked' : '' ) . '> ' . esc_html( $input[1] ) .
 				'</label>' );
 		}
 	}
