@@ -1,5 +1,6 @@
 'use strict';
 
+// eslint-disable-next-line no-redeclare
 const SgddInspector = function ( attributes ) {
 	this.block = attributes.block;
 };

@@ -2,10 +2,10 @@
 
 // eslint-disable-next-line no-redeclare
 const SgddStringSetting = function ( attributes ) {
-	SgddSettingsBase.call( this, attributes ); //eslint-disable-line no-undef
+	SgddSettingsBase.call( this, attributes );
 };
 
-SgddStringSetting.prototype = Object.create( SgddSettingsBase.prototype ); //eslint-disable-line no-undef
+SgddStringSetting.prototype = Object.create( SgddSettingsBase.prototype );
 SgddStringSetting.prototype.renderInput = function () {
 	const that = this;
 	const value = this.block.getAttribute( this.name );
@@ -18,7 +18,7 @@ SgddStringSetting.prototype.renderInput = function () {
 		onChange( e ) {
 			that.change( e );
 		},
-		placeholder: sgddBlockJsLocalize[ this.name ][ 1 ], //eslint-disable-line no-undef
+		placeholder: sgddBlockJsLocalize[ this.name ][ 1 ],
 		type: 'text',
 		value: this.state.value,
 	} );

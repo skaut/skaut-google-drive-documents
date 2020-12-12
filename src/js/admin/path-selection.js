@@ -12,12 +12,11 @@
 		$( '.loadingCircle' ).fadeIn( 'slow' );
 
 		$.ajax( {
-			url: sgddRootPathLocalize.ajaxUrl, //eslint-disable-line no-undef
+			url: sgddRootPathLocalize.ajaxUrl,
 			type: 'GET',
 			data: {
 				action: 'listDrive',
 				path,
-				_ajax_nonce: sgddRootPathLocalize.nonce, // eslint-disable-line camelcase, no-undef
 			},
 			success( response ) {
 				let html = '';
@@ -33,7 +32,7 @@
 					html +=
 						'<a data-id="">' +
 						sgddRootPathLocalize.driveList +
-						'</a> > '; //eslint-disable-line no-undef
+						'</a> > ';
 					for ( i = 0; i < response.pathNames.length; i++ ) {
 						if ( 0 < i ) {
 							html += ' > ';
@@ -49,7 +48,7 @@
 					html +=
 						'<a data-id="">' +
 						sgddRootPathLocalize.driveList +
-						'</a>'; //eslint-disable-line no-undef
+						'</a>';
 					$( '#submit' ).attr( 'disabled', 'disabled' );
 				}
 				$( '.tablePath' ).html( html );
@@ -131,5 +130,5 @@
 		showDir( path );
 	}
 
-	showDir( sgddRootPathLocalize.path ); //eslint-disable-line no-undef
+	showDir( sgddRootPathLocalize.path );
 } )( jQuery );

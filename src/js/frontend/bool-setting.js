@@ -1,10 +1,10 @@
 'use strict';
 
 const SgddBoolSetting = function ( attributes ) {
-	SgddSettingsBase.call( this, attributes ); //eslint-disable-line no-undef
+	SgddSettingsBase.call( this, attributes );
 };
 
-SgddBoolSetting.prototype = Object.create( SgddSettingsBase.prototype ); //eslint-disable-line no-undef
+SgddBoolSetting.prototype = Object.create( SgddSettingsBase.prototype );
 SgddBoolSetting.prototype.renderInput = function () {
 	const that = this;
 	const value = this.block.getAttribute( this.name );

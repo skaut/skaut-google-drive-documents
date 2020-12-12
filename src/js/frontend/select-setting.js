@@ -2,9 +2,9 @@
 
 // eslint-disable-next-line no-redeclare
 const SgddSelectSetting = function ( attributes ) {
-	SgddSettingsBase.call( this, attributes ); //eslint-disable-line no-undef
+	SgddSettingsBase.call( this, attributes );
 };
-SgddSelectSetting.prototype = Object.create( SgddSettingsBase.prototype ); //eslint-disable-line no-undef
+SgddSelectSetting.prototype = Object.create( SgddSettingsBase.prototype );
 SgddSelectSetting.prototype.renderInput = function () {
 	const that = this;
 	const value = this.block.getAttribute( this.name );
@@ -14,17 +14,17 @@ SgddSelectSetting.prototype.renderInput = function () {
 	switch ( this.name ) {
 		case 'orderBy':
 			inputs = [
-				[ 'name_asc', sgddBlockJsLocalize.name_asc ], //eslint-disable-line no-undef
-				[ 'name_dsc', sgddBlockJsLocalize.name_dsc ], //eslint-disable-line no-undef
-				[ 'time_asc', sgddBlockJsLocalize.time_asc ], //eslint-disable-line no-undef
-				[ 'time_dsc', sgddBlockJsLocalize.time_dsc ], //eslint-disable-line no-undef
+				[ 'name_asc', sgddBlockJsLocalize.name_asc ],
+				[ 'name_dsc', sgddBlockJsLocalize.name_dsc ],
+				[ 'time_asc', sgddBlockJsLocalize.time_asc ],
+				[ 'time_dsc', sgddBlockJsLocalize.time_dsc ],
 			];
 			break;
 
 		case 'folderType':
 			inputs = [
-				[ 'list', sgddBlockJsLocalize.list ], //eslint-disable-line no-undef
-				[ 'grid', sgddBlockJsLocalize.grid ], //eslint-disable-line no-undef
+				[ 'list', sgddBlockJsLocalize.list ],
+				[ 'grid', sgddBlockJsLocalize.grid ],
 			];
 			break;
 	}

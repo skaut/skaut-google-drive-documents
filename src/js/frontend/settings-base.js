@@ -1,12 +1,13 @@
 'use strict';
 
+// eslint-disable-next-line no-redeclare
 const SgddSettingsBase = function ( attributes ) {
 	this.block = attributes.block;
 	this.name = attributes.name;
 
 	const value =
 		undefined === this.block.getAttribute( this.name )
-			? sgddBlockJsLocalize[ this.name ][ 1 ] //eslint-disable-line no-undef
+			? sgddBlockJsLocalize[ this.name ][ 1 ]
 			: this.block.getAttribute( this.name );
 
 	this.state = { value };
@@ -30,10 +31,7 @@ SgddSettingsBase.prototype.render = function () {
 		el(
 			'span',
 			{ className: 'sgdd-block-settings-description', key: 'desc' },
-			[
-				sgddBlockJsLocalize[ this.name ][ 0 ], //eslint-disable-line no-undef
-				':',
-			]
+			[ sgddBlockJsLocalize[ this.name ][ 0 ], ':' ]
 		),
 		this.renderInput(),
 	] );
@@ -53,6 +51,6 @@ SgddSettingsBase.prototype.change = function ( e ) {
 	this.setState( { value } );
 	this.block.setAttribute(
 		this.name,
-		undefined === value ? sgddBlockLocalize[ this.name ][ 1 ] : value //eslint-disable-line no-undef
+		undefined === value ? sgddBlockJsLocalize[ this.name ][ 1 ] : value
 	);
 };

@@ -3,8 +3,8 @@
 const registerBlockType = wp.blocks.registerBlockType;
 
 registerBlockType( 'skaut-google-drive-documents/block', {
-	title: sgddBlockJsLocalize.blockName, //eslint-disable-line no-undef
-	description: sgddBlockJsLocalize.blockDescription, //eslint-disable-line no-undef
+	title: sgddBlockJsLocalize.blockName,
+	description: sgddBlockJsLocalize.blockDescription,
 	icon: 'welcome-add-page',
 	category: 'common',
 	keywords: [ 'docs', 'documents', 'drive' ],
@@ -52,7 +52,7 @@ registerBlockType( 'skaut-google-drive-documents/block', {
 		},
 	},
 
-	edit: SgddFileSelection, //eslint-disable-line no-undef
+	edit: SgddFileSelection,
 	save: renderFrontend,
 } );
 
