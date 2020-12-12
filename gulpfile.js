@@ -28,19 +28,19 @@ gulp.task( 'build:deps:composer:apiclient', function () {
 		gulp
 			.src(
 				[
-					'vendor/google/apiclient/src/Google/AccessToken/Revoke.php',
-					'vendor/google/apiclient/src/Google/AuthHandler/AuthHandlerFactory.php',
-					'vendor/google/apiclient/src/Google/AuthHandler/Guzzle6AuthHandler.php',
-					'vendor/google/apiclient/src/Google/AuthHandler/Guzzle7AuthHandler.php',
-					'vendor/google/apiclient/src/Google/Client.php',
-					'vendor/google/apiclient/src/Google/Collection.php',
-					'vendor/google/apiclient/src/Google/Exception.php',
-					'vendor/google/apiclient/src/Google/Http/Batch.php',
-					'vendor/google/apiclient/src/Google/Http/REST.php',
-					'vendor/google/apiclient/src/Google/Service.php',
-					'vendor/google/apiclient/src/Google/Service/Exception.php',
-					'vendor/google/apiclient/src/Google/Task/Runner.php',
-					'vendor/google/apiclient/src/Google/Utils/*',
+					'vendor/google/apiclient/src/AccessToken/Revoke.php',
+					'vendor/google/apiclient/src/AuthHandler/AuthHandlerFactory.php',
+					'vendor/google/apiclient/src/AuthHandler/Guzzle6AuthHandler.php',
+					'vendor/google/apiclient/src/AuthHandler/Guzzle7AuthHandler.php',
+					'vendor/google/apiclient/src/Client.php',
+					'vendor/google/apiclient/src/Collection.php',
+					'vendor/google/apiclient/src/Exception.php',
+					'vendor/google/apiclient/src/Http/Batch.php',
+					'vendor/google/apiclient/src/Http/REST.php',
+					'vendor/google/apiclient/src/Service.php',
+					'vendor/google/apiclient/src/Service/Exception.php',
+					'vendor/google/apiclient/src/Task/Runner.php',
+					'vendor/google/apiclient/src/Utils/*',
 					'!**/autoload.php',
 					'!**/README*',
 				],
@@ -65,7 +65,7 @@ gulp.task( 'build:deps:composer:apiclient', function () {
 			.pipe( replace( / Exception/g, ' \\Exception' ) )
 			.pipe( replace( / LogicException/g, ' \\LogicException' ) ),
 		gulp
-			.src( [ 'vendor/google/apiclient/src/Google/Model.php' ], {
+			.src( [ 'vendor/google/apiclient/src/Model.php' ], {
 				base: 'vendor/',
 			} )
 			.pipe( replace( /^<\?php/, '<?php\nnamespace Sgdd\\Vendor;' ) )
@@ -86,12 +86,9 @@ gulp.task( 'build:deps:composer:apiclient', function () {
 				)
 			),
 		gulp
-			.src(
-				[ 'vendor/google/apiclient/src/Google/Service/Resource.php' ],
-				{
-					base: 'vendor/',
-				}
-			)
+			.src( [ 'vendor/google/apiclient/src/Service/Resource.php' ], {
+				base: 'vendor/',
+			} )
 			.pipe( replace( /^<\?php/, '<?php\nnamespace Sgdd\\Vendor;' ) )
 			.pipe( replace( /\nuse /g, '\nuse Sgdd\\Vendor\\' ) )
 			.pipe(
