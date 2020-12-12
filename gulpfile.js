@@ -28,51 +28,75 @@ gulp.task( 'build:deps:composer:apiclient', function () {
 		gulp
 			.src(
 				[
-					'vendor/google/apiclient/src/Google/AccessToken/Revoke.php',
-					'vendor/google/apiclient/src/Google/AuthHandler/AuthHandlerFactory.php',
-					'vendor/google/apiclient/src/Google/AuthHandler/Guzzle6AuthHandler.php',
-					'vendor/google/apiclient/src/Google/AuthHandler/Guzzle7AuthHandler.php',
-					'vendor/google/apiclient/src/Google/Client.php',
-					'vendor/google/apiclient/src/Google/Collection.php',
-					'vendor/google/apiclient/src/Google/Exception.php',
-					'vendor/google/apiclient/src/Google/Http/Batch.php',
-					'vendor/google/apiclient/src/Google/Http/REST.php',
-					'vendor/google/apiclient/src/Google/Service.php',
-					'vendor/google/apiclient/src/Google/Service/Exception.php',
-					'vendor/google/apiclient/src/Google/Task/Runner.php',
-					'vendor/google/apiclient/src/Google/Utils/*',
+					'vendor/google/apiclient/src/AccessToken/Revoke.php',
+					'vendor/google/apiclient/src/AccessToken/Verify.php',
+					'vendor/google/apiclient/src/AuthHandler/AuthHandlerFactory.php',
+					'vendor/google/apiclient/src/AuthHandler/Guzzle5AuthHandler.php',
+					'vendor/google/apiclient/src/AuthHandler/Guzzle6AuthHandler.php',
+					'vendor/google/apiclient/src/AuthHandler/Guzzle7AuthHandler.php',
+					'vendor/google/apiclient/src/Client.php',
+					'vendor/google/apiclient/src/Collection.php',
+					'vendor/google/apiclient/src/Exception.php',
+					'vendor/google/apiclient/src/Http/Batch.php',
+					'vendor/google/apiclient/src/Http/MediaFileUpload.php',
+					'vendor/google/apiclient/src/Http/REST.php',
+					'vendor/google/apiclient/src/Model.php',
+					'vendor/google/apiclient/src/Service.php',
+					'vendor/google/apiclient/src/Service/Exception.php',
+					'vendor/google/apiclient/src/Service/Resource.php',
+					'vendor/google/apiclient/src/Task/Exception.php',
+					'vendor/google/apiclient/src/Task/Composer.php',
+					'vendor/google/apiclient/src/Task/Retryable.php',
+					'vendor/google/apiclient/src/Task/Runner.php',
+					'vendor/google/apiclient/src/Utils/*',
 					'!**/autoload.php',
 					'!**/README*',
 				],
 				{ base: 'vendor/' }
 			)
-			.pipe( replace( /^<\?php/, '<?php\nnamespace Sgdd\\Vendor;' ) )
-			.pipe( replace( /\nuse /g, '\nuse Sgdd\\Vendor\\' ) )
 			.pipe(
 				replace(
-					/class_exists\('(?!\\)/g,
-					"class_exists('\\\\Sgdd\\\\Vendor\\\\"
+					/\nnamespace Google/,
+					'\nnamespace Sgdd\\Vendor\\Google'
 				)
 			)
 			.pipe(
 				replace(
-					/defined\('\\GuzzleHttp/g,
+					/\nuse BadMethodCallException/g,
+					'\nuse \\BadMethodCallException'
+				)
+			)
+			.pipe(
+				replace( /\nuse DomainException/g, '\nuse \\DomainException' )
+			)
+			.pipe(
+				replace(
+					/\nuse InvalidArgumentException/g,
+					'\nuse \\InvalidArgumentException'
+				)
+			)
+			.pipe(
+				replace( /\nuse LogicException/g, '\nuse \\LogicException' )
+			)
+			.pipe( replace( /\nuse Exception/g, '\nuse \\Exception' ) )
+			.pipe( replace( /\nuse TypeError/g, '\nuse \\TypeError' ) )
+			.pipe(
+				replace( /\nuse ReflectionObject/g, '\nuse \\ReflectionObject' )
+			)
+			.pipe(
+				replace(
+					/\nuse ReflectionProperty/g,
+					'\nuse \\ReflectionProperty'
+				)
+			)
+			.pipe( replace( /\nuse stdClass/g, '\nuse \\stdClass' ) )
+			.pipe( replace( /\nuse ([^\\])/g, '\nuse Sgdd\\Vendor\\$1' ) )
+			.pipe(
+				replace(
+					/defined\('\\?GuzzleHttp/g,
 					"defined('\\Sgdd\\Vendor\\GuzzleHttp"
 				)
 			)
-			.pipe( replace( / Iterator/g, ' \\Iterator' ) )
-			.pipe( replace( / Countable/g, ' \\Countable' ) )
-			.pipe( replace( / Exception/g, ' \\Exception' ) )
-			.pipe( replace( / LogicException/g, ' \\LogicException' ) ),
-		gulp
-			.src( [ 'vendor/google/apiclient/src/Google/Model.php' ], {
-				base: 'vendor/',
-			} )
-			.pipe( replace( /^<\?php/, '<?php\nnamespace Sgdd\\Vendor;' ) )
-			.pipe( replace( / ArrayAccess/g, ' \\ArrayAccess' ) )
-			.pipe( replace( 'stdClass', '\\stdClass' ) )
-			.pipe( replace( 'ReflectionObject', '\\ReflectionObject' ) )
-			.pipe( replace( 'ReflectionProperty', '\\ReflectionProperty' ) )
 			.pipe(
 				replace(
 					'class_exists($this->$keyType)',
@@ -84,20 +108,33 @@ gulp.task( 'build:deps:composer:apiclient', function () {
 					'return $this->$keyType;',
 					"return '\\\\Sgdd\\\\Vendor\\\\' . $this->$keyType;"
 				)
-			),
-		gulp
-			.src(
-				[ 'vendor/google/apiclient/src/Google/Service/Resource.php' ],
-				{
-					base: 'vendor/',
-				}
 			)
-			.pipe( replace( /^<\?php/, '<?php\nnamespace Sgdd\\Vendor;' ) )
-			.pipe( replace( /\nuse /g, '\nuse Sgdd\\Vendor\\' ) )
 			.pipe(
 				replace(
 					'public function call($name, $arguments, $expectedClass = null)\n  {',
 					"public function call($name, $arguments, $expectedClass = null)\n  {\n    $expectedClass = '\\\\Sgdd\\\\Vendor\\\\' . $expectedClass;"
+				)
+			),
+		gulp
+			.src( [ 'vendor/google/apiclient/src/aliases.php' ], {
+				base: 'vendor/',
+			} )
+			.pipe(
+				replace(
+					/\n {4}'Google\\\\([^']*)' => 'Google_([^']*)',/g,
+					"\n    'Sgdd\\\\Vendor\\\\Google\\\\$1' => 'Sgdd\\\\Vendor\\\\Google_$2',"
+				)
+			)
+			.pipe(
+				replace(
+					/\nclass Google_([^ ]*) extends \\Google\\([^ ]*)/g,
+					'\nclass Google_$1 extends \\Sgdd\\Vendor\\Google\\$2'
+				)
+			)
+			.pipe(
+				replace(
+					/\nclass Google_Task_Composer extends \\Sgdd\\Vendor\\Google\\Task\\Composer\n{\n}/g,
+					'\n'
 				)
 			)
 	).pipe( gulp.dest( 'dist/includes/vendor/' ) );

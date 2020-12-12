@@ -8,13 +8,14 @@
  */
 
 // Do not change the order of these, they might break.
-
 require_once __DIR__ . '/vendor/psr/http-message/src/UriInterface.php';
 require_once __DIR__ . '/vendor/psr/http-message/src/MessageInterface.php';
 require_once __DIR__ . '/vendor/psr/http-message/src/RequestInterface.php';
 require_once __DIR__ . '/vendor/psr/http-message/src/StreamInterface.php';
 require_once __DIR__ . '/vendor/psr/http-message/src/ResponseInterface.php';
+
 require_once __DIR__ . '/vendor/psr/log/Psr/Log/LoggerInterface.php';
+
 require_once __DIR__ . '/vendor/psr/cache/src/CacheItemPoolInterface.php';
 require_once __DIR__ . '/vendor/psr/cache/src/CacheItemInterface.php';
 
@@ -25,6 +26,7 @@ require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/Handler/CurlFactory.php';
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/Handler/CurlMultiHandler.php';
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/Handler/Proxy.php';
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/Handler/EasyHandle.php';
+
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/functions.php';
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/PrepareBodyMiddleware.php';
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/RequestOptions.php';
@@ -42,8 +44,8 @@ require_once __DIR__ . '/vendor/guzzlehttp/psr7/src/Query.php';
 require_once __DIR__ . '/vendor/guzzlehttp/psr7/src/Request.php';
 require_once __DIR__ . '/vendor/guzzlehttp/psr7/src/Uri.php';
 require_once __DIR__ . '/vendor/guzzlehttp/psr7/src/UriResolver.php';
-require_once __DIR__ . '/vendor/guzzlehttp/psr7/src/Response.php';
 require_once __DIR__ . '/vendor/guzzlehttp/psr7/src/Utils.php';
+require_once __DIR__ . '/vendor/guzzlehttp/psr7/src/Response.php';
 
 require_once __DIR__ . '/vendor/guzzlehttp/promises/src/functions.php';
 require_once __DIR__ . '/vendor/guzzlehttp/promises/src/Create.php';
@@ -68,34 +70,50 @@ require_once __DIR__ . '/vendor/monolog/monolog/src/Monolog/Formatter/LineFormat
 
 require_once __DIR__ . '/vendor/google/auth/src/Cache/MemoryCacheItemPool.php';
 require_once __DIR__ . '/vendor/google/auth/src/Cache/Item.php';
+
 require_once __DIR__ . '/vendor/google/auth/src/HttpHandler/Guzzle6HttpHandler.php';
-require_once __DIR__ . '/vendor/google/auth/src/HttpHandler/Guzzle7HttpHandler.php';
 require_once __DIR__ . '/vendor/google/auth/src/HttpHandler/HttpHandlerFactory.php';
+
 require_once __DIR__ . '/vendor/google/auth/src/CacheTrait.php';
 require_once __DIR__ . '/vendor/google/auth/src/FetchAuthTokenInterface.php';
-require_once __DIR__ . '/vendor/google/auth/src/OAuth2.php';
 require_once __DIR__ . '/vendor/google/auth/src/Middleware/ScopedAccessTokenMiddleware.php';
 
-require_once __DIR__ . '/vendor/google/apiclient/src/Google/Http/Batch.php';
-require_once __DIR__ . '/vendor/google/apiclient/src/Google/Http/REST.php';
-require_once __DIR__ . '/vendor/google/apiclient/src/Google/Task/Runner.php';
-require_once __DIR__ . '/vendor/google/apiclient/src/Google/AccessToken/Revoke.php';
-require_once __DIR__ . '/vendor/google/apiclient/src/Google/AuthHandler/AuthHandlerFactory.php';
-require_once __DIR__ . '/vendor/google/apiclient/src/Google/AuthHandler/Guzzle6AuthHandler.php';
-require_once __DIR__ . '/vendor/google/apiclient/src/Google/AuthHandler/Guzzle7AuthHandler.php';
-require_once __DIR__ . '/vendor/google/apiclient/src/Google/Exception.php';
-require_once __DIR__ . '/vendor/google/apiclient/src/Google/Service/Resource.php';
-require_once __DIR__ . '/vendor/google/apiclient/src/Google/Service/Exception.php';
-require_once __DIR__ . '/vendor/google/apiclient/src/Google/Utils/UriTemplate.php';
-require_once __DIR__ . '/vendor/google/apiclient/src/Google/Client.php';
-require_once __DIR__ . '/vendor/google/apiclient/src/Google/Model.php';
-require_once __DIR__ . '/vendor/google/apiclient/src/Google/Collection.php';
-require_once __DIR__ . '/vendor/google/apiclient/src/Google/Service.php';
+require_once __DIR__ . '/vendor/google/auth/src/OAuth2.php';
+
+require_once __DIR__ . '/vendor/google/apiclient/src/Exception.php';
+
+require_once __DIR__ . '/vendor/google/apiclient/src/Http/Batch.php';
+require_once __DIR__ . '/vendor/google/apiclient/src/Http/MediaFileUpload.php';
+require_once __DIR__ . '/vendor/google/apiclient/src/Http/REST.php';
+
+require_once __DIR__ . '/vendor/google/apiclient/src/Task/Exception.php';
+require_once __DIR__ . '/vendor/google/apiclient/src/Task/Composer.php';
+require_once __DIR__ . '/vendor/google/apiclient/src/Task/Retryable.php';
+require_once __DIR__ . '/vendor/google/apiclient/src/Task/Runner.php';
+
+require_once __DIR__ . '/vendor/google/apiclient/src/AccessToken/Revoke.php';
+require_once __DIR__ . '/vendor/google/apiclient/src/AccessToken/Verify.php';
+
+require_once __DIR__ . '/vendor/google/apiclient/src/AuthHandler/AuthHandlerFactory.php';
+require_once __DIR__ . '/vendor/google/apiclient/src/AuthHandler/Guzzle5AuthHandler.php';
+require_once __DIR__ . '/vendor/google/apiclient/src/AuthHandler/Guzzle6AuthHandler.php';
+require_once __DIR__ . '/vendor/google/apiclient/src/AuthHandler/Guzzle7AuthHandler.php';
+
+require_once __DIR__ . '/vendor/google/apiclient/src/Service/Resource.php';
+require_once __DIR__ . '/vendor/google/apiclient/src/Service/Exception.php';
+
+require_once __DIR__ . '/vendor/google/apiclient/src/Utils/UriTemplate.php';
+
+require_once __DIR__ . '/vendor/google/apiclient/src/Client.php';
+require_once __DIR__ . '/vendor/google/apiclient/src/Model.php';
+require_once __DIR__ . '/vendor/google/apiclient/src/Collection.php';
+require_once __DIR__ . '/vendor/google/apiclient/src/Service.php';
+require_once __DIR__ . '/vendor/google/apiclient/src/aliases.php';
 
 require_once __DIR__ . '/vendor/google/apiclient-services/src/Google/Service/Drive/Drive.php';
 require_once __DIR__ . '/vendor/google/apiclient-services/src/Google/Service/Drive/DriveList.php';
-require_once __DIR__ . '/vendor/google/apiclient-services/src/Google/Service/Drive/DriveFile.php';
 require_once __DIR__ . '/vendor/google/apiclient-services/src/Google/Service/Drive/DriveFileImageMediaMetadata.php';
+require_once __DIR__ . '/vendor/google/apiclient-services/src/Google/Service/Drive/DriveFile.php';
 require_once __DIR__ . '/vendor/google/apiclient-services/src/Google/Service/Drive/FileList.php';
 require_once __DIR__ . '/vendor/google/apiclient-services/src/Google/Service/Drive/Permission.php';
 require_once __DIR__ . '/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/About.php';
@@ -108,4 +126,5 @@ require_once __DIR__ . '/vendor/google/apiclient-services/src/Google/Service/Dri
 require_once __DIR__ . '/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Replies.php';
 require_once __DIR__ . '/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Revisions.php';
 require_once __DIR__ . '/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Teamdrives.php';
+
 require_once __DIR__ . '/vendor/google/apiclient-services/src/Google/Service/Drive.php';

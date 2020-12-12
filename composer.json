@@ -1,9 +1,9 @@
 {
     "require": {
 		"php": "^7.0 || ^8.0",
-		"google/apiclient": "^2.7 <2.8",
+        "google/apiclient": "^2.8.3",
 		"guzzlehttp/guzzle": "^6.5.5",
-		"monolog/monolog": "^1.25 <2.0",
+        "monolog/monolog": "^1.25",
 		"symfony/polyfill-intl-idn": "^1.19.0 <1.20",
 		"symfony/polyfill-intl-normalizer": "^1.19.0 <1.20",
 		"symfony/polyfill-php70": "^1.19.0 <1.20",
