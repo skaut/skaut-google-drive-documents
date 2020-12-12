@@ -29,18 +29,24 @@ gulp.task( 'build:deps:composer:apiclient', function () {
 			.src(
 				[
 					'vendor/google/apiclient/src/AccessToken/Revoke.php',
+					'vendor/google/apiclient/src/AccessToken/Verify.php',
 					'vendor/google/apiclient/src/AuthHandler/AuthHandlerFactory.php',
+					'vendor/google/apiclient/src/AuthHandler/Guzzle5AuthHandler.php',
 					'vendor/google/apiclient/src/AuthHandler/Guzzle6AuthHandler.php',
 					'vendor/google/apiclient/src/AuthHandler/Guzzle7AuthHandler.php',
 					'vendor/google/apiclient/src/Client.php',
 					'vendor/google/apiclient/src/Collection.php',
 					'vendor/google/apiclient/src/Exception.php',
 					'vendor/google/apiclient/src/Http/Batch.php',
+					'vendor/google/apiclient/src/Http/MediaFileUpload.php',
 					'vendor/google/apiclient/src/Http/REST.php',
 					'vendor/google/apiclient/src/Model.php',
 					'vendor/google/apiclient/src/Service.php',
 					'vendor/google/apiclient/src/Service/Exception.php',
 					'vendor/google/apiclient/src/Service/Resource.php',
+					'vendor/google/apiclient/src/Task/Exception.php',
+					'vendor/google/apiclient/src/Task/Composer.php',
+					'vendor/google/apiclient/src/Task/Retryable.php',
 					'vendor/google/apiclient/src/Task/Runner.php',
 					'vendor/google/apiclient/src/Utils/*',
 					'!**/autoload.php',
@@ -107,6 +113,28 @@ gulp.task( 'build:deps:composer:apiclient', function () {
 				replace(
 					'public function call($name, $arguments, $expectedClass = null)\n  {',
 					"public function call($name, $arguments, $expectedClass = null)\n  {\n    $expectedClass = '\\\\Sgdd\\\\Vendor\\\\' . $expectedClass;"
+				)
+			),
+		gulp
+			.src( [ 'vendor/google/apiclient/src/aliases.php' ], {
+				base: 'vendor/',
+			} )
+			.pipe(
+				replace(
+					/\n {4}'Google\\\\([^']*)' => 'Google_([^']*)',/g,
+					"\n    'Sgdd\\\\Vendor\\\\Google\\\\$1' => 'Sgdd\\\\Vendor\\\\Google_$2',"
+				)
+			)
+			.pipe(
+				replace(
+					/\nclass Google_([^ ]*) extends \\Google\\([^ ]*)/g,
+					'\nclass Google_$1 extends \\Sgdd\\Vendor\\Google\\$2'
+				)
+			)
+			.pipe(
+				replace(
+					/\nclass Google_Task_Composer extends \\Sgdd\\Vendor\\Google\\Task\\Composer\n{\n}/g,
+					'\n'
 				)
 			)
 	).pipe( gulp.dest( 'dist/includes/vendor/' ) );
