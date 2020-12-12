@@ -22,11 +22,11 @@ if ( ! is_admin() ) {
 function get_google_client() {
 	$client = new \Sgdd\Vendor\Google_Client();
 	$client->setAuthConfig(
-		[
+		array(
 			'client_id'     => \Sgdd\Admin\Options\Options::$client_id->get(),
 			'client_secret' => \Sgdd\Admin\Options\Options::$client_secret->get(),
-			'redirect_uris' => [ esc_url_raw( admin_url( 'admin.php?page=sgdd_basic&action=oauth_redirect' ) ) ],
-		]
+			'redirect_uris' => array( esc_url_raw( admin_url( 'admin.php?page=sgdd_basic&action=oauth_redirect' ) ) ),
+		)
 	);
 	$client->setAccessType( 'offline' );
 	$client->setIncludeGrantedScopes( true );
@@ -47,7 +47,7 @@ function get_drive_client() {
 	$client       = \Sgdd\Admin\GoogleAPILib\get_google_client();
 	$access_token = get_option( 'sgdd_access_token' );
 
-	if ( ! $access_token ) {
+	if ( false === $access_token ) {
 		throw new \Exception( __( 'Not authorized!', 'skaut-google-drive-documents' ) );
 	}
 
@@ -82,17 +82,16 @@ function oauth_redirect() {
 		add_settings_error( 'general', 'oauth_failed', esc_html__( 'Google API hasn\'t returned an authentication code. Please try again.', 'skaut-google-drive-documents' ), 'error' );
 	}
 
-	if ( count( get_settings_errors() ) === 0 && ! get_option( 'sgdd_access_token' ) ) {
+	if ( count( get_settings_errors() ) === 0 && false === get_option( 'sgdd_access_token' ) ) {
 		$client = get_google_client();
 		// phpcs:ignore
 		$client->authenticate( $_GET['code'] );
 		$access_token = $client->getAccessToken();
 
-		add_option( 'sgdd_access_token', $access_token );
+		update_option( 'sgdd_access_token', $access_token );
 
-		$service = \Sgdd\Admin\GoogleAPILib\get_google_client();
 		// phpcs:ignore WordPress.Security.NonceVerification
-		$client->authenticate( $_GET['code'] );
+		$client->authenticate( sanitize_text_field( wp_unslash( $_GET['code'] ) ) );
 		$access_token = $client->getAccessToken();
 		$drive_client = new \Sgdd\Vendor\Google_Service_Drive( $client );
 		try {
@@ -100,7 +99,7 @@ function oauth_redirect() {
 			update_option( 'sgdd_access_token', $access_token );
 		} catch ( \Sgdd\Vendor\Google_Service_Exception $e ) {
 			if ( 'accessNotConfigured' === $e->getErrors()[0]['reason'] ) {
-				// translators: %s: Link to the Google developers console
+				// translators: %s: Link to the Google developers console.
 				add_settings_error( 'general', 'oauth_failed', sprintf( esc_html__( 'Google Drive API is not enabled. Please enable it at %s and try again after a while.', 'skaut-google-drive-documents' ), '<a href="https://console.developers.google.com/apis/library/drive.googleapis.com" target="_blank">https://console.developers.google.com/apis/library/drive.googleapis.com</a>' ), 'error' );
 			} else {
 				add_settings_error( 'general', 'oauth_failed', esc_html__( 'An unknown error has been encountered:', 'skaut-google-drive-documents' ) . ' ' . $e->getErrors()[0]['message'], 'error' );
@@ -123,7 +122,7 @@ function oauth_revoke() {
 	$client = get_google_client();
 	$client->revokeToken();
 
-	if ( get_option( 'sgdd_access_token' ) ) {
+	if ( false !== get_option( 'sgdd_access_token' ) ) {
 		delete_option( 'sgdd_access_token' );
 	}
 

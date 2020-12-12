@@ -19,22 +19,37 @@
     "url": "git+https://github.com/skaut/skaut-google-drive-documents.git"
   },
   "scripts": {
-	  "build": "gulp build"
+    "build": "gulp build",
+    "lint:css:stylelint": "stylelint src/**/*.css",
+    "lint:css": "run-s -c lint:css:*",
+    "lint:php:phan": "export PHAN_DISABLE_XDEBUG_WARN=1; vendor/bin/phan",
+    "lint:php:phpcs": "vendor/bin/phpcs",
+    "lint:php:phpmd": "vendor/bin/phpmd src text phpmd.xml",
+    "lint:php": "run-s -c lint:php:*",
+    "lint:js:eslint": "eslint src/**/*.js gulpfile.js",
+    "lint:js": "run-s -c lint:js:*",
+    "lint": "run-s -c lint:*"
   },
   "dependencies": {
     "composer": "^4.1.0"
   },
   "devDependencies": {
+    "@wordpress/browserslist-config": "^2.7.0",
     "@wordpress/eslint-plugin": "^7.0.0",
     "eslint": "^7.15.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-compat": "^3.5.1",
     "eslint-plugin-import": "^2.20.1",
     "gulp": "^4.0.2",
-    "gulp-composer": "^0.4.5",
     "gulp-eslint": "^6.0.0",
     "gulp-replace": "^1.0.0",
-    "gulp-shell": "^0.8.0",
-    "merge-stream": "^2.0.0"
-  }
+    "merge-stream": "^2.0.0",
+    "npm-run-all": "^4.1.5",
+    "stylelint": "^13.8.0",
+    "stylelint-config-wordpress": "^17.0.0",
+    "stylelint-no-unsupported-browser-features": "^4.1.4"
+  },
+  "browserslist": [
+    "extends @wordpress/browserslist-config"
+  ]
 }
