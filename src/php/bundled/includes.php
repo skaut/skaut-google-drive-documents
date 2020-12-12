@@ -9,7 +9,6 @@
 
 // Do not change the order of these, they might break.
 
-require_once __DIR__ . '/vendor/psr/http-client/src/ClientInterface.php';
 require_once __DIR__ . '/vendor/psr/http-message/src/UriInterface.php';
 require_once __DIR__ . '/vendor/psr/http-message/src/MessageInterface.php';
 require_once __DIR__ . '/vendor/psr/http-message/src/RequestInterface.php';
@@ -32,7 +31,6 @@ require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/RequestOptions.php';
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/RedirectMiddleware.php';
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/Middleware.php';
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/ClientInterface.php';
-require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/ClientTrait.php';
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/Client.php';
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/HandlerStack.php';
 require_once __DIR__ . '/vendor/guzzlehttp/guzzle/src/Utils.php';
