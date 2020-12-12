@@ -14,7 +14,7 @@ SgddButtonSetting.prototype.render = function () {
 			className: 'sgdd-block-settings-button button button-primary',
 			key: 'permButton',
 			type: 'button',
-			value: sgddBlockJsLocalize[ this.name ], //eslint-disable-line no-undef
+			value: sgddBlockJsLocalize[ this.name ],
 			onClick() {
 				that.ajax();
 			},
@@ -24,14 +24,14 @@ SgddButtonSetting.prototype.render = function () {
 
 SgddButtonSetting.prototype.ajax = function () {
 	jQuery.ajax( {
-		url: sgddBlockJsLocalize.ajaxUrl, //eslint-disable-line no-undef
+		url: sgddBlockJsLocalize.ajaxUrl,
 		type: 'GET',
 		data: {
 			action: 'setPermissions',
 			fileId: this.getAttribute( 'fileId' ),
 			folderId: this.getAttribute( 'folderId' ),
 			folderType: this.getAttribute( 'folderType' ),
-			_ajax_nonce: sgddBlockJsLocalize.noncePerm, // eslint-disable-line camelcase, no-undef
+			_ajax_nonce: sgddBlockJsLocalize.noncePerm,
 		},
 		success() {
 			//handle success

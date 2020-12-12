@@ -21,9 +21,13 @@
 	},
 	"globals": {
 		"jQuery": "readonly",
+		"sgddBlockJsLocalize": "readonly",
 		"SgddButtonSetting": "readonly",
+		"SgddFileSelection": "readonly",
+		"SgddInspector": "readonly",
 		"SgddIntegerSetting": "readonly",
 		"SgddSelectSetting": "readonly",
+		"SgddSettingsBase": "readonly",
 		"SgddStringSetting": "readonly"
 	}
 }
