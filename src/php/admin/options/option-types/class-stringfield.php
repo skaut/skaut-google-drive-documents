@@ -5,6 +5,7 @@
  * @package SGDD
  * @since 1.0.0
  */
+
 namespace Sgdd\Admin\Options\OptionTypes;
 
 require_once __DIR__ . '/class-settingfield.php';
@@ -15,17 +16,28 @@ require_once __DIR__ . '/class-settingfield.php';
  * @see SettingField
  */
 class StringField extends SettingField {
+	/**
+	 * Whether the field is read-only.
+	 *
+	 * @var bool
+	 */
 	private $read_only;
+
+	/**
+	 * Whether the field is selectable.
+	 *
+	 * @var bool
+	 */
 	private $selectable;
 
 	/**
 	 * StringField class constructor.
 	 *
-	 * @param $id An unique name of the option used as key to reference it. Prefix "sgdd_" will be added.
-	 * @param @title Name of the option displayed to user.
-	 * @param $page Setting page in which the option will be displayed. Prefix "sgdd_" will be added.
-	 * @param $section Section within page in which the option will be displayed. Prefix "sgdd_" will be added.
-	 * @param $default_value Default valur of option if user do not specify one.
+	 * @param string $id An unique name of the option used as key to reference it. Prefix "sgdd_" will be added.
+	 * @param string $title Name of the option displayed to user.
+	 * @param string $page Setting page in which the option will be displayed. Prefix "sgdd_" will be added.
+	 * @param string $section Section within page in which the option will be displayed. Prefix "sgdd_" will be added.
+	 * @param string $default_value Default valur of option if user do not specify one.
 	 */
 	public function __construct( $id, $title, $page, $section, $default_value ) {
 		parent::__construct( $id, $title, $page, $section, $default_value );
@@ -51,7 +63,8 @@ class StringField extends SettingField {
 	/**
 	 * Sanitize the input.
 	 *
-	 * @param $value The unsanitized input.
+	 * @param string $value The unsanitized input.
+	 *
 	 * @return int Sanitized value.
 	 */
 	public function sanitize( $value ) {
@@ -61,8 +74,8 @@ class StringField extends SettingField {
 	/**
 	 * Adds option into WordPress and specify if it is read-only and select on click.
 	 *
-	 * @param $read Specify if option will be read-only
-	 * @param $sel Specify if value of option should be selected on click.
+	 * @param bool $read Specify if option will be read-only.
+	 * @param bool $sel Specify if value of option should be selected on click.
 	 */
 	public function add_field( $read = false, $sel = false ) {
 		$this->read_only  = $read;

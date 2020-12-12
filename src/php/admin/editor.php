@@ -40,6 +40,8 @@ function ajax_handler() {
 
 /**
  * Fetch result of folder content and returns to ajax
+ *
+ * @throws \Exception An error occured.
  */
 function file_selection() {
 	check_ajax_referer( 'sgdd_block_js' );
@@ -48,12 +50,12 @@ function file_selection() {
 		throw new \Exception( esc_html__( 'Insufficient role for this action.', 'skaut-google-drive-documents' ) );
 	}
 	if ( ! get_option( 'sgdd_access_token' ) ) {
-		// translators: 1: Start of link to the settings 2: End of link to the settings
+		// translators: 1: Start of link to the settings 2: End of link to the settings.
 		throw new \Exception( sprintf( esc_html__( 'Google Drive Documents hasn\'t been granted permissions yet. Please %1$sconfigure%2$s the plugin and try again.', 'skaut-google-drive-documents' ), '<a href="' . esc_url( admin_url( 'admin.php?page=sgdd_basic' ) ) . '">', '</a>' ) );
 	}
 
 	$service = \Sgdd\Admin\GoogleAPILib\get_drive_client();
-	$path    = isset( $_GET['idsPath'] ) ? $_GET['idsPath'] : array();
+	$path    = isset( $_GET['idsPath'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_GET['idsPath'] ) ) : array();
 
 	if ( 0 < count( $path ) ) {
 		$result = get_folder_content( $service, end( $path ) );
@@ -67,8 +69,11 @@ function file_selection() {
 /**
  * Returns folder content
  *
- * @param $service Object of Google Drive Client
- * @param $folder Folder id
+ * @param \Sgdd\Vendor\Google_Service_Drive $service Object of Google Drive Client.
+ * @param string                            $folder Folder id.
+ *
+ * @throws \Exception An error occured.
+ *
  * @return array List of content in specified folder
  */
 function get_folder_content( $service, $folder = null ) {

@@ -5,6 +5,7 @@
  * @package SGDD
  * @since 1.0.0
  */
+
 namespace Sgdd\Admin\Options\OptionTypes;
 
 require_once __DIR__ . '/class-settingfield.php';
@@ -33,8 +34,9 @@ class SelectField extends SettingField {
 	/**
 	 * Sanitize the input.
 	 *
-	 * @param $value The unsanitized input.
-	 * @return int Sanitized value.
+	 * @param string $value The unsanitized input.
+	 *
+	 * @return string Sanitized value.
 	 */
 	public function sanitize( $value ) {
 		return esc_html( $value );
@@ -47,15 +49,14 @@ class SelectField extends SettingField {
 		$display = '';
 		$inputs;
 
-		// Folder view type
+		// Folder view type.
 		if ( 'sgdd_folder_type' === $this->id ) {
 			$inputs = array(
 				array( 'list', __( 'List', 'skaut-google-drive-documents' ) ),
 				array( 'grid', __( 'Grid', 'skaut-google-drive-documents' ) ),
 			);
-		}
-		// Order files by
-		elseif ( 'sgdd_order_by' === $this->id ) {
+		} elseif ( 'sgdd_order_by' === $this->id ) {
+			// Order files by.
 			$inputs = array(
 				array( 'name_asc', __( 'Name (ascending)', 'skaut-google-drive-documents' ) ),
 				array( 'name_dsc', __( 'Name (descending)', 'skaut-google-drive-documents' ) ),
@@ -65,15 +66,13 @@ class SelectField extends SettingField {
 		}
 
 		foreach ( $inputs as &$input ) {
-			if ( $display !== '' ) {
-				$display .= '<br>';
+			if ( '' !== $display ) {
+				echo( '<br>' );
 			}
 
-			$display .= '<label for="sgdd-' . esc_attr( $this->id ) . '">
-					<input type="radio" id="sgdd-' . esc_attr( $this->id ) . '-' . $input[0] . '" name="' . esc_attr( $this->id ) . '" value="' . $input[0] . '" ' . ( $this->get() === $input[0] ? 'checked' : '' ) . '> ' . $input[1] .
-				'</label>';
+			echo( '<label for="sgdd-' . esc_attr( $this->id ) . '">
+					<input type="radio" id="sgdd-' . esc_attr( $this->id . '-' . $input[0] ) . '" name="' . esc_attr( $this->id ) . '" value="' . esc_attr( $input[0] ) . '" ' . ( $this->get() === $input[0] ? 'checked' : '' ) . '> ' . esc_html( $input[1] ) .
+				'</label>' );
 		}
-
-		echo $display;
 	}
 }

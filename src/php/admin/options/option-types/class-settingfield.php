@@ -5,6 +5,7 @@
  * @package SGDD
  * @since 1.0.0
  */
+
 namespace Sgdd\Admin\Options\OptionTypes;
 
 /**
@@ -42,18 +43,18 @@ abstract class SettingField {
 	/**
 	 * Default valur of option if user do not specify one.
 	 *
-	 * @var string $default_value
+	 * @var mixed $default_value
 	 */
 	protected $default_value;
 
 	/**
 	 * SettingField class constructor.
 	 *
-	 * @param $id An unique name of the option used as key to reference it. Prefix "sgdd_" will be added.
-	 * @param @title Name of the option displayed to user.
-	 * @param $page Setting page in which the option will be displayed. Prefix "sgdd_" will be added.
-	 * @param $section Section within page in which the option will be displayed. Prefix "sgdd_" will be added.
-	 * @param $default_value Default valur of option if user do not specify one.
+	 * @param string $id An unique name of the option used as key to reference it. Prefix "sgdd_" will be added.
+	 * @param string $title Name of the option displayed to user.
+	 * @param string $page Setting page in which the option will be displayed. Prefix "sgdd_" will be added.
+	 * @param string $section Section within page in which the option will be displayed. Prefix "sgdd_" will be added.
+	 * @param mixed  $default_value Default valur of option if user do not specify one.
 	 */
 	public function __construct( $id, $title, $page, $section, $default_value ) {
 		$this->id            = 'sgdd_' . $id;

@@ -92,7 +92,7 @@ function oauth_redirect() {
 
 		$service = \Sgdd\Admin\GoogleAPILib\get_google_client();
 		// phpcs:ignore WordPress.Security.NonceVerification
-		$client->authenticate( $_GET['code'] );
+		$client->authenticate( sanitize_text_field( wp_unslash( $_GET['code'] ) ) );
 		$access_token = $client->getAccessToken();
 		$drive_client = new \Sgdd\Vendor\Google_Service_Drive( $client );
 		try {
@@ -100,7 +100,7 @@ function oauth_redirect() {
 			update_option( 'sgdd_access_token', $access_token );
 		} catch ( \Sgdd\Vendor\Google_Service_Exception $e ) {
 			if ( 'accessNotConfigured' === $e->getErrors()[0]['reason'] ) {
-				// translators: %s: Link to the Google developers console
+				// translators: %s: Link to the Google developers console.
 				add_settings_error( 'general', 'oauth_failed', sprintf( esc_html__( 'Google Drive API is not enabled. Please enable it at %s and try again after a while.', 'skaut-google-drive-documents' ), '<a href="https://console.developers.google.com/apis/library/drive.googleapis.com" target="_blank">https://console.developers.google.com/apis/library/drive.googleapis.com</a>' ), 'error' );
 			} else {
 				add_settings_error( 'general', 'oauth_failed', esc_html__( 'An unknown error has been encountered:', 'skaut-google-drive-documents' ) . ' ' . $e->getErrors()[0]['message'], 'error' );
