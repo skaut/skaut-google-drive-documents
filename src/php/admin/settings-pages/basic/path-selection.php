@@ -233,15 +233,15 @@ function display() {
 		<table class="widefat">
 			<thead>
 				<tr>
-					<th class="tablePath"></th>
+					<th class="table-path"></th>
 				</tr>
 			</thead>
 			<tbody class="tableBody">
-				<tr class="loadingCircle"></tr>
+				<tr class="loading-circle"></tr>
 			</tbody>
 			<tfoot>
 				<tr>
-					<th class="tablePath"></th>
+					<th class="table-path"></th>
 				</tr>
 			</tfoot>
 		</table>

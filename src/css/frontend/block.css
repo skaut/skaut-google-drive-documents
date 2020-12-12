@@ -1,9 +1,11 @@
-.sgdd-block-settings-folder, .sgdd-block-settings-folder-up {
+.sgdd-block-settings-folder,
+.sgdd-block-settings-folder-up {
 	color: var(--wp-admin-theme-color);
-  	font-weight: bold;
+	font-weight: 700;
 }
 
-.sgdd-block-settings-folder label, .sgdd-block-settings-folder-up label {
+.sgdd-block-settings-folder label,
+.sgdd-block-settings-folder-up label {
 	color: var(--wp-admin-theme-color);
 }
 
@@ -44,7 +46,8 @@
 	right: 0 !important;
 }
 
-.sgdd-block-settings-integer, .sgdd-block-settings-string {
+.sgdd-block-settings-integer,
+.sgdd-block-settings-string {
 	margin: 0 !important;
 	width: 100px !important;
 	right: 0 !important;
@@ -68,21 +71,23 @@
 	height: 0;
 }
 
-.sgdd-embedded-folder-grid tr, .sgdd-embedded-folder-list td {
+.sgdd-embedded-folder-grid tr,
+.sgdd-embedded-folder-list td {
 	vertical-align: top;
 }
 
 .sgdd-embedded-folder-element {
 	border: solid 1px;
 	border-color: rgba(51, 51, 51, 0.1);
-	border-radius: 10px;
+	border-radius: 10px; /* stylelint-disable-line plugin/no-unsupported-browser-features */
 	margin: auto;
 	vertical-align: middle;
 	padding: 10px;
 	height: 100%;
 }
 
-.sgdd-embedded-folder-element a, .sgdd-embedded-folder-list a {
+.sgdd-embedded-folder-element a,
+.sgdd-embedded-folder-list a {
 	text-decoration: none !important;
 }
 
