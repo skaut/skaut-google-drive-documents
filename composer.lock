@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4b4e8e75b61763494757795b68897a53",
+    "content-hash": "ccfc3efd035bd392c0f5feeb6a75fbca",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -1064,25 +1064,25 @@
         },
         {
             "name": "symfony/polyfill-php72",
-            "version": "v1.19.0",
+            "version": "v1.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php72.git",
-                "reference": "beecef6b463b06954638f02378f52496cb84bacc"
+                "reference": "cc6e6f9b39fe8075b3dabfbaf5b5f645ae1340c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/beecef6b463b06954638f02378f52496cb84bacc",
-                "reference": "beecef6b463b06954638f02378f52496cb84bacc",
+                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/cc6e6f9b39fe8075b3dabfbaf5b5f645ae1340c9",
+                "reference": "cc6e6f9b39fe8075b3dabfbaf5b5f645ae1340c9",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=7.1"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.19-dev"
+                    "dev-main": "1.22-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -1133,7 +1133,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-23T09:01:57+00:00"
+            "time": "2021-01-07T16:49:33+00:00"
         }
     ],
     "packages-dev": [
