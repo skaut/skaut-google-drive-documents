@@ -34,7 +34,7 @@
     "composer": "^4.1.0"
   },
   "devDependencies": {
-    "@wordpress/browserslist-config": "^2.7.0",
+    "@wordpress/browserslist-config": "^3.0.0",
     "@wordpress/eslint-plugin": "^7.4.0",
     "eslint": "^7.18.0",
     "eslint-config-airbnb-base": "^14.2.1",
